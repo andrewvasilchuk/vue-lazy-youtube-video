@@ -55,6 +55,10 @@ export default {
 </template>
 ```
 
+## Demo
+
+[![Edit vue-lazy-youtube-video](https://codesandbox.io/static/img/play-codesandbox.svg)](https://codesandbox.io/s/x7nrwxq6qo)
+
 ## ⚙️ Properties
 
 | Property    | Required | Type   | Default                     | Description                                                                           |

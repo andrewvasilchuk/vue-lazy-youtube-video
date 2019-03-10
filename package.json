@@ -1,6 +1,6 @@
 {
   "name": "vue-lazy-youtube-video",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Vue.js component for lazyloading YouTube videos",
   "main": "dist/vue-lazy-youtube-video.js",
   "scripts": {
