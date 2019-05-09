@@ -4,12 +4,12 @@
       <template v-if="!isVideoLoaded">
         <picture>
           <source
-            :srcset="`https://i.ytimg.com/vi_webp/${id}/maxresdefault.webp`"
+            :srcset="`https://i.ytimg.com/vi_webp/${id}/hqdefault.webp`"
             type="image/webp"
           >
           <img
             class="y-video__media"
-            src="https://i.ytimg.com/vi/4JS70KB9GS0/maxresdefault.jpg"
+            :src="`https://i.ytimg.com/vi/${id}/hqdefault.jpg`"
             :alt="alt"
           >
         </picture>
