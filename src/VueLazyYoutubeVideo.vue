@@ -9,7 +9,7 @@
           >
           <img
             class="y-video__media"
-            src="`https://i.ytimg.com/vi/${id}/hqdefault.jpg`"
+            :src="`https://i.ytimg.com/vi/${id}/hqdefault.jpg`"
             :alt="alt"
           >
         </picture>
