@@ -4,12 +4,12 @@
       <template v-if="!isVideoLoaded">
         <picture>
           <source
-            :srcset="`https://i.ytimg.com/vi_webp/${id}/hqdefault.webp`"
+            :srcset="`https://i.ytimg.com/vi_webp/${id}/${size}.webp`"
             type="image/webp"
           >
           <img
             class="y-video__media"
-            :src="`https://i.ytimg.com/vi/${id}/hqdefault.jpg`"
+            :src="`https://i.ytimg.com/vi/${id}/${size}.jpg`"
             :alt="alt"
           >
         </picture>
@@ -54,6 +54,18 @@ export default {
         const pattern = /^\d+:\d+$/;
         return pattern.test(value);
       }
+    },
+    size: {
+      type: String,
+      default: "hqdefault",
+      validator: value =>
+        [
+          "default",
+          "mqdefault",
+          "sddefault",
+          "hqdefault",
+          "maxresdefault"
+        ].indexOf(value) !== -1
     }
   },
   data() {
