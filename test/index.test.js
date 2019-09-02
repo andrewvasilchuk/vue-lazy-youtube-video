@@ -11,14 +11,23 @@ const factory = (props = {}) => {
 }
 
 describe('VueLazyYoutubeVideo', () => {
-  it('should create iframe when button is clicked', () => {
+  it('should insert iframe into the DOM when button is clicked', () => {
     const wrapper = factory()
 
     wrapper.find('button').trigger('click')
     expect(wrapper.find('iframe').exists()).toBeTruthy()
   })
 
-  it('should correctly sets aspect ratio', () => {
+  it('should correctly set src attribute of iframe', () => {
+    const wrapper = factory()
+
+    wrapper.find('button').trigger('click')
+    expect(wrapper.find('iframe').element.getAttribute('src')).toBe(
+      'https://www.youtube.com/embed/eJnQBXmZ7Ek?rel=0&showinfo=0&autoplay=1'
+    )
+  })
+
+  it('should correctly set aspect ratio', () => {
     const [a, b] = [16, 9]
 
     const wrapper = factory({
@@ -30,7 +39,7 @@ describe('VueLazyYoutubeVideo', () => {
     )
   })
 
-  it('should sets alternative text of the preview image', () => {
+  it('should correctly set alternative text of the preview image', () => {
     const alt = 'Simple dummy text'
 
     const wrapper = factory({
@@ -38,5 +47,30 @@ describe('VueLazyYoutubeVideo', () => {
     })
 
     expect(wrapper.find('img').element.getAttribute('alt')).toBe(alt)
+  })
+
+  it('should correctly set aria-label attribute of a button', () => {
+    const buttonLabel = 'Simple dummy text'
+
+    const wrapper = factory({
+      buttonLabel,
+    })
+
+    expect(wrapper.find('button').element.getAttribute('aria-label')).toBe(buttonLabel)
+  })
+
+  it('should correctly set size of the preview image', () => {
+    const previewImageSize = 'hqdefault'
+
+    const wrapper = factory({
+      previewImageSize,
+    })
+
+    expect(
+      wrapper
+        .find('img')
+        .element.getAttribute('src')
+        .includes(previewImageSize)
+    ).toBeTruthy()
   })
 })
