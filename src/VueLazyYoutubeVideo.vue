@@ -57,7 +57,7 @@ export default {
     },
     previewImageSize: {
       type: String,
-      default: "hqdefault",
+      default: "maxresdefault",
       validator: value =>
         [
           "default",
