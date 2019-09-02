@@ -8,7 +8,7 @@
             type="image/webp"
           >
           <img
-            class="y-video__media"
+            class="y-video__media y-video__media--type--img"
             :src="`https://i.ytimg.com/vi/${id}/${previewImageSize}.jpg`"
             :alt="alt"
           >
@@ -119,6 +119,14 @@ export default {
     width: 100%;
     height: 100%;
     border-width: 0;
+  }
+
+  &__media {
+    &--type  {
+      &--img {
+        object-fit: cover;
+      }
+    }
   }
 
   &__button {
