@@ -61,13 +61,13 @@ export default {
 
 ## ⚙️ Properties
 
-| Property    | Required | Type   | Default                     | Description                                                                           |
-|-------------|----------|--------|-----------------------------|---------------------------------------------------------------------------------------|
-| url         | `true`   | String |                             | Video url in https://www.youtube.com/watch?v=VIDEO_ID format                          |
-| alt         | `false`  | String | `"Video alternative image"` | Alternative text of the preview image                                                 |
-| buttonLabel | `false`  | String | `"Play video"`              | `aria-label` attribute value of the play button. It improves a11y.                    |
-| aspectRatio | `false`  | String | `"16:9"`                    | Aspect ratio. It helps to save proportions of the video on different container sizes. |
-| size        | `false`  | String | `"hqdefault"`               | Video size. Available variants 'mqdefault', 'sddefault', 'hqdefault', 'maxresdefault'.|
+| Property         | Required | Type   | Default                     | Description                                                                                       |
+| ---------------- | -------- | ------ | --------------------------- | ------------------------------------------------------------------------------------------------- |
+| url              | `true`   | String |                             | Video url in  format                                                                              |
+| alt              | `false`  | String | `"Video alternative image"` | Alternative text of the preview image                                                             |
+| buttonLabel      | `false`  | String | `"Play video"`              | `aria-label` attribute value of the play button. It improves a11y.                                |
+| aspectRatio      | `false`  | String | `"16:9"`                    | Aspect ratio. It helps to save proportions of the video on different container sizes.             |
+| previewImageSize | `false`  | String | `"hqdefault"`               | Size of preview image. Available variants 'mqdefault', 'sddefault', 'hqdefault', 'maxresdefault'. |
 
 ## ⚙️ Events
 
