@@ -2,29 +2,29 @@
   "name": "vue-lazy-youtube-video",
   "version": "1.2.2",
   "description": "Vue.js component for lazyloading YouTube videos",
+  "keywords": [
+    "aspect-ratio",
+    "vue"
+  ],
+  "homepage": "https://github.com/3vilArthas/vue-lazy-youtube-video#readme",
+  "bugs": {
+    "url": "https://github.com/3vilArthas/vue-lazy-youtube-video/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/3vilArthas/vue-lazy-youtube-video.git"
+  },
+  "license": "MIT",
+  "author": "Andrew Vasilchuk <andrew.d.vasilchuk@gmail.com>",
+  "files": [
+    "src",
+    "dist/*.js"
+  ],
   "main": "dist/vue-lazy-youtube-video.js",
   "scripts": {
     "build": "webpack",
     "test": "jest"
   },
-  "files": [
-    "src",
-    "dist/*.js"
-  ],
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/3vilArthas/vue-lazy-youtube-video.git"
-  },
-  "keywords": [
-    "vue",
-    "aspect-ratio"
-  ],
-  "author": "Andrew Vasilchuk <andrew.d.vasilchuk@gmail.com>",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/3vilArthas/vue-lazy-youtube-video/issues"
-  },
-  "homepage": "https://github.com/3vilArthas/vue-lazy-youtube-video#readme",
   "devDependencies": {
     "@babel/core": "^7.5.5",
     "@babel/preset-env": "^7.5.5",
