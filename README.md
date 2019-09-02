@@ -67,6 +67,7 @@ export default {
 | alt         | `false`  | String | `"Video alternative image"` | Alternative text of the preview image                                                 |
 | buttonLabel | `false`  | String | `"Play video"`              | `aria-label` attribute value of the play button. It improves a11y.                    |
 | aspectRatio | `false`  | String | `"16:9"`                    | Aspect ratio. It helps to save proportions of the video on different container sizes. |
+| size        | `false`  | String | `"hqdefault"`               | Video size. Available variants 'mqdefault', 'sddefault', 'hqdefault', 'maxresdefault'.|
 
 ## ⚙️ Events
 
