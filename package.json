@@ -1,7 +1,7 @@
 {
-  "name": "vue-lazy-youtube-video",
-  "version": "1.2.2",
-  "description": "Vue.js component for lazyloading YouTube videos",
+  "name": "unr-lazy-youtube-video",
+  "version": "1.2.3",
+  "description": "[Not Official Repo] - I forked this to mess around. Vue.js component for lazyloading YouTube videos",
   "keywords": [
     "aspect-ratio",
     "vue"
@@ -33,9 +33,7 @@
     "babel-loader": "^8.0.6",
     "css-loader": "^3.2.0",
     "jest": "^24.9.0",
-    "node-sass": "^4.12.0",
     "prettier": "1.18.2",
-    "sass-loader": "^8.0.0",
     "vue": "^2.6.10",
     "vue-loader": "^15.7.1",
     "vue-style-loader": "^4.1.2",
