@@ -22,6 +22,7 @@
   ],
   "main": "dist/vue-lazy-youtube-video.js",
   "scripts": {
+    "dev": "cross-env TS_NODE_PROJECT=\"./build/tsconfig.json\" webpack-dev-server --config ./build/webpack.config.dev.ts",
     "build": "webpack",
     "test": "jest",
     "prettier": "prettier --write ./**/*.{js,vue}"
