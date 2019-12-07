@@ -11,7 +11,7 @@
           />
           <img
             class="y-video__media y-video__media--type--img"
-            :src="thumnail || `https://i.ytimg.com/vi/${id}/${previewImageSize}.jpg`"
+            :src="thumbnail || `https://i.ytimg.com/vi/${id}/${previewImageSize}.jpg`"
             :alt="alt"
           />
         </picture>
