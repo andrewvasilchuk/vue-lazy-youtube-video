@@ -33,6 +33,7 @@
     "@types/node": "^12.12.14",
     "@types/webpack": "^4.41.0",
     "@types/webpack-dev-server": "^3.9.0",
+    "@types/webpack-merge": "^4.1.5",
     "@vue/test-utils": "^1.0.0-beta.30",
     "babel-loader": "^8.0.6",
     "cross-env": "^6.0.3",
