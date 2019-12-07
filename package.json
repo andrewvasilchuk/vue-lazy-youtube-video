@@ -27,20 +27,20 @@
     "prettier": "prettier --write ./**/*.{js,vue}"
   },
   "devDependencies": {
-    "@babel/core": "^7.5.5",
-    "@babel/preset-env": "^7.5.5",
-    "@vue/test-utils": "^1.0.0-beta.29",
+    "@babel/core": "^7.7.5",
+    "@babel/preset-env": "^7.7.5",
+    "@vue/test-utils": "^1.0.0-beta.30",
     "babel-loader": "^8.0.6",
-    "css-loader": "^3.2.0",
+    "css-loader": "^3.2.1",
     "jest": "^24.9.0",
-    "node-sass": "^4.12.0",
-    "prettier": "1.18.2",
+    "node-sass": "^4.13.0",
+    "prettier": "^1.19.1",
     "sass-loader": "^8.0.0",
     "vue": "^2.6.10",
-    "vue-loader": "^15.7.1",
+    "vue-loader": "^15.7.2",
     "vue-style-loader": "^4.1.2",
     "vue-template-compiler": "^2.6.10",
-    "webpack": "^4.39.3",
-    "webpack-cli": "^3.3.7"
+    "webpack": "^4.41.2",
+    "webpack-cli": "^3.3.10"
   }
 }
