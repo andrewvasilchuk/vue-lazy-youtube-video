@@ -25,7 +25,8 @@
     "build": "rimraf dist/* && rollup -c build/rollup.config.prod.js",
     "dev": "rollup -c build/rollup.config.dev.js --watch",
     "prettier": "prettier --write ./**/*.{js,vue}",
-    "test": "jest"
+    "test": "jest",
+    "prepare": "npm run build"
   },
   "devDependencies": {
     "@vue/test-utils": "^1.0.0-beta.30",
