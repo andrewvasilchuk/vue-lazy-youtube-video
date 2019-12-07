@@ -1,9 +1,16 @@
 import webpack from 'webpack'
-import VueLoaderPlugin from 'vue-loader/lib/plugin'
+import { VueLoaderPlugin } from 'vue-loader'
 
 const config: webpack.Configuration = {
   module: {
     rules: [
+      {
+        test: /\.tsx?$/,
+        loader: 'ts-loader',
+        options: {
+          appendTsSuffixTo: [/\.vue$/],
+        },
+      },
       {
         test: /\.js$/,
         loader: 'babel-loader',
