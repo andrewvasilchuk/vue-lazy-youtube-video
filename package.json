@@ -34,6 +34,7 @@
     "@types/webpack-dev-server": "^3.9.0",
     "@vue/test-utils": "^1.0.0-beta.30",
     "babel-loader": "^8.0.6",
+    "cross-env": "^6.0.3",
     "css-loader": "^3.2.1",
     "jest": "^24.9.0",
     "node-sass": "^4.13.0",
