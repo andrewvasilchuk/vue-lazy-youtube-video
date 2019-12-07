@@ -22,10 +22,10 @@
   ],
   "main": "dist/vue-lazy-youtube-video.js",
   "scripts": {
-    "dev": "rollup -c build/rollup.config.dev.js --watch",
     "build": "rimraf dist/* && rollup -c build/rollup.config.prod.js",
-    "test": "jest",
-    "prettier": "prettier --write ./**/*.{js,vue}"
+    "dev": "rollup -c build/rollup.config.dev.js --watch",
+    "prettier": "prettier --write ./**/*.{js,vue}",
+    "test": "jest"
   },
   "devDependencies": {
     "@vue/test-utils": "^1.0.0-beta.30",
