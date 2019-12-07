@@ -36,8 +36,10 @@
   </div>
 </template>
 
-<script>
-export default {
+<script lang="ts">
+import Vue from 'vue'
+
+export default Vue.extend({
   name: 'VueLazyYoutubeVideo',
   props: {
     url: {
@@ -82,11 +84,19 @@ export default {
     }
   },
   computed: {
-    id() {
+    id(): string {
       const regExp = /^https:\/\/www\.youtube\.com\/watch\?v=(.+)$/
-      return regExp.exec(this.url)[1]
+      const executionResult = regExp.exec(this.url)
+      if (executionResult !== null) {
+        return executionResult[1]
+      } else {
+        console.error(
+          `[vue-lazy-youtube-video]: failed to extract video id from "${this.url}"`
+        )
+        return ''
+      }
     },
-    styleObj() {
+    styleObj(): object {
       return {
         paddingBottom: this.getPaddingBottom(),
       }
@@ -103,10 +113,10 @@ export default {
     },
     getPaddingBottom() {
       const [a, b] = this.aspectRatio.split(':')
-      return `${(b / a) * 100}%`
+      return `${(Number(b) / Number(a)) * 100}%`
     },
   },
-}
+})
 </script>
 
 <style lang="scss">
