@@ -22,7 +22,7 @@
   ],
   "main": "dist/vue-lazy-youtube-video.js",
   "scripts": {
-    "dev": "cross-env TS_NODE_PROJECT=\"./build/tsconfig.json\" webpack-dev-server --config ./build/webpack.config.dev.ts",
+    "dev": "webpack-dev-server --config ./build/webpack.config.dev.ts",
     "build": "webpack",
     "test": "jest",
     "prettier": "prettier --write ./**/*.{js,vue}"
@@ -36,7 +36,6 @@
     "@types/webpack-merge": "^4.1.5",
     "@vue/test-utils": "^1.0.0-beta.30",
     "babel-loader": "^8.0.6",
-    "cross-env": "^6.0.3",
     "css-loader": "^3.2.1",
     "jest": "^24.9.0",
     "node-sass": "^4.13.0",
