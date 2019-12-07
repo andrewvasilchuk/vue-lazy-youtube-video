@@ -89,8 +89,7 @@ npm run test
 
 * Babel
 * Webpack 4
-* Vue
-* SASS
+* Vue 
 
 ## Inspiration
 
