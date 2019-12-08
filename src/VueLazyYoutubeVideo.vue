@@ -61,7 +61,7 @@ export default Vue.extend({
       required: true,
       validator: value => {
         if (typeof value === 'string') {
-          return value.startsWith('https://www.youtube.com/watch?')
+          return value.startsWith('https://www.youtube.com/watch?v=')
         } else {
           return false
         }
