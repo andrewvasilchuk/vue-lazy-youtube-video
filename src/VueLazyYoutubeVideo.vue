@@ -60,7 +60,11 @@ export default Vue.extend({
       type: String,
       required: true,
       validator: value => {
-        return value.startsWith('https://www.youtube.com/watch?')
+        if (typeof value === 'string') {
+          return value.startsWith('https://www.youtube.com/watch?')
+        } else {
+          return false
+        }
       },
     },
     query: {
