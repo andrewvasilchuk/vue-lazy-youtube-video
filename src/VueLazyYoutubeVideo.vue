@@ -13,7 +13,7 @@
         <picture>
           <source
             :srcset="
-              thumbnail ||
+              thumbnail && thumbnail.webp ||
                 `https://i.ytimg.com/vi_webp/${id}/${previewImageSize}.webp`
             "
             type="image/webp"
@@ -21,7 +21,7 @@
           <img
             class="y-video__media y-video__media--type--img"
             :src="
-              thumbnail ||
+              thumbnail && thumbnail.jpg ||
                 `https://i.ytimg.com/vi/${id}/${previewImageSize}.jpg`
             "
             :alt="alt"
@@ -95,7 +95,8 @@ export default Vue.extend({
         ].indexOf(value) !== -1,
     },
     thumbnail: {
-      type: String,
+      type: Object,
+      validator: val => 'jpg' in val && 'webp' in val
     },
     noCookie: {
       type: Boolean,
