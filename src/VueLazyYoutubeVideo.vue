@@ -7,6 +7,7 @@
         :src="generateURL()"
         allowfullscreen
         frameborder="0"
+        allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
         class="y-video__media"
       ></iframe>
       <template v-else>
