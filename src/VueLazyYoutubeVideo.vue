@@ -144,8 +144,30 @@ export default Vue.extend({
       this.$emit('videoLoaded')
     },
     getPaddingBottom() {
-      const [a, b] = this.aspectRatio.split(':')
-      return `${(Number(b) / Number(a)) * 100}%`
+      let { aspectRatio } = this
+      // Vue does not provide correct typescript support
+      // @ts-ignore
+      const defaultAspectRatio = this.$options.props.aspectRatio.default
+      const warningMessage = `Invalid value ${aspectRatio} supplied to \`aspectRatio\` property, instead fallback value ${defaultAspectRatio} is used `
+
+      if (typeof aspectRatio === 'string') {
+        const [a, b] = aspectRatio.split(':')
+
+        if (Number.isFinite(Number(a)) && Number.isFinite(Number(b))) {
+        } else {
+          aspectRatio = defaultAspectRatio
+          this.warn(warningMessage)
+        }
+      } else {
+        aspectRatio = defaultAspectRatio
+        this.warn(warningMessage)
+      }
+
+      const [a, b] = aspectRatio.split(':')
+      return this.getPaddingBottomValue(Number(a), Number(b))
+    },
+    getPaddingBottomValue(a: number, b: number) {
+      return `${(b / a) * 100}%`
     },
     warn(message: string) {
       console.warn(`[vue-lazy-youtube-video]: ${message}`)
