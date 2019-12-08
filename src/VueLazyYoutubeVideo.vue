@@ -6,7 +6,7 @@
         v-bind="iframeAttributes"
         :src="generateURL()"
         allowfullscreen
-        allow="autoplay"
+        frameborder="0"
         class="y-video__media"
       ></iframe>
       <template v-else>
