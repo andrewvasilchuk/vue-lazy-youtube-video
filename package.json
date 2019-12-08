@@ -23,7 +23,7 @@
   "author": "Andrew Vasilchuk <andrew.d.vasilchuk@gmail.com>",
   "files": [
     "src",
-    "dist/*.js"
+    "dist"
   ],
   "main": "dist/vue-lazy-youtube-video.js",
   "scripts": {
