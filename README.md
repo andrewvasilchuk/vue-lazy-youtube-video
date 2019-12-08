@@ -161,6 +161,7 @@ After the successful build the following files will be generated in the `dist` f
 ├── vue-lazy-youtube-video.esm.js
 ├── vue-lazy-youtube-video.js
 ├── vue-lazy-youtube-video.min.js
+```
 
 ## Powered by
 
