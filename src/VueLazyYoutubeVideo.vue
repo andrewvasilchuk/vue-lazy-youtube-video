@@ -1,22 +1,37 @@
 <template>
   <div class="y-video" @click="clickHandler">
     <div class="y-video__inner" :style="styleObj">
-      <template v-if="!clicked">
+      <iframe
+        v-if="clicked"
+        :src="generateURL()"
+        allowfullscreen
+        allow="autoplay"
+        class="y-video__media"
+      ></iframe>
+      <template v-else>
         <picture>
           <source
             :srcset="
-              thumbnail || `https://i.ytimg.com/vi_webp/${id}/${previewImageSize}.webp`
+              thumbnail ||
+                `https://i.ytimg.com/vi_webp/${id}/${previewImageSize}.webp`
             "
             type="image/webp"
           />
           <img
             class="y-video__media y-video__media--type--img"
-            :src="thumbnail || `https://i.ytimg.com/vi/${id}/${previewImageSize}.jpg`"
+            :src="
+              thumbnail ||
+                `https://i.ytimg.com/vi/${id}/${previewImageSize}.jpg`
+            "
             :alt="alt"
           />
         </picture>
         <slot name="button">
-          <button type="button" class="y-video__button" :aria-label="buttonLabel">
+          <button
+            type="button"
+            class="y-video__button"
+            :aria-label="buttonLabel"
+          >
             <slot name="icon">
               <svg viewBox="0 0 68 48" version="1.1" width="100%" height="100%">
                 <path
@@ -29,13 +44,6 @@
           </button>
         </slot>
       </template>
-      <iframe
-        v-else
-        :src="generateURL()"
-        allowfullscreen
-        allow="autoplay"
-        class="y-video__media"
-      ></iframe>
     </div>
   </div>
 </template>
@@ -55,7 +63,7 @@ export default Vue.extend({
     },
     query: {
       type: String,
-      default: '?rel=0&showinfo=0&autoplay=1'
+      default: '?rel=0&showinfo=0&autoplay=1',
     },
     alt: {
       type: String,
@@ -86,12 +94,12 @@ export default Vue.extend({
         ].indexOf(value) !== -1,
     },
     thumbnail: {
-      type: String
+      type: String,
     },
     noCookie: {
       type: Boolean,
-      default: false
-    }
+      default: false,
+    },
   },
   data() {
     return {
@@ -105,10 +113,11 @@ export default Vue.extend({
       if (executionResult !== null) {
         return executionResult[1]
       } else {
-        console.error(`[vue-lazy-youtube-video]: failed to extract video id from "${this.url}"`)
+        console.error(
+          `[vue-lazy-youtube-video]: failed to extract video id from "${this.url}"`
+        )
         return ''
       }
-
     },
     styleObj(): object {
       return {
@@ -118,7 +127,9 @@ export default Vue.extend({
   },
   methods: {
     generateURL() {
-      return `https://www.youtube${this.noCookie ? '-nocookie' : ''}.com/embed/${this.id}${this.query}`
+      return `https://www.youtube${
+        this.noCookie ? '-nocookie' : ''
+      }.com/embed/${this.id}${this.query}`
     },
     clickHandler() {
       this.clicked = true
