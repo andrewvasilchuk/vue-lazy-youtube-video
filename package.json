@@ -25,7 +25,7 @@
     "src",
     "dist"
   ],
-  "main": "dist/vue-lazy-youtube-video.js",
+  "main": "dist/vue-lazy-youtube-video.common.js",
   "scripts": {
     "build": "rimraf dist/* && rollup -c build/rollup.config.prod.js",
     "dev": "rollup -c build/rollup.config.dev.js --watch",
