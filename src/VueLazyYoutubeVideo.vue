@@ -123,8 +123,8 @@ export default Vue.extend({
       if (executionResult !== null) {
         return executionResult[1]
       } else {
-        console.error(
-          `[vue-lazy-youtube-video]: failed to extract video id from "${this.url}"`
+        this.warn(
+          `Failed to extract video id from ${this.url}`
         )
         return ''
       }
