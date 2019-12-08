@@ -59,7 +59,7 @@ export default Vue.extend({
       type: String,
       required: true,
       validator: value => {
-        return value.indexOf('https://www.youtube.com/watch?') !== 1
+        return value.startsWith('https://www.youtube.com/watch?')
       },
     },
     query: {
