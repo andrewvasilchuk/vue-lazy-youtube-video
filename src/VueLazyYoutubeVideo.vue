@@ -1,7 +1,7 @@
 <template>
   <div class="y-video" @click="clickHandler">
     <div class="y-video__inner" :style="styleObj">
-      <template v-if="!isVideoLoaded">
+      <template v-if="!clicked">
         <picture>
           <source
             :srcset="
@@ -99,7 +99,7 @@ export default Vue.extend({
   },
   data() {
     return {
-      isVideoLoaded: false,
+      clicked: false,
     }
   },
   computed: {
@@ -128,7 +128,7 @@ export default Vue.extend({
       }.com/embed/${this.id}${this.query}`
     },
     clickHandler() {
-      this.isVideoLoaded = true
+      this.clicked = true
       this.$emit('videoLoaded')
     },
     getPaddingBottom() {
