@@ -123,9 +123,7 @@ export default Vue.extend({
       if (executionResult !== null) {
         return executionResult[1]
       } else {
-        console.error(
-          `[vue-lazy-youtube-video]: failed to extract video id from "${this.url}"`
-        )
+        this.warn(`Failed to extract video id from "${this.url}"`)
         return ''
       }
     },
@@ -148,6 +146,9 @@ export default Vue.extend({
     getPaddingBottom() {
       const [a, b] = this.aspectRatio.split(':')
       return `${(Number(b) / Number(a)) * 100}%`
+    },
+    warn(message: string) {
+      console.warn(`[vue-lazy-youtube-video]: ${message}`)
     },
   },
 })
