@@ -23,11 +23,13 @@
   "author": "Andrew Vasilchuk <andrew.d.vasilchuk@gmail.com>",
   "files": [
     "src",
-    "dist"
+    "dist",
+    "types/*.d.ts"
   ],
   "main": "dist/vue-lazy-youtube-video.common.js",
   "unpkg": "dist/vue-lazy-youtube-video.min.js",
   "module": "dist/vue-lazy-youtube-video.esm.js",
+  "types":  "types/index.d.ts",
   "scripts": {
     "build": "rimraf dist/* && rollup -c build/rollup.config.prod.js",
     "dev": "rollup -c build/rollup.config.dev.js --watch",
