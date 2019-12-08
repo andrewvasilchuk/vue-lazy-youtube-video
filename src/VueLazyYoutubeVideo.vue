@@ -149,6 +149,9 @@ export default Vue.extend({
       const [a, b] = this.aspectRatio.split(':')
       return `${(Number(b) / Number(a)) * 100}%`
     },
+    warn(message: string) {
+      console.warn(`[vue-lazy-youtube-video]: ${message}`)
+    }
   },
 })
 </script>
