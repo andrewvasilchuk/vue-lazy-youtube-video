@@ -3,7 +3,11 @@
   "version": "1.2.2",
   "description": "Vue.js component for lazyloading YouTube videos",
   "keywords": [
-    "aspect-ratio",
+    "youtube",
+    "youtube-video",
+    "vue-youtube",
+    "lazyload",
+    "video-lazyload",
     "vue"
   ],
   "homepage": "https://github.com/3vilArthas/vue-lazy-youtube-video#readme",
