@@ -143,7 +143,10 @@ export default Vue.extend({
     },
     clickHandler() {
       this.clicked = true
-      this.$emit('videoLoaded')
+
+      this.$nextTick(() => {
+        this.$emit('videoLoaded')
+      })
     },
     getPaddingBottom() {
       let { aspectRatio } = this
