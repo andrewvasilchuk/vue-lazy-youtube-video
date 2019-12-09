@@ -1,7 +1,9 @@
 import path from 'path'
 import typescript from 'rollup-plugin-typescript2'
+import vue from 'rollup-plugin-vue'
 import replace from 'rollup-plugin-replace'
 import { terser } from 'rollup-plugin-terser'
+import css from 'rollup-plugin-css-only'
 
 import typescriptPluginOptions from './base/plugins/typescript'
 import basePlugins from './base/plugins/index'
@@ -12,7 +14,7 @@ const FILE_NAME = 'vue-lazy-youtube-video'
 const name = 'VueLazyYoutubeVideo'
 const external = ['vue']
 const globals = {
-  vue: 'Vue'
+  vue: 'Vue',
 }
 const plugins = [
   replace({
@@ -44,7 +46,30 @@ export default [
       },
     ],
     plugins: [
-      typescript(Object.assign({}, typescriptPluginOptions, { tsconfig: './tsconfig.prod.json'})),
+      typescript(
+        Object.assign({}, typescriptPluginOptions, {
+          tsconfig: './tsconfig.prod.json',
+        })
+      ),
+      vue(),
+    ].concat(plugins),
+  },
+  {
+    input: SOURCE,
+    external,
+    output: {
+      file: `${DIST_DIR}/${FILE_NAME}.ssr.common.js`,
+      exports: 'named',
+      format: 'cjs',
+    },
+    plugins: [
+      css({ output: path.join(__dirname, `../${DIST_DIR}/style.css`) }),
+      typescript(
+        Object.assign({}, typescriptPluginOptions, {
+          tsconfig: './tsconfig.prod.json',
+        })
+      ),
+      vue({ css: false }),
     ].concat(plugins),
   },
   {
@@ -58,8 +83,13 @@ export default [
       name,
     },
     plugins: [
-      typescript(Object.assign({}, typescriptPluginOptions, { tsconfig: './tsconfig.prod.umd.json'})),
-      terser()
+      typescript(
+        Object.assign({}, typescriptPluginOptions, {
+          tsconfig: './tsconfig.prod.umd.json',
+        })
+      ),
+      vue(),
+      terser(),
     ].concat(plugins),
   },
 ]
