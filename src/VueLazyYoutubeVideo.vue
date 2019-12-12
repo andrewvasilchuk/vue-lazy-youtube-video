@@ -2,7 +2,7 @@
   <div class="y-video" @click="clickHandler">
     <div class="y-video__inner" :style="styleObj">
       <iframe
-        v-if="clicked"
+        v-if="clicked || autoplay"
         v-bind="iframeAttributes"
         :src="generateURL()"
         allowfullscreen
@@ -133,6 +133,9 @@ export default Vue.extend({
       return {
         paddingBottom: this.getPaddingBottom(),
       }
+    },
+    autoplay(): boolean {
+      return this.query.indexOf('autoplay=1') !== -1;
     },
   },
   methods: {
