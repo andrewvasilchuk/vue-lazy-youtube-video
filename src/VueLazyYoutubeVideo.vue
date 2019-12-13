@@ -67,6 +67,10 @@ export default Vue.extend({
         }
       },
     },
+    autoplay: {
+      type: Boolean,
+      default: false,
+    },
     query: {
       type: String,
       default: '?autoplay=1',
@@ -129,20 +133,67 @@ export default Vue.extend({
         return ''
       }
     },
+    queryPart(): string {
+        let query = {};
+
+        let pairs = (
+            this.query[0] === '?' ?
+                this.query.substr(1) :
+                this.query
+        ).split('&');
+
+        for (let i = 0; i < pairs.length; i++) {
+            let pair = pairs[i].split('=');
+            let name = decodeURIComponent(pair[0]),
+                value = decodeURIComponent(pair[1] || true);
+
+            query[name] = value;
+        }
+
+        if (this.autoplay) {
+            if (query.hasOwnProperty('autoplay')) {
+                if (!query.autoplay) query.autoplay = true;
+            }
+            else {
+                query['autoplay'] = true;
+            }
+
+            if (query.hasOwnProperty('mute')) {
+                if (!query.mute) query.mute = true;
+            }
+            else {
+                query['mute'] = true;
+            }
+        }
+
+        let _query = Object.keys(t).map(function (name) {
+            let value = String(t[name]);
+
+            value =
+                value === 'true' ?
+                '1' :
+                    (
+                        value === 'false' ?
+                            '0' :
+                            value
+                    );
+
+            return `${name}=${value}`;
+        });
+
+        return `?${_query.join('&')}`;
+    },
     styleObj(): object {
       return {
         paddingBottom: this.getPaddingBottom(),
       }
-    },
-    autoplay(): boolean {
-      return this.query.indexOf('autoplay=1') !== -1;
     },
   },
   methods: {
     generateURL() {
       return `https://www.youtube${
         this.noCookie ? '-nocookie' : ''
-      }.com/embed/${this.id}${this.query}`
+      }.com/embed/${this.id}${this.queryPart}`
     },
     clickHandler() {
       this.clicked = true
