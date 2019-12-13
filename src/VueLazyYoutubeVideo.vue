@@ -61,7 +61,10 @@ export default Vue.extend({
       required: true,
       validator: value => {
         if (typeof value === 'string') {
-          return value.startsWith('https://www.youtube.com/watch?v=')
+          return (
+            value.startsWith('https://www.youtube.com/watch?v=') ||
+            value.startsWith('https://youtu.be/')
+          )
         } else {
           return false
         }
@@ -114,32 +117,48 @@ export default Vue.extend({
   data() {
     return {
       clicked: false,
+      id: '',
+      urlQuery: '',
     }
   },
   computed: {
-    id(): string {
-      const regExp = /^https:\/\/www\.youtube\.com\/watch\?v=(.+)$/
-      const executionResult = regExp.exec(this.url)
-      if (executionResult !== null) {
-        return executionResult[1]
-      } else {
-        this.warn(
-          `Failed to extract video id from ${this.url}`
-        )
-        return ''
-      }
-    },
     styleObj(): object {
       return {
         paddingBottom: this.getPaddingBottom(),
       }
     },
   },
+  beforeMount() {
+    this.setUrlInformation()
+  },
+  watch: {
+    url() { 
+      this.setUrlInformation() 
+    }
+  },
   methods: {
+    setUrlInformation() {
+      let regExp = /^https:\/\/www\.youtube\.com\/watch\?v=(.+)\&(.+)$/
+      let executionResult = regExp.exec(this.url)
+
+      if (executionResult === null) {
+        regExp = /^https:\/\/youtu\.be\/(.+)$/
+        executionResult = regExp.exec(this.url)
+      }
+
+      if (executionResult !== null) {
+        this.id = executionResult[1]
+        this.urlQuery = executionResult[2] ? '&' + executionResult[2] : ''
+      } else {
+        this.warn(`Failed to extract video id from ${this.url}`)
+        this.id = ''
+        this.urlQuery = ''
+      }
+    },
     generateURL() {
       return `https://www.youtube${
         this.noCookie ? '-nocookie' : ''
-      }.com/embed/${this.id}${this.query}`
+      }.com/embed/${this.id}${this.query}${this.urlQuery}`
     },
     clickHandler() {
       this.clicked = true
@@ -171,7 +190,7 @@ export default Vue.extend({
       const [a, b] = aspectRatio.split(':')
       return this.getPaddingBottomValue(Number(a), Number(b))
     },
-    getPaddingBottomValue(a:number, b:number) {
+    getPaddingBottomValue(a: number, b: number) {
       return `${(b / a) * 100}%`
     },
     warn(message: string) {
