@@ -116,45 +116,38 @@ export default Vue.extend({
   },
   data() {
     return {
-      clicked: false,
-      id: '',
-      urlQuery: '',
+      clicked: false
     }
   },
   computed: {
+    id(): string {
+      const regExp = /(?:(?:v=|(?:v%3D))|(?:\/(?:v|e)\/)|(?:(?:(?:youtu.be)|(?:embed))\/))([^&\n#?%]+)/
+      const executionResult = regExp.exec(this.url)
+      if (executionResult !== null) {
+        return executionResult[1]
+      } else {
+        this.warn(
+          `Failed to extract video id from ${this.url}`
+        )
+        return ''
+      }
+    },
+    urlQuery() : string {
+      const regExp = /\&([^&=]+)=([^&=]+)(?:&([^&=]+)=([^&=]+))*$/
+      const executionResult = regExp.exec(this.url)
+      if (executionResult !== null) {
+        return executionResult[0]
+      } else {
+        return ''
+      }
+    },
     styleObj(): object {
       return {
         paddingBottom: this.getPaddingBottom(),
       }
     },
   },
-  beforeMount() {
-    this.setUrlInformation()
-  },
-  watch: {
-    url() { 
-      this.setUrlInformation() 
-    }
-  },
   methods: {
-    setUrlInformation() {
-      let regExp = /^https:\/\/www\.youtube\.com\/watch\?v=(.+)\&(.+)$/
-      let executionResult = regExp.exec(this.url)
-
-      if (executionResult === null) {
-        regExp = /^https:\/\/youtu\.be\/(.+)$/
-        executionResult = regExp.exec(this.url)
-      }
-
-      if (executionResult !== null) {
-        this.id = executionResult[1]
-        this.urlQuery = executionResult[2] ? '&' + executionResult[2] : ''
-      } else {
-        this.warn(`Failed to extract video id from ${this.url}`)
-        this.id = ''
-        this.urlQuery = ''
-      }
-    },
     generateURL() {
       return `https://www.youtube${
         this.noCookie ? '-nocookie' : ''
