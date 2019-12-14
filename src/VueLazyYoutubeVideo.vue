@@ -116,7 +116,7 @@ export default Vue.extend({
   },
   data() {
     return {
-      clicked: false
+      clicked: false,
     }
   },
   computed: {
