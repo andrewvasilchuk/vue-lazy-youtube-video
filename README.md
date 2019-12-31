@@ -118,7 +118,7 @@ Vue.use(Plugin)
 
 ```vue
 <template>
-  <LazyYoutubeVideo url="https://www.youtube.com/watch?v=4JS70KB9GS0" />
+  <LazyYoutubeVideo src="https://www.youtube.com/embed/4JS70KB9GS0" />
 </template>
 ```
 
@@ -130,13 +130,11 @@ Vue.use(Plugin)
 
 ### Properties
 
-> 🚨 Value of the `url` property must be a **DIRECT** link to the video (e.g. https://www.youtube.com/watch?v=4JS70KB9GS0), but not the **EMBED** link (e.g. https://www.youtube.com/embed/4JS70KB9GS0). Component itself will generate appropriate `src` attribute for the `<iframe />` element.
-
 The list of available `props` (with their types, default values and descriptions) is listed below:
 
 | Property           | Required | Type                           | Default           | Description                                                                                                                                                                                                                                    |
 | ------------------ | -------- | ------------------------------ | ----------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `url`              | `true`   | `string`                       |                   | Video `URL` in `https://www.youtube.com/watch?v=[VIDEO_ID]` format                                                                                                                                                                             |
+| `src`              | `true`   | `string`                       |                   | `<iframe />` `src` attribute in `https://www.youtube.com/embed/[VIDEO_ID]`                                                                                                                                                                             |
 | `alt`              | `false`  | `string`                       | `Video thumbnail` | Value of the `alt` attribute of the thumbnail `<img />` element                                                                                                                                                                                |
 | `buttonLabel`      | `false`  | `string`                       | `Play video`      | Value of the `aria-label` attribute of the play `<button></button>` element. Improves a11y.                                                                                                                                                    |
 | `aspectRatio`      | `false`  | `string`                       | `16:9`            | Aspect ratio of the video. This prop helps to save proportions of the video on different container sizes. Should match the `number:number` pattern                                                                                             |
@@ -184,6 +182,7 @@ After the successful build the following files will be generated in the `dist` f
 ├── vue-lazy-youtube-video.js
 ├── vue-lazy-youtube-video.min.js
 ├── vue-lazy-youtube-video.ssr.common.js
+├── style.css
 ```
 
 ## Powered by
