@@ -1,11 +1,11 @@
 <template>
-  <LazyYoutubeVideo url="https://www.youtube.com/watch?v=4JS70KB9GS0" preview-image-size="maxresdefault" />
+  <LazyYoutubeVideo src="https://www.youtube.com/embed/4JS70KB9GS0" />
 </template>
 
 <script lang="ts">
 import Vue from 'vue'
 
 export default Vue.extend({
-  name: 'AppPage'
+  name: 'AppPage',
 })
 </script>
