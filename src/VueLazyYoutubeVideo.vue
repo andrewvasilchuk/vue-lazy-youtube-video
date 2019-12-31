@@ -2,7 +2,7 @@
   <div class="y-video" @click="clickHandler">
     <div class="y-video__inner" :style="styleObj">
       <iframe
-        v-if="clicked"
+        v-if="activated"
         v-bind="iframeAttributes"
         :src="srcAttribute"
         class="y-video__media"
@@ -114,7 +114,7 @@ export default Vue.extend({
   data() {
     const self = this
     return {
-      clicked: self.autoplay,
+      activated: self.autoplay,
     }
   },
   computed: {
@@ -140,7 +140,7 @@ export default Vue.extend({
   },
   methods: {
     clickHandler() {
-      this.clicked = true
+      this.activated = true
     },
     getPaddingBottom() {
       let { aspectRatio } = this
