@@ -190,29 +190,6 @@ describe('VueLazyYoutubeVideo', () => {
       })
     })
 
-    describe('noCookie', () => {
-      it('should correctly set `src` attribute of <iframe /> when truthy value is passed', async () => {
-        const wrapper = factory({ noCookie: true })
-        const iframe = await clickAndGetIframe(wrapper)
-        const srcAttribute = iframe.element.getAttribute('src')
-
-        if (srcAttribute !== null) {
-          expect(
-            srcAttribute.startsWith('https://www.youtube-nocookie.com/embed/')
-          ).toBeTruthy()
-        }
-      })
-
-      it('should call `console.error` when value with invalid type is passed', () => {
-        const error = jest.spyOn(global.console, 'error')
-        const invalidProps = [0, '0', {}, [], () => {}]
-        invalidProps.forEach(prop => {
-          factory({ noCookie: prop })
-        })
-        expect(error).toHaveBeenCalledTimes(invalidProps.length)
-      })
-    })
-
     describe('iframeAttributes', () => {
       it('should correctly set attributes of <iframe /> when valid value is passed', async done => {
         const iframeAttributes = { foo: 'bar', baz: 'vue' }
