@@ -27,12 +27,25 @@ describe('VueLazyYoutubeVideo', () => {
   describe('props', () => {
     describe('src', () => {
       it('should correctly set `src` attribute of <iframe /> when valid value is passed', async () => {
-        const wrapper = factory()
+        let wrapper = factory()
         wrapper.trigger('click')
-        await Vue.nextTick()
+        await wrapper.vm.$nextTick()
         expect(wrapper.find('iframe').element.getAttribute('src')).toBe(
           `${defaultProps.src}?autoplay=1`
         )
+        const query = '?loop=1'
+        wrapper = factory({ src: `${defaultProps.src}${query}` })
+        wrapper.trigger('click')
+        await wrapper.vm.$nextTick()
+        expect(wrapper.find('iframe').element.getAttribute('src')).toBe(
+          `${defaultProps.src}${query}&autoplay=1`
+        )
+      })
+
+      it('should call `console.error` when no value is passed', () => {
+        const error = jest.spyOn(global.console, 'error')
+        factory({ src: undefined })
+        expect(error).toHaveBeenCalled()
       })
 
       it('should call `console.error` when value with invalid type is passed', () => {
@@ -41,16 +54,15 @@ describe('VueLazyYoutubeVideo', () => {
         invalidProps.forEach(prop => {
           factory({ src: prop })
         })
-        // * 2 – validator messages
         expect(error).toHaveBeenCalledTimes(invalidProps.length)
       })
 
-      it('should call `console.error` invalid value is passed', () => {
+      it('should call `console.error` when invalid value is passed', () => {
         const error = jest.spyOn(global.console, 'error')
         factory({ src: 'INVALID_URL' })
         // valid src
         factory({ src: defaultProps.src })
-        expect(error).toHaveBeenCalled()
+        expect(error).toHaveBeenCalledTimes(1)
       })
     })
 
@@ -74,7 +86,7 @@ describe('VueLazyYoutubeVideo', () => {
     })
 
     describe('buttonLabel', () => {
-      it('should correctly set `aria-label` attribute of a <button></button> when no value is passed', () => {
+      it('should correctly set `aria-label` attribute of the <button></button> when no value is passed', () => {
         const wrapper = factory()
         expect(
           wrapper.find(classes.button).element.getAttribute('aria-label')
