@@ -4,7 +4,7 @@
       <iframe
         v-if="clicked"
         v-bind="iframeAttributes"
-        :src="src"
+        :src="srcAttribute"
         class="y-video__media"
       ></iframe>
       <template v-else>
@@ -114,6 +114,10 @@ export default Vue.extend({
         this.warn(`Failed to extract video id from ${this.src}`)
         return ''
       }
+    },
+    srcAttribute(): string {
+      const hasQuestionMark = this.src.includes('?')
+      return `${this.src}${hasQuestionMark ? '&' : '?'}autoplay=1`
     },
     styleObj(): object {
       return {
