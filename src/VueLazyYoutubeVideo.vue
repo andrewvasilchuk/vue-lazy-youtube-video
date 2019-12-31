@@ -12,7 +12,7 @@
           <source
             v-if="webp"
             :srcset="
-              thumbnail && thumbnail.webp ||
+              (thumbnail && thumbnail.webp) ||
                 `https://i.ytimg.com/vi_webp/${id}/${previewImageSize}.webp`
             "
             type="image/webp"
@@ -20,7 +20,7 @@
           <img
             class="y-video__media y-video__media--type--img"
             :src="
-              thumbnail && thumbnail.jpg ||
+              (thumbnail && thumbnail.jpg) ||
                 `https://i.ytimg.com/vi/${id}/${previewImageSize}.jpg`
             "
             :alt="alt"
@@ -57,7 +57,9 @@ export default Vue.extend({
     src: {
       type: String,
       required: true,
-      validator: value => value.startsWith('https://www.youtube.com/embed/') || value.startsWith('https://www.youtube-nocookie.com/embed/')
+      validator: value =>
+        value.startsWith('https://www.youtube.com/embed/') ||
+        value.startsWith('https://www.youtube-nocookie.com/embed/'),
     },
     alt: {
       type: String,
@@ -89,19 +91,20 @@ export default Vue.extend({
     },
     thumbnail: {
       type: Object,
-      validator: val => 'jpg' in val && 'webp' in val
+      validator: val => 'jpg' in val && 'webp' in val,
     },
     iframeAttributes: {
       type: Object,
       default: () => ({
         allowfullscreen: true,
         frameborder: 0,
-        allow: 'accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture'
-      })
+        allow:
+          'accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture',
+      }),
     },
     webp: {
       type: Boolean,
-      default: true
+      default: true,
     },
     autoplay: {
       type: Boolean,
@@ -121,9 +124,7 @@ export default Vue.extend({
       if (executionResult !== null) {
         return executionResult[1]
       } else {
-        this.warn(
-          `Failed to extract video id from ${this.src}`
-        )
+        this.warn(`Failed to extract video id from ${this.src}`)
         return ''
       }
     },
@@ -164,12 +165,12 @@ export default Vue.extend({
       const [a, b] = aspectRatio.split(':')
       return this.getPaddingBottomValue(Number(a), Number(b))
     },
-    getPaddingBottomValue(a:number, b:number) {
+    getPaddingBottomValue(a: number, b: number) {
       return `${(b / a) * 100}%`
     },
     warn(message: string) {
       console.warn(`[vue-lazy-youtube-video]: ${message}`)
-    }
+    },
   },
 })
 </script>
