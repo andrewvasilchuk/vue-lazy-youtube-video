@@ -6,3 +6,13 @@ export async function clickAndGetIframe(wrapper: Wrapper<Component>) {
   await wrapper.vm.$nextTick()
   return wrapper.find('iframe')
 }
+
+export function getImgAndSourceElements(wrapper: Wrapper<Component>) {
+  const img = wrapper.find('img').element
+  const source = wrapper.find('source').element
+
+  return {
+    img,
+    source,
+  }
+}
