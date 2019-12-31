@@ -109,7 +109,7 @@ export default Vue.extend({
   },
   computed: {
     id(): string {
-      const regExp = /^https:\/\/www\.youtube(?:-nocookie)?\.com\/embed\/(.+)$/
+      const regExp = /^https:\/\/www\.youtube(?:-nocookie)?\.com\/embed\/(.+)\?.*$/
       const executionResult = regExp.exec(this.src)
       if (executionResult !== null) {
         return executionResult[1]
