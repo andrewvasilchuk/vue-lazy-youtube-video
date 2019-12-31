@@ -56,6 +56,7 @@ export default Vue.extend({
     src: {
       type: String,
       required: true,
+      validator: value => value.startsWith('https://www.youtube.com/embed/')
     },
     alt: {
       type: String,
