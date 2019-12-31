@@ -2,7 +2,7 @@ import Vue from 'vue'
 import { shallowMount } from '@vue/test-utils'
 import VueLazyYoutubeVideo from '../src/VueLazyYoutubeVideo.vue'
 import { classes } from './config'
-import { defaultProps } from './fixtures'
+import { defaultProps, getDefaultProps, VIDEO_ID } from './fixtures'
 import { clickAndGetIframe } from './helpers'
 
 beforeEach(() => {
@@ -19,25 +19,23 @@ const factory = (props = {}) => {
 describe('VueLazyYoutubeVideo', () => {
   it('should insert <iframe /> into the DOM when clicked', async () => {
     const wrapper = factory()
-    wrapper.trigger('click')
-    await wrapper.vm.$nextTick()
-    expect(wrapper.find('iframe').exists()).toBeTruthy()
+    const iframe = await clickAndGetIframe(wrapper)
+    expect(iframe.exists()).toBeTruthy()
   })
 
   describe('props', () => {
     describe('src', () => {
       it('should correctly set `src` attribute of <iframe /> when valid value is passed', async () => {
         let wrapper = factory()
-        wrapper.trigger('click')
-        await wrapper.vm.$nextTick()
-        expect(wrapper.find('iframe').element.getAttribute('src')).toBe(
+        let iframe = await clickAndGetIframe(wrapper)
+        expect(iframe.element.getAttribute('src')).toBe(
           `${defaultProps.src}?autoplay=1`
         )
+        // respects query
         const query = '?loop=1'
-        wrapper = factory({ src: `${defaultProps.src}${query}` })
-        wrapper.trigger('click')
-        await wrapper.vm.$nextTick()
-        expect(wrapper.find('iframe').element.getAttribute('src')).toBe(
+        wrapper = factory(getDefaultProps({ query }))
+        iframe = await clickAndGetIframe(wrapper)
+        expect(iframe.element.getAttribute('src')).toBe(
           `${defaultProps.src}${query}&autoplay=1`
         )
       })
@@ -60,13 +58,18 @@ describe('VueLazyYoutubeVideo', () => {
       it('should call `console.error` when invalid value is passed', () => {
         const error = jest.spyOn(global.console, 'error')
         factory({ src: 'INVALID_URL' })
-        // valid src
-        factory({ src: defaultProps.src })
         expect(error).toHaveBeenCalledTimes(1)
       })
     })
 
     describe('alt', () => {
+      it('should correctly set `alt` attribute of the preview <img /> when no value is passed', () => {
+        const wrapper = factory()
+        expect(
+          wrapper.find('img').element.getAttribute('alt')
+        ).toBe('Video thumbnail')
+      })
+
       it('should correctly set `alt` attribute of the preview <img /> when valid value is passed', () => {
         const alt = 'foo'
         const wrapper = factory({
@@ -79,7 +82,7 @@ describe('VueLazyYoutubeVideo', () => {
         const error = jest.spyOn(global.console, 'error')
         const invalidProps = [0, true, {}, [], () => {}]
         invalidProps.forEach(prop => {
-          factory({ buttonLabel: prop })
+          factory({ alt: prop })
         })
         expect(error).toHaveBeenCalledTimes(invalidProps.length)
       })
@@ -114,7 +117,7 @@ describe('VueLazyYoutubeVideo', () => {
     })
 
     describe('aspectRatio', () => {
-      it(`should correctly set padding bottom of <element class="${classes.inner}"></element> when no value is passed`, () => {
+      it(`should correctly set \`padding-bottom\` of <element class="${classes.inner}"></element> when no value is passed`, () => {
         const wrapper = factory()
         expect(wrapper.find(classes.inner).element.style.paddingBottom).toBe(
           `${(9 / 16) * 100}%`
@@ -153,10 +156,17 @@ describe('VueLazyYoutubeVideo', () => {
         const previewImageSize = 'hqdefault'
         const wrapper = factory({
           previewImageSize,
+          src: getDefaultProps({ query: '?foo=1' }).src
         })
         const srcAttribute = wrapper.find('img').element.getAttribute('src')
-        if (srcAttribute !== null) {
-          expect(srcAttribute.includes(previewImageSize)).toBeTruthy()
+        const srcsetAttribute = wrapper.find('source').element.getAttribute('srcset')
+
+        if (srcAttribute) {
+          expect(srcAttribute).toBe(`https://i.ytimg.com/vi/${VIDEO_ID}/${previewImageSize}.jpg`)
+        }
+
+        if (srcsetAttribute) {
+          expect(srcsetAttribute).toBe(`https://i.ytimg.com/vi_webp/${VIDEO_ID}/${previewImageSize}.webp`)
         }
       })
 
