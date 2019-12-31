@@ -20,18 +20,18 @@ describe('VueLazyYoutubeVideo', () => {
   it('should insert <iframe /> into the DOM when clicked', async () => {
     const wrapper = factory()
     wrapper.trigger('click')
-    await Vue.nextTick()
+    await wrapper.vm.$nextTick()
     expect(wrapper.find('iframe').exists()).toBeTruthy()
   })
 
   describe('props', () => {
-    describe('url', () => {
+    describe('src', () => {
       it('should correctly set `src` attribute of <iframe /> when valid value is passed', async () => {
         const wrapper = factory()
         wrapper.trigger('click')
         await Vue.nextTick()
         expect(wrapper.find('iframe').element.getAttribute('src')).toBe(
-          'https://www.youtube.com/embed/4JS70KB9GS0?autoplay=1'
+          `${defaultProps.src}?autoplay=1`
         )
       })
 
@@ -39,17 +39,17 @@ describe('VueLazyYoutubeVideo', () => {
         const error = jest.spyOn(global.console, 'error')
         const invalidProps = [0, true, {}, [], () => {}]
         invalidProps.forEach(prop => {
-          factory({ url: prop })
+          factory({ src: prop })
         })
         // * 2 – validator messages
-        expect(error).toHaveBeenCalledTimes(invalidProps.length * 2)
+        expect(error).toHaveBeenCalledTimes(invalidProps.length)
       })
 
       it('should call `console.error` invalid value is passed', () => {
         const error = jest.spyOn(global.console, 'error')
-        factory({ url: 'INVALID_URL' })
-        // valid url
-        factory({ url: defaultProps.url })
+        factory({ src: 'INVALID_URL' })
+        // valid src
+        factory({ src: defaultProps.src })
         expect(error).toHaveBeenCalled()
       })
     })
