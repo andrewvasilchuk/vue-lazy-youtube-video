@@ -60,10 +60,6 @@ export default Vue.extend({
       type: String,
       required: true,
     },
-    query: {
-      type: String,
-      default: '?autoplay=1',
-    },
     alt: {
       type: String,
       default: 'Video thumbnail',
@@ -126,7 +122,7 @@ export default Vue.extend({
   },
   methods: {
     generateURL() {
-      return `https://www.youtube.com/embed/${this.id}${this.query}`
+      return `https://www.youtube.com/embed/${this.id}`
     },
     clickHandler() {
       this.clicked = true
