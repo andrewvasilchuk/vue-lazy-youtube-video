@@ -154,12 +154,6 @@ The list of available slots are listed below:
 | `button` | Slot gives you an ability to provide custom play button             |
 | `icon`   | Slot gives you an ability to provide custom icon of the play button |
 
-### Events
-
-| Name        | Type         | Usage                                                                     |
-| ----------- | ------------ | ------------------------------------------------------------------------- |
-| videoLoaded | `() => void` | The event that is triggered when the `<iframe>` is inserted into the DOM. |
-
 ## Tests
 
 ### Unit
