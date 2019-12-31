@@ -56,7 +56,9 @@ export default Vue.extend({
     src: {
       type: String,
       required: true,
-      validator: value => value.startsWith('https://www.youtube.com/embed/')
+      validator: value =>
+        value.startsWith('https://www.youtube.com/embed/') ||
+        value.startsWith('https://www.youtube-nocookie.com/embed/'),
     },
     alt: {
       type: String,
@@ -107,7 +109,7 @@ export default Vue.extend({
   },
   computed: {
     id(): string {
-      const regExp = /^https:\/\/www\.youtube\.com\/embed\/(.+)$/
+      const regExp = /^https:\/\/www\.youtube(?:-nocookie)?\.com\/embed\/(.+)$/
       const executionResult = regExp.exec(this.src)
       if (executionResult !== null) {
         return executionResult[1]
