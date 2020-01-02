@@ -32,7 +32,7 @@
   "types": "types/index.d.ts",
   "style": "dist/style.css",
   "scripts": {
-    "build": "rimraf dist/* && rollup -c build/rollup.config.prod.js",
+    "build": "rimraf dist/* && rollup -c build/rollup.config.prod.js && node ./build/style.js",
     "dev": "rollup -c build/rollup.config.dev.js --watch",
     "prettier": "prettier --write ./**/*.{js,vue}",
     "test:unit": "jest",
@@ -45,6 +45,7 @@
     "@types/lodash.clonedeep": "^4.5.6",
     "@vue/test-utils": "^1.0.0-beta.30",
     "babel-core": "^7.0.0-bridge.0",
+    "cp-file": "^7.0.0",
     "jest": "^24.9.0",
     "lodash.clonedeep": "^4.5.0",
     "prettier": "^1.19.1",
