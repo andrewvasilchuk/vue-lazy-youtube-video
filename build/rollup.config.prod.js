@@ -1,6 +1,5 @@
 import path from 'path'
 import typescript from 'rollup-plugin-typescript2'
-import vue from 'rollup-plugin-vue'
 import replace from 'rollup-plugin-replace'
 import { terser } from 'rollup-plugin-terser'
 import css from 'rollup-plugin-css-only'
@@ -51,7 +50,6 @@ export default [
           tsconfig: './tsconfig.prod.json',
         })
       ),
-      vue(),
     ].concat(plugins),
   },
   {
@@ -69,7 +67,6 @@ export default [
           tsconfig: './tsconfig.prod.json',
         })
       ),
-      vue({ css: false }),
     ].concat(plugins),
   },
   {
@@ -88,7 +85,6 @@ export default [
           tsconfig: './tsconfig.prod.umd.json',
         })
       ),
-      vue(),
       terser(),
     ].concat(plugins),
   },
