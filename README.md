@@ -2,6 +2,8 @@
 
 ![Vue.js logo plus YouTube logo](./assets/img.jpg)
 
+> 1.x documentation can be found [here](https://github.com/andrewvasilchuk/vue-lazy-youtube-video/tree/1.x).
+
 - [vue-lazy-youtube-video](#vue-lazy-youtube-video)
   - [Features](#features)
   - [Installation](#installation)
