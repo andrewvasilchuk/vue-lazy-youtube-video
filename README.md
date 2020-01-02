@@ -8,6 +8,7 @@
     - [Via NPM](#via-npm)
     - [Via Yarn](#via-yarn)
   - [Initialization](#initialization)
+    - [Styles](#styles)
     - [As a global component](#as-a-global-component)
     - [As a local component](#as-a-local-component)
     - [As a plugin](#as-a-plugin)
@@ -47,6 +48,12 @@ $ yarn add vue-lazy-youtube-video
 ```
 
 ## Initialization
+
+### Styles
+
+```js
+import 'vue-lazy-youtube-video/dist/style.css'
+```
 
 ### As a global component
 
