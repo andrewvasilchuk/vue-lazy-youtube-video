@@ -56,23 +56,6 @@ export default [
     input: SOURCE,
     external,
     output: {
-      file: `${DIST_DIR}/${FILE_NAME}.ssr.common.js`,
-      exports: 'named',
-      format: 'cjs',
-    },
-    plugins: [
-      css({ output: path.join(__dirname, `../${DIST_DIR}/style.css`) }),
-      typescript(
-        Object.assign({}, typescriptPluginOptions, {
-          tsconfig: './tsconfig.prod.json',
-        })
-      ),
-    ].concat(plugins),
-  },
-  {
-    input: SOURCE,
-    external,
-    output: {
       file: `${DIST_DIR}/${FILE_NAME}.min.js`,
       format: 'umd',
       exports: 'named',
