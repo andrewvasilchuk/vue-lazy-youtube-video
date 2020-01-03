@@ -108,12 +108,16 @@ export default Vue.extend({
       default: false,
     },
     iframeAttributes: {
-      type: Object,
+      type: Object
+    },
+    autoplay: {
+      type: Boolean,
     },
   },
   data() {
+    const self = this
     return {
-      clicked: false,
+      clicked: self.autoplay,
     }
   },
   computed: {
