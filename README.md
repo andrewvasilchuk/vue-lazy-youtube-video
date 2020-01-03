@@ -132,7 +132,7 @@ The list of available slots are listed below:
 | Slot     | Description                                                      |
 | -------- | ---------------------------------------------------------------- |
 | `button` | Slot gives an ability to provide custom play button              |
-| `icon`   | Slot gives yan ability to provide custom icon of the play button |
+| `icon`   | Slot gives an ability to provide custom icon of the play button |
 
 > ⚠️ **Note**, that when `button` slot is passed and that slot contains `<button></button>`, ones should not to forget to add `aria-label` attribute. Also, if that button do not contain `.y-video-button` class, all default styles will be lost, so style concerns it's up to developer.
 
