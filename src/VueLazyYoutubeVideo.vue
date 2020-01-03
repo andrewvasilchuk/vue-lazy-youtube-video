@@ -59,13 +59,6 @@ export default Vue.extend({
     url: {
       type: String,
       required: true,
-      validator: value => {
-        if (typeof value === 'string') {
-          return value.startsWith('https://www.youtube.com/watch?v=')
-        } else {
-          return false
-        }
-      },
     },
     query: {
       type: String,
@@ -122,7 +115,7 @@ export default Vue.extend({
   },
   computed: {
     id(): string {
-      const regExp = /^https:\/\/www\.youtube\.com\/watch\?v=(.+)$/
+      const regExp = /(?:https?:\/\/(?:www\.)?)?(?:youtube(?:-nocookie)?\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]vi?=)|youtu\.be\/)([^"&?\/ ]{11}).*/
       const executionResult = regExp.exec(this.url)
       if (executionResult !== null) {
         return executionResult[1]
