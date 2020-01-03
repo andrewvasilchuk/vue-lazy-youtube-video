@@ -9,6 +9,7 @@
   - [Installation](#installation)
     - [Via NPM](#via-npm)
     - [Via Yarn](#via-yarn)
+    - [Directly in browser](#directly-in-browser)
   - [Initialization](#initialization)
     - [Styles](#styles)
     - [As a global component](#as-a-global-component)
@@ -48,7 +49,19 @@ $ npm install vue-lazy-youtube-video --save
 $ yarn add vue-lazy-youtube-video
 ```
 
-[comment]: <> (Add note about installation directly in browser)
+### Directly in browser
+
+```html
+<script src="https://cdn.jsdelivr.net/npm/vue"></script>
+<link rel="stylesheet" href="https://unpkg.com/vue-lazy-youtube-video/dist/style.css"></link>
+<script src="https://unpkg.com/vue-lazy-youtube-video"></script>
+<script>
+  // as a plugin
+  Vue.use(VueLazyYoutubeVideo.Plugin)
+  // as a component
+  Vue.use('LazyYoutubeVideo', VueLazyYoutubeVideo.default)
+</script>
+```
 
 ## Initialization
 
