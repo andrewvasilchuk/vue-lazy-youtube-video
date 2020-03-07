@@ -1,4 +1,5 @@
 import Vue, { VNode } from 'vue'
+import { startsWith } from './helpers'
 
 export default Vue.extend({
   name: 'VueLazyYoutubeVideo',
@@ -7,8 +8,8 @@ export default Vue.extend({
       type: String,
       required: true,
       validator: value =>
-        value.startsWith('https://www.youtube.com/embed/') ||
-        value.startsWith('https://www.youtube-nocookie.com/embed/'),
+        startsWith(value, 'https://www.youtube.com/embed/') ||
+        startsWith(value, 'https://www.youtube-nocookie.com/embed/'),
     },
     alt: {
       type: String,
