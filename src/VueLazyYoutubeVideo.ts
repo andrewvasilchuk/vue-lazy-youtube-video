@@ -100,9 +100,9 @@ export default Vue.extend({
       const warningMessage = `Invalid value ${aspectRatio} supplied to \`aspectRatio\` property, instead fallback value ${defaultAspectRatio} is used `
 
       if (typeof aspectRatio === 'string') {
-        const [a, b] = aspectRatio.split(':')
+        const [a, b] = aspectRatio.split(':').map(Number)
 
-        if (Number.isFinite(Number(a)) && Number.isFinite(Number(b))) {
+        if (isFinite(a) === true && isFinite(b) === true) {
         } else {
           aspectRatio = defaultAspectRatio
           this.warn(warningMessage)
@@ -112,8 +112,8 @@ export default Vue.extend({
         this.warn(warningMessage)
       }
 
-      const [a, b] = aspectRatio.split(':')
-      return this.getPaddingBottomValue(Number(a), Number(b))
+      const [a, b] = aspectRatio.split(':').map(Number)
+      return this.getPaddingBottomValue(a, b)
     },
     getPaddingBottomValue(a: number, b: number) {
       return `${(b / a) * 100}%`
