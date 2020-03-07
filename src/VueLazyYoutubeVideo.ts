@@ -170,6 +170,9 @@ export default Vue.extend({
                         `https://i.ytimg.com/vi/${id}/${previewImageSize}.jpg`,
                       alt,
                     },
+                    on: {
+                      load: () => this.$emit('load')
+                    }
                   }),
                 ]),
                 this.$slots.button ||
