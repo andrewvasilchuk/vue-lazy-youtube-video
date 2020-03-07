@@ -68,7 +68,7 @@ export default [
           tsconfig: './tsconfig.prod.umd.json',
         })
       ),
-      terser(),
+      terser({ output: { comments: false } }),
     ].concat(plugins),
   },
 ]
