@@ -1,4 +1,5 @@
 import Vue, { VNode } from 'vue'
+import { startsWith } from './helpers'
 
 export default Vue.extend({
   name: 'VueLazyYoutubeVideo',
@@ -7,8 +8,8 @@ export default Vue.extend({
       type: String,
       required: true,
       validator: value =>
-        value.startsWith('https://www.youtube.com/embed/') ||
-        value.startsWith('https://www.youtube-nocookie.com/embed/'),
+        startsWith(value, 'https://www.youtube.com/embed/') ||
+        startsWith(value, 'https://www.youtube-nocookie.com/embed/'),
     },
     alt: {
       type: String,
@@ -79,7 +80,7 @@ export default Vue.extend({
     },
     srcAttribute(): string {
       const hasQuestionMark =
-        typeof this.src === 'string' && this.src.includes('?')
+        typeof this.src === 'string' && this.src.indexOf('?') !== -1
       return `${this.src}${hasQuestionMark ? '&' : '?'}autoplay=1`
     },
     styleObj(): object {
@@ -100,9 +101,9 @@ export default Vue.extend({
       const warningMessage = `Invalid value ${aspectRatio} supplied to \`aspectRatio\` property, instead fallback value ${defaultAspectRatio} is used `
 
       if (typeof aspectRatio === 'string') {
-        const [a, b] = aspectRatio.split(':')
+        const [a, b] = aspectRatio.split(':').map(Number)
 
-        if (Number.isFinite(Number(a)) && Number.isFinite(Number(b))) {
+        if (isFinite(a) === true && isFinite(b) === true) {
         } else {
           aspectRatio = defaultAspectRatio
           this.warn(warningMessage)
@@ -112,8 +113,8 @@ export default Vue.extend({
         this.warn(warningMessage)
       }
 
-      const [a, b] = aspectRatio.split(':')
-      return this.getPaddingBottomValue(Number(a), Number(b))
+      const [a, b] = aspectRatio.split(':').map(Number)
+      return this.getPaddingBottomValue(a, b)
     },
     getPaddingBottomValue(a: number, b: number) {
       return `${(b / a) * 100}%`
