@@ -6,6 +6,7 @@
           src="https://www.youtube.com/embed/4JS70KB9GS0"
           alt="foo"
           button-label="baz"
+          :img-listeners="thumbnailListeners"
         />
       </li>
       <li>
@@ -37,6 +38,15 @@ import Vue from 'vue'
 
 export default Vue.extend({
   name: 'AppPage',
+  data() {
+    return {
+      thumbnailListeners: {
+        load() {
+          console.log('load')
+        }
+      }
+    }
+  }
 })
 </script>
 
