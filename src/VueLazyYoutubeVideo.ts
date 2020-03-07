@@ -79,7 +79,7 @@ export default Vue.extend({
     },
     srcAttribute(): string {
       const hasQuestionMark =
-        typeof this.src === 'string' && this.src.includes('?')
+        typeof this.src === 'string' && this.src.indexOf('?') !== -1
       return `${this.src}${hasQuestionMark ? '&' : '?'}autoplay=1`
     },
     styleObj(): object {
