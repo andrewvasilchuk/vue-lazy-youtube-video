@@ -1,7 +1,6 @@
-import Vue, { PluginObject } from 'vue'
+import { PluginObject } from 'vue'
+import { IVueLazyYoutubeVideo } from '../src/VueLazyYoutubeVideo'
 
-declare class LazyYoutubeVideo extends Vue { }
+export default IVueLazyYoutubeVideo
 
-export default LazyYoutubeVideo
-
-export declare const Plugin: PluginObject<any>
+export declare const Plugin: PluginObject<never>
