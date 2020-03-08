@@ -61,7 +61,7 @@ const component = Vue.extend({
       default: false,
     },
     thumbnailListeners: {
-      type: Object,
+      type: Object as () => Record<string, Function | Function[]>,
     },
   },
   data(): { activated: boolean } {
