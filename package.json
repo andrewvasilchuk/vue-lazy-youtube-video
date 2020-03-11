@@ -34,6 +34,7 @@
   "scripts": {
     "build": "rimraf dist/* && rollup -c build/rollup.config.prod.js && node ./build/style.js",
     "dev": "rollup -c build/rollup.config.dev.js --watch",
+    "format": "prettier --check ./**/*.{js,ts,vue}",
     "prettier": "prettier --write ./**/*.{js,ts,vue}",
     "test:unit": "jest",
     "prepare": "npm run build"
