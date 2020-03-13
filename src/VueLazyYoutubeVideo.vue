@@ -5,9 +5,6 @@
         v-if="clicked"
         v-bind="iframeAttributes"
         :src="src"
-        allowfullscreen
-        frameborder="0"
-        allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
         class="y-video__media"
       ></iframe>
       <template v-else>
@@ -94,6 +91,12 @@ export default Vue.extend({
     },
     iframeAttributes: {
       type: Object,
+      default: () => ({
+        allowfullscreen: true,
+        frameborder: 0,
+        allow:
+          'accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture',
+      }),
     },
   },
   data() {
