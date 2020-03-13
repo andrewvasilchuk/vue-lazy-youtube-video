@@ -34,4 +34,15 @@ describe('VueLazyYoutubeVideo', () => {
     })
     expect(wrapper.find('img').element.getAttribute('alt')).toBe(alt)
   })
+
+  it('should correctly set size of the preview image', () => {
+    const previewImageSize = 'hqdefault'
+    const wrapper = factory({
+      previewImageSize,
+    })
+    const srcAttribute = wrapper.find('img').element.getAttribute('src')
+    if (srcAttribute !== null) {
+      expect(srcAttribute.includes(previewImageSize)).toBeTruthy()
+    }
+  })
 })
