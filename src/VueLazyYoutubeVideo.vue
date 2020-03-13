@@ -106,10 +106,15 @@ export default Vue.extend({
       type: Boolean,
       default: true,
     },
+    autoplay: {
+      type: Boolean,
+      default: false,
+    },
   },
   data() {
+    const self = this
     return {
-      clicked: false,
+      clicked: self.autoplay,
     }
   },
   computed: {
