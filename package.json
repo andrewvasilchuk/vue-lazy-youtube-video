@@ -23,7 +23,8 @@
   "main": "dist/vue-lazy-youtube-video.js",
   "scripts": {
     "build": "webpack",
-    "test": "jest"
+    "test": "jest",
+    "prettier": "prettier --write ./**/*.{js,vue}"
   },
   "devDependencies": {
     "@babel/core": "^7.5.5",
