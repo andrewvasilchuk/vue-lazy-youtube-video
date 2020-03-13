@@ -1,7 +1,14 @@
 <template>
   <div class="y-video" @click="clickHandler">
     <div class="y-video__inner" :style="styleObj">
-      <template v-if="!clicked">
+      <iframe
+        v-if="clicked"
+        :src="generateURL()"
+        allowfullscreen
+        allow="autoplay"
+        class="y-video__media"
+      ></iframe>
+      <template v-else>
         <picture>
           <source
             :srcset="
@@ -20,7 +27,11 @@
           />
         </picture>
         <slot name="button">
-          <button type="button" class="y-video__button" :aria-label="buttonLabel">
+          <button
+            type="button"
+            class="y-video__button"
+            :aria-label="buttonLabel"
+          >
             <slot name="icon">
               <svg viewBox="0 0 68 48" version="1.1" width="100%" height="100%">
                 <path
@@ -33,13 +44,6 @@
           </button>
         </slot>
       </template>
-      <iframe
-        v-else
-        :src="generateURL()"
-        allowfullscreen
-        allow="autoplay"
-        class="y-video__media"
-      ></iframe>
     </div>
   </div>
 </template>
