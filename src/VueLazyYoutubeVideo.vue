@@ -10,6 +10,7 @@
       <template v-else>
         <picture>
           <source
+            v-if="webp"
             :srcset="
               (thumbnail && thumbnail.webp) ||
                 `https://i.ytimg.com/vi_webp/${id}/${previewImageSize}.webp`
@@ -100,6 +101,10 @@ export default Vue.extend({
         allow:
           'accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture',
       }),
+    },
+    webp: {
+      type: Boolean,
+      default: true,
     },
   },
   data() {
