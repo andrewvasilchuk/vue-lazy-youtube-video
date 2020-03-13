@@ -35,6 +35,16 @@ describe('VueLazyYoutubeVideo', () => {
     expect(wrapper.find('img').element.getAttribute('alt')).toBe(alt)
   })
 
+  it('should correctly set `aria-label` attribute of the `<button></button>` when valid value is passed', () => {
+    const buttonLabel = 'Simple dummy text'
+    const wrapper = factory({
+      buttonLabel,
+    })
+    expect(wrapper.find('button').element.getAttribute('aria-label')).toBe(
+      buttonLabel
+    )
+  })
+
   it('should correctly set size of the preview image', () => {
     const previewImageSize = 'hqdefault'
     const wrapper = factory({
