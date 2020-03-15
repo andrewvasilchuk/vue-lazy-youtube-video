@@ -86,6 +86,12 @@ You can run tests by typing this command in your console:
 npm run test
 ```
 
+## Development
+
+1. Clone this repository
+2. Install dependencies using `yarn install` or `npm install`
+3. Start development server using `npm run dev` script
+
 ## Powered by
 
 - `Vue`
