@@ -49,6 +49,17 @@ export default {
 }
 ```
 
+### As a plugin
+
+> ⚠️ It must be called before `new Vue()`.
+
+```js
+import Vue from 'vue'
+import { Plugin } from 'vue-lazy-youtube-video'
+
+Vue.use(Plugin)
+```
+
 ## 🚀 Usage
 
 ```vue
