@@ -4,7 +4,7 @@
       <iframe
         v-if="clicked"
         v-bind="iframeAttributes"
-        :src="generateURL()"
+        :src="src"
         allowfullscreen
         frameborder="0"
         allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
@@ -56,7 +56,7 @@ import Vue from 'vue'
 export default Vue.extend({
   name: 'VueLazyYoutubeVideo',
   props: {
-    url: {
+    src: {
       type: String,
       required: true,
     },
@@ -103,12 +103,12 @@ export default Vue.extend({
   },
   computed: {
     id(): string {
-      const regExp = /^https:\/\/www\.youtube\.com\/watch\?v=(.+)$/
-      const executionResult = regExp.exec(this.url)
+      const regExp = /^https:\/\/www\.youtube\.com\/embed\/(.+)$/
+      const executionResult = regExp.exec(this.src)
       if (executionResult !== null) {
         return executionResult[1]
       } else {
-        this.warn(`Failed to extract video id from "${this.url}"`)
+        this.warn(`Failed to extract video id from ${this.src}`)
         return ''
       }
     },
@@ -119,9 +119,6 @@ export default Vue.extend({
     },
   },
   methods: {
-    generateURL() {
-      return `https://www.youtube.com/embed/${this.id}`
-    },
     clickHandler() {
       this.clicked = true
 
