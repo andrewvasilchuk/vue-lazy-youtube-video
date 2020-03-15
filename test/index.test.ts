@@ -6,6 +6,7 @@ import { clickAndGetIframe } from './helpers'
 
 beforeEach(() => {
   console.error = jest.fn()
+  console.warn = jest.fn()
 })
 
 const factory = (props = {}) => {
