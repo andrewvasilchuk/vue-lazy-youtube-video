@@ -4,6 +4,10 @@ import { classes } from './config'
 import { defaultProps } from './fixtures'
 import { clickAndGetIframe } from './helpers'
 
+beforeEach(() => {
+  console.error = jest.fn()
+})
+
 const factory = (props = {}) => {
   return shallowMount(VueLazyYoutubeVideo, {
     propsData: Object.assign({}, defaultProps, props),
