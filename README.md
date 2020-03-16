@@ -92,7 +92,11 @@ Vue.use(Plugin)
 
 Jest is used for unit-tests.
 
-You can run tests by typing this command in your console:
+### Unit
+
+[`Jest`](https://jestjs.io) and [`VueTestUtils`](https://vue-test-utils.vuejs.org) is used for unit tests.
+
+You can run unit tests by running the next command:
 
 ```bash
 npm run test
