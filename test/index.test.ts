@@ -1,12 +1,10 @@
 import { shallowMount } from '@vue/test-utils'
 import VueLazyYoutubeVideo from '../dist/vue-lazy-youtube-video'
+import { defaultProps } from './fixtures'
 
 const factory = (props = {}) => {
   return shallowMount(VueLazyYoutubeVideo, {
-    propsData: {
-      url: 'https://www.youtube.com/watch?v=eJnQBXmZ7Ek',
-      ...props,
-    },
+    propsData: Object.assign({}, defaultProps, props),
   })
 }
 
