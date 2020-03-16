@@ -1,5 +1,5 @@
 import { shallowMount } from '@vue/test-utils'
-import VueLazyYoutubeVideo from '../dist/vue-lazy-youtube-video'
+import VueLazyYoutubeVideo from '../src/VueLazyYoutubeVideo.vue'
 import { classes } from './config'
 import { defaultProps } from './fixtures'
 import { clickAndGetIframe } from './helpers'
