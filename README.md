@@ -72,7 +72,9 @@ Vue.use(Plugin)
 
 [![Edit vue-lazy-youtube-video](https://codesandbox.io/static/img/play-codesandbox.svg)](https://codesandbox.io/s/x7nrwxq6qo)
 
-## ⚙️ Properties
+## API
+
+### ⚙ Properties
 
 | Property         | Required | Type    | Default             | Description                                                                                                                          |
 | ---------------- | -------- | ------- | ------------------- | ------------------------------------------------------------------------------------------------------------------------------------ |
@@ -86,7 +88,7 @@ Vue.use(Plugin)
 | noCookie         | `false`  | Boolean | `false`             | Whether or not to enable privacy-enhanced mode. If `true` – component will insert `-nocookie` part into the generated embed link     |
 | iframeAttributes | `false`  | Object  |                     | Custom attributes that will be assigned to the `<iframe />` element                                                                  |
 
-## Slots
+### Slots
 
 Component provides some `slots`.
 
@@ -99,7 +101,7 @@ The list of available slots is listed below:
 
 > ⚠️ **Note**, that when `button` slot is passed and this slot contains `<button></button>`, ones should not to forget to add `aria-label` (if this button contains only icon) and `type="button"` attributes. Also, if that button do not contain `.y-video-button` class, all default styles will be lost, so style concerns it's up to developer.
 
-## ⚙️ Events
+### ⚙️ Events
 
 | Name        | Type         | Usage                                                                     |
 | ----------- | ------------ | ------------------------------------------------------------------------- |
