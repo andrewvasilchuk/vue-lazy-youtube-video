@@ -101,6 +101,8 @@ Vue.use(Plugin)
 
 > 🚨 Value of the `url` property must be a **DIRECT** link to the video (e.g. https://www.youtube.com/watch?v=4JS70KB9GS0), but not the **EMBED** link (e.g. https://www.youtube.com/embed/4JS70KB9GS0). Component itself will generate appropriate `src` attribute for the `<iframe />` element
 
+The list of available `props` (with their types, default values and descriptions) is listed below:
+
 [1]: https://stackoverflow.com/questions/2068344/how-do-i-get-a-youtube-video-thumbnail-from-the-youtube-api
 
 | Property           | Required | Type                           | Default           | Description                                                                                                                                        |
