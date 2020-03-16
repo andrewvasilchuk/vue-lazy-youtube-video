@@ -1,10 +1,10 @@
 import Vue from 'vue'
 import App from './App.vue'
-import VueLazyYoutubeVideo from '../src'
+import { Plugin } from '../src'
 
 Vue.config.productionTip = false
 
-Vue.component('LazyYoutubeVideo', VueLazyYoutubeVideo)
+Vue.use(Plugin)
 
 new Vue({
   el: '#app',
