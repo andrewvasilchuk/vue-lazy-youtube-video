@@ -199,13 +199,13 @@ After the successful build the following files will be generated in the `dist` f
 
 ## Powered by
 
-- `Vue`
-- `Rollup` (and plugins)
-- `Babel`
-- `Jest`
-- `Vue Test Utils`
-- `TypeScript`
-- `PostCSS`
+- [`Vue`](https://vuejs.org)
+- [`Rollup`](https://rollupjs.org/guide/en) (and plugins)
+- [`Babel`](https://babeljs.io)
+- [`Jest`](https://jestjs.io)
+- [`Vue Test Utils`](http://vue-test-utils.vuejs.org)
+- [`TypeScript`](http://www.typescriptlang.org)
+- [`PostCSS`](https://postcss.org)
 
 ## Inspiration
 
