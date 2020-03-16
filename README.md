@@ -2,6 +2,29 @@
 
 ![Vue.js logo plus YouTube logo](./assets/img.jpg)
 
+- [vue-lazy-youtube-video](#vue-lazy-youtube-video)
+  - [Features](#features)
+  - [Installation](#installation)
+    - [Via NPM](#via-npm)
+    - [Via Yarn](#via-yarn)
+  - [Initialization](#initialization)
+    - [As a global component](#as-a-global-component)
+    - [As a local component](#as-a-local-component)
+    - [As a plugin](#as-a-plugin)
+  - [Usage](#usage)
+  - [Demo](#demo)
+  - [API](#api)
+    - [Properties](#properties)
+    - [Slots](#slots)
+    - [Events](#events)
+  - [Tests](#tests)
+    - [Unit](#unit)
+  - [Development](#development)
+  - [Build](#build)
+  - [Powered by](#powered-by)
+  - [Inspiration](#inspiration)
+  - [License](#license)
+
 ## Features
 
 - reduces initial load size by ~1.1MB per video
@@ -9,7 +32,7 @@
 - `.webp` thumbnail format for modern browsers that support it, with `.jpg` fallback for browsers that don't
 - fully customizable through `props` and `slots`
 
-## 💿 Installation
+## Installation
 
 ### Via NPM
 
@@ -60,7 +83,7 @@ import { Plugin } from 'vue-lazy-youtube-video'
 Vue.use(Plugin)
 ```
 
-## 🚀 Usage
+## Usage
 
 ```vue
 <template>
@@ -74,7 +97,7 @@ Vue.use(Plugin)
 
 ## API
 
-### ⚙ Properties
+### Properties
 
 | Property         | Required | Type    | Default             | Description                                                                                                                          |
 | ---------------- | -------- | ------- | ------------------- | ------------------------------------------------------------------------------------------------------------------------------------ |
@@ -101,13 +124,13 @@ The list of available slots is listed below:
 
 > ⚠️ **Note**, that when `button` slot is passed and this slot contains `<button></button>`, ones should not to forget to add `aria-label` (if this button contains only icon) and `type="button"` attributes. Also, if that button do not contain `.y-video-button` class, all default styles will be lost, so style concerns it's up to developer.
 
-### ⚙️ Events
+### Events
 
 | Name        | Type         | Usage                                                                     |
 | ----------- | ------------ | ------------------------------------------------------------------------- |
 | videoLoaded | `() => void` | The event that is triggered when the `<iframe>` is inserted into the DOM. |
 
-## 💉 Tests
+## Tests
 
 Jest is used for unit-tests.
 
@@ -153,6 +176,6 @@ After the successful build the following files will be generated in the `dist` f
 
 Inspired by [Vadim Makeev](https://pepelsbey.net). Vadim created a comprehensive tutorial in which he shows how to lazyload YouTube videos properly.
 
-## 🔒 License
+## License
 
 [MIT](http://opensource.org/licenses/MIT)
