@@ -92,6 +92,19 @@ npm run test
 2. Install dependencies using `yarn install` or `npm install`
 3. Start development server using `npm run dev` script
 
+## Build
+
+To build the production ready bundle simply run `npm run build`:
+
+After the successful build the following files will be generated in the `dist` folder:
+
+```
+├── vue-lazy-youtube-video.common.js
+├── vue-lazy-youtube-video.esm.js
+├── vue-lazy-youtube-video.js
+├── vue-lazy-youtube-video.min.js
+```
+
 ## Powered by
 
 - `Vue`
