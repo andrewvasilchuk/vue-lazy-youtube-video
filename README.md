@@ -82,6 +82,19 @@ Vue.use(Plugin)
 | noCookie         | `false`  | Boolean | `false`             | Whether or not to enable privacy-enhanced mode. If `true` – component will insert `-nocookie` part into the generated embed link     |
 | iframeAttributes | `false`  | Object  |                     | Custom attributes that will be assigned to the `<iframe />` element                                                                  |
 
+## Slots
+
+Component provides some `slots`.
+
+The list of available slots is listed below:
+
+| Slot     | Description                                                     |
+| -------- | --------------------------------------------------------------- |
+| `button` | Slot gives an ability to provide custom play button             |
+| `icon`   | Slot gives an ability to provide custom icon of the play button |
+
+> ⚠️ **Note**, that when `button` slot is passed and this slot contains `<button></button>`, ones should not to forget to add `aria-label` (if this button contains only icon) and `type="button"` attributes. Also, if that button do not contain `.y-video-button` class, all default styles will be lost, so style concerns it's up to developer.
+
 ## ⚙️ Events
 
 | Name        | Type         | Usage                                                                     |
