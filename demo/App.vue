@@ -4,3 +4,11 @@
     preview-image-size="maxresdefault"
   />
 </template>
+
+<script lang="ts">
+import Vue from 'vue'
+
+export default Vue.extend({
+  name: 'AppPage',
+})
+</script>
