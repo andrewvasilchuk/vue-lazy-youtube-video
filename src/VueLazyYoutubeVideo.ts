@@ -60,6 +60,9 @@ export default Vue.extend({
       type: Boolean,
       default: false,
     },
+    thumbnailListeners: {
+      type: Object,
+    },
   },
   data(): { activated: boolean } {
     const self = this
@@ -170,9 +173,7 @@ export default Vue.extend({
                         `https://i.ytimg.com/vi/${id}/${previewImageSize}.jpg`,
                       alt,
                     },
-                    on: {
-                      load: () => this.$emit('load')
-                    }
+                    on: this.thumbnailListeners,
                   }),
                 ]),
                 this.$slots.button ||
