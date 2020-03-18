@@ -157,12 +157,6 @@ The list of available slots is listed below:
 
 > ⚠️ **Note**, that when `button` slot is passed and this slot contains `<button></button>`, ones should not to forget to add `aria-label` (if this button contains only icon) and `type="button"` attributes. Also, if that button do not contain `.y-video-button` class, all default styles will be lost, so style concerns it's up to developer.
 
-### Events
-
-| Name        | Type         | Usage                                                                     |
-| ----------- | ------------ | ------------------------------------------------------------------------- |
-| videoLoaded | `() => void` | The event that is triggered when the `<iframe>` is inserted into the DOM. |
-
 ## Tests
 
 Jest is used for unit-tests.
