@@ -335,6 +335,29 @@ describe('VueLazyYoutubeVideo', () => {
         expect(error).toHaveBeenCalledTimes(invalidProps.length)
       })
     })
+
+    describe('thumbnailListeners', () => {
+      it('should bind passed listeners', () => {
+        const click = jest.fn(() => true)
+        const wrapper = factory({
+          propsData: { thumbnailListeners: { click } },
+        })
+        const img = wrapper.find('img')
+        img.element.click()
+        expect(click).toHaveBeenCalled()
+      })
+
+      it('should call `console.error` and throw an error when value with invalid type is passed', () => {
+        const error = jest.spyOn(global.console, 'error')
+        const invalidProps = [1, 'foo', true, [], () => {}]
+        invalidProps.forEach(prop => {
+          try {
+            factory({ propsData: { thumbnailListeners: prop } })
+          } catch (e) {}
+        })
+        expect(error).toHaveBeenCalledTimes(invalidProps.length)
+      })
+    })
   })
 
   describe('slots', () => {
