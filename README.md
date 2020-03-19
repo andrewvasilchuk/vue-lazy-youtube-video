@@ -56,8 +56,12 @@ $ yarn add vue-lazy-youtube-video
 <script src="https://cdn.jsdelivr.net/npm/vue"></script>
 <!-- Styles with CSS Custom Properties -->
 <link rel="stylesheet" href="https://unpkg.com/vue-lazy-youtube-video/dist/style.css"></link>
+<!-- Minified styles with CSS Custom Properties -->
+<!-- <link rel="stylesheet" href="https://unpkg.com/vue-lazy-youtube-video/dist/style.min.css"></link> -->
 <!-- Styles without CSS Custom Properties -->
 <!-- <link rel="stylesheet" href="https://unpkg.com/vue-lazy-youtube-video/dist/style.simplified.css"></link> -->
+<!-- Minified styles without CSS Custom Properties -->
+<!-- <link rel="stylesheet" href="https://unpkg.com/vue-lazy-youtube-video/dist/style.simplified.min.css"></link> -->
 <script src="https://unpkg.com/vue-lazy-youtube-video"></script>
 <script>
   // as a plugin
@@ -188,7 +192,9 @@ After the successful build the following files will be generated in the `dist` f
 ├── vue-lazy-youtube-video.js
 ├── vue-lazy-youtube-video.min.js
 ├── style.css
+├── style.min.css
 ├── style.simplified.css
+├── style.simplified.min.css
 ```
 
 ## Powered by
