@@ -4,14 +4,16 @@
       <template v-if="!isVideoLoaded">
         <picture>
           <source
-            :srcset="`https://i.ytimg.com/vi_webp/${id}/${previewImageSize}.webp`"
+            :srcset="
+              `https://i.ytimg.com/vi_webp/${id}/${previewImageSize}.webp`
+            "
             type="image/webp"
-          >
+          />
           <img
             class="y-video__media y-video__media--type--img"
             :src="`https://i.ytimg.com/vi/${id}/${previewImageSize}.jpg`"
             :alt="alt"
-          >
+          />
         </picture>
         <button type="button" class="y-video__button" :aria-label="buttonLabel">
           <svg viewBox="0 0 68 48" version="1.1" width="100%" height="100%">
@@ -23,82 +25,88 @@
           </svg>
         </button>
       </template>
-      <iframe v-else :src="generateURL()" allowfullscreen allow="autoplay" class="y-video__media"></iframe>
+      <iframe
+        v-else
+        :src="generateURL()"
+        allowfullscreen
+        allow="autoplay"
+        class="y-video__media"
+      ></iframe>
     </div>
   </div>
 </template>
 
 <script>
 export default {
-  name: "VueLazyYoutubeVideo",
+  name: 'VueLazyYoutubeVideo',
   props: {
     url: {
       type: String,
       required: true,
       validator: value => {
-        return value.indexOf("https://www.youtube.com/watch?") !== 1;
-      }
+        return value.indexOf('https://www.youtube.com/watch?') !== 1
+      },
     },
     alt: {
       type: String,
-      default: "Video alternative image"
+      default: 'Video alternative image',
     },
     buttonLabel: {
       type: String,
-      default: "Play video"
+      default: 'Play video',
     },
     aspectRatio: {
       type: String,
-      default: "16:9",
+      default: '16:9',
       validator: value => {
-        const pattern = /^\d+:\d+$/;
-        return pattern.test(value);
-      }
+        const pattern = /^\d+:\d+$/
+        return pattern.test(value)
+      },
     },
     previewImageSize: {
       type: String,
-      default: "maxresdefault",
+      default: 'maxresdefault',
       validator: value =>
         [
-          "default",
-          "mqdefault",
-          "sddefault",
-          "hqdefault",
-          "maxresdefault"
-        ].indexOf(value) !== -1
-    }
+          'default',
+          'mqdefault',
+          'sddefault',
+          'hqdefault',
+          'maxresdefault',
+        ].indexOf(value) !== -1,
+    },
   },
   data() {
     return {
-      isVideoLoaded: false
-    };
+      isVideoLoaded: false,
+    }
   },
   computed: {
     id() {
-      const regExp = /^https:\/\/www\.youtube\.com\/watch\?v=(.+)$/;
-      return regExp.exec(this.url)[1];
+      const regExp = /^https:\/\/www\.youtube\.com\/watch\?v=(.+)$/
+      return regExp.exec(this.url)[1]
     },
     styleObj() {
       return {
-        paddingBottom: this.getPaddingBottom()
-      };
-    }
+        paddingBottom: this.getPaddingBottom(),
+      }
+    },
   },
   methods: {
     generateURL() {
-      const query = "?rel=0&showinfo=0&autoplay=1";
-      return `https://www.youtube.com/embed/${this.id}${query}`;
+      const query = '?rel=0&showinfo=0&autoplay=1'
+      return `https://www.youtube.com/embed/${this.id}${query}`
     },
     clickHandler() {
-      this.isVideoLoaded = true;
-      this.$emit("videoLoaded");
+      this.isVideoLoaded = true
+      this.$emit('videoLoaded')
     },
     getPaddingBottom() {
-      const [a, b] = this.aspectRatio.split(":");
-      return `${(b / a) * 100}%`;
-    }
-  }
-};
+      const [a, b] = this.aspectRatio.split(':')
+      return `${(b / a) * 100}%`
+    },
+  },
+}
 </script>
 
 <style lang="scss">
@@ -122,7 +130,7 @@ export default {
   }
 
   &__media {
-    &--type  {
+    &--type {
       &--img {
         object-fit: cover;
       }

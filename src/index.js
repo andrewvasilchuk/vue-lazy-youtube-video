@@ -1,3 +1,3 @@
-import VueLazyYoutubeVideo from "./VueLazyYoutubeVideo.vue";
+import VueLazyYoutubeVideo from './VueLazyYoutubeVideo.vue'
 
-export default VueLazyYoutubeVideo;
+export default VueLazyYoutubeVideo
