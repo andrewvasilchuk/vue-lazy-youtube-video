@@ -2,7 +2,7 @@ import { shallowMount, ThisTypedShallowMountOptions } from '@vue/test-utils'
 import VueLazyYoutubeVideo from '../src/VueLazyYoutubeVideo.vue'
 import { classes } from './config'
 import { defaultProps, getDefaultProps, VIDEO_ID } from './fixtures'
-import { clickAndGetIframe } from './helpers'
+import { clickAndGetIframe, getImgAndSourceElements } from './helpers'
 
 beforeEach(() => {
   console.error = jest.fn()
@@ -165,10 +165,9 @@ describe('VueLazyYoutubeVideo', () => {
             previewImageSize,
           },
         })
-        const srcAttribute = wrapper.find('img').element.getAttribute('src')
-        const srcsetAttribute = wrapper
-          .find('source')
-          .element.getAttribute('srcset')
+        const { img, source } = getImgAndSourceElements(wrapper)
+        const srcAttribute = img.getAttribute('src')
+        const srcsetAttribute = source.getAttribute('srcset')
 
         if (srcAttribute !== null) {
           expect(srcAttribute).toBe(
@@ -196,13 +195,9 @@ describe('VueLazyYoutubeVideo', () => {
       it('should correctly set `srcset` and `src` attributes of thumbnails when valid value is passed', () => {
         const thumbnail = { webp: 'w', jpg: 'j' }
         const wrapper = factory({ propsData: { thumbnail } })
-        const picture = wrapper.find('picture')
-        expect(picture.find('source').element.getAttribute('srcset')).toEqual(
-          thumbnail.webp
-        )
-        expect(picture.find('img').element.getAttribute('src')).toEqual(
-          thumbnail.jpg
-        )
+        const { img, source } = getImgAndSourceElements(wrapper)
+        expect(source.getAttribute('srcset')).toEqual(thumbnail.webp)
+        expect(img.getAttribute('src')).toEqual(thumbnail.jpg)
       })
 
       it('should call `console.error` when value with invalid type is passed', () => {
