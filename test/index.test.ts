@@ -246,4 +246,22 @@ describe('VueLazyYoutubeVideo', () => {
       })
     })
   })
+
+  describe('slots', () => {
+    describe('icon', () => {
+      it('should render when passed', async () => {
+        const icon = '<svg><g></g></svg>'
+        const wrapper = factory({ slots: { icon } })
+        expect(wrapper.find(classes.button).element.innerHTML).toBe(icon)
+      })
+    })
+
+    describe('button', () => {
+      it('should render when passed', async () => {
+        const button = '<button type="button">foo</button>'
+        const wrapper = factory({ slots: { button } })
+        expect(wrapper.find('button').element.outerHTML).toBe(button)
+      })
+    })
+  })
 })
