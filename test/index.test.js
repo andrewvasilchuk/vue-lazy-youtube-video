@@ -17,6 +17,14 @@ describe('VueLazyYoutubeVideo', () => {
     expect(wrapper.find('iframe').exists()).toBeTruthy()
   })
 
+  it('should correctly set `src` attribute of the `<iframe />`', () => {
+    const wrapper = factory()
+    wrapper.find('button').trigger('click')
+    expect(wrapper.find('iframe').element.getAttribute('src')).toBe(
+      'https://www.youtube.com/embed/eJnQBXmZ7Ek?rel=0&showinfo=0&autoplay=1'
+    )
+  })
+
   it('should correctly set `padding bottom` of the `<element class="y-video__inner"></element>`', () => {
     const [a, b] = [16, 9]
     const wrapper = factory({
