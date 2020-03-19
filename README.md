@@ -88,7 +88,12 @@ npm run test
 
 ## Powered by
 
-- Vue
+- `Vue`
+- `Rollup` (and plugins)
+- `Babel`
+- `Jest`
+- `Vue Test Utils`
+- `TypeScript`
 
 ## Inspiration
 
