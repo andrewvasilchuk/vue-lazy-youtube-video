@@ -1,5 +1,7 @@
 import { shallowMount, ThisTypedShallowMountOptions } from '@vue/test-utils'
-import VueLazyYoutubeVideo from '../src/VueLazyYoutubeVideo'
+import VueLazyYoutubeVideo, {
+  IVueLazyYoutubeVideo,
+} from '../src/VueLazyYoutubeVideo'
 import { classes } from './config'
 import { defaultProps, getDefaultProps, VIDEO_ID } from './fixtures'
 import { clickAndGetIframe, getImgAndSourceElements } from './helpers'
@@ -10,7 +12,7 @@ beforeEach(() => {
 })
 
 const factory = (options?: ThisTypedShallowMountOptions<Vue>) => {
-  return shallowMount(VueLazyYoutubeVideo, {
+  return shallowMount<InstanceType<IVueLazyYoutubeVideo>>(VueLazyYoutubeVideo, {
     ...options,
     propsData: {
       ...defaultProps,
@@ -321,7 +323,6 @@ describe('VueLazyYoutubeVideo', () => {
       it('should set initial value of `activated` data property', () => {
         const autoplay = true
         const wrapper = factory({ propsData: { autoplay } })
-        // @ts-ignore
         expect(wrapper.vm.activated).toBe(autoplay)
       })
 
