@@ -2,6 +2,7 @@ import { shallowMount } from '@vue/test-utils'
 import VueLazyYoutubeVideo from '../dist/vue-lazy-youtube-video'
 import { classes } from './config'
 import { defaultProps } from './fixtures'
+import { clickAndGetIframe } from './helpers'
 
 const factory = (props = {}) => {
   return shallowMount(VueLazyYoutubeVideo, {
@@ -10,17 +11,17 @@ const factory = (props = {}) => {
 }
 
 describe('VueLazyYoutubeVideo', () => {
-  it('should insert `<iframe />` into the DOM when clicked', () => {
+  it('should insert `<iframe />` into the DOM when clicked', async () => {
     const wrapper = factory()
-    wrapper.find('button').trigger('click')
-    expect(wrapper.find('iframe').exists()).toBeTruthy()
+    const iframe = await clickAndGetIframe(wrapper)
+    expect(iframe.exists()).toBeTruthy()
   })
 
-  it('should correctly set `src` attribute of the `<iframe />`', () => {
+  it('should correctly set `src` attribute of the `<iframe />`', async () => {
     const wrapper = factory()
-    wrapper.find('button').trigger('click')
-    expect(wrapper.find('iframe').element.getAttribute('src')).toBe(
-      'https://www.youtube.com/embed/eJnQBXmZ7Ek?rel=0&showinfo=0&autoplay=1'
+    const iframe = await clickAndGetIframe(wrapper)
+    expect(iframe.element.getAttribute('src')).toBe(
+      `https://www.youtube.com/embed/eJnQBXmZ7Ek?rel=0&showinfo=0&autoplay=1`
     )
   })
 
