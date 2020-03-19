@@ -53,6 +53,10 @@ export default Vue.extend({
         return value.indexOf('https://www.youtube.com/watch?') !== 1
       },
     },
+    query: {
+      type: String,
+      default: '?rel=0&showinfo=0&autoplay=1',
+    },
     alt: {
       type: String,
       default: 'Video alternative image',
@@ -115,10 +119,9 @@ export default Vue.extend({
   },
   methods: {
     generateURL() {
-      const query = '?rel=0&showinfo=0&autoplay=1'
       return `https://www.youtube${
         this.noCookie ? '-nocookie' : ''
-      }.com/embed/${this.id}${query}`
+      }.com/embed/${this.id}${this.query}`
     },
     clickHandler() {
       this.isVideoLoaded = true
