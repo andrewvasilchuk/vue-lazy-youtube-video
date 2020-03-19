@@ -10,7 +10,6 @@
   - [Initialization](#initialization)
     - [As a global component](#as-a-global-component)
     - [As a local component](#as-a-local-component)
-    - [SSR](#ssr)
     - [As a plugin](#as-a-plugin)
   - [Usage](#usage)
   - [Demo](#demo)
@@ -70,34 +69,6 @@ export default {
   components: {
     LazyYoutubeVideo,
   },
-}
-```
-
-### SSR
-
-There is special bundle for SSR users:
-
-```js
-import Vue from 'vue'
-import LazyYoutubeVideo, {
-  Plugin,
-} from 'vue-lazy-youtube-video/dist/vue-lazy-youtube-video.ssr.common'
-// have to import ejected style directly, see this issue https://github.com/vuejs/rollup-plugin-vue/issues/266
-import 'vue-lazy-youtube-video/dist/style.css'
-
-// as a global component
-Vue.component('LazyYoutubeVideo', LazyYoutubeVideo)
-
-// or as a plugin
-Vue.use(Plugin)
-
-// or as a local component
-export default {
-  // ...
-  components: {
-    LazyYoutubeVideo,
-  },
-  // ...
 }
 ```
 
@@ -188,7 +159,6 @@ After the successful build the following files will be generated in the `dist` f
 ├── vue-lazy-youtube-video.esm.js
 ├── vue-lazy-youtube-video.js
 ├── vue-lazy-youtube-video.min.js
-├── vue-lazy-youtube-video.ssr.common.js
 ├── style.css
 ```
 
