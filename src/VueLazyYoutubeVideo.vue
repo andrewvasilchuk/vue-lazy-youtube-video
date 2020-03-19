@@ -84,6 +84,10 @@ export default Vue.extend({
     thumbnail: {
       type: String,
     },
+    noCookie: {
+      type: Boolean,
+      default: false,
+    },
   },
   data() {
     return {
@@ -112,7 +116,9 @@ export default Vue.extend({
   methods: {
     generateURL() {
       const query = '?rel=0&showinfo=0&autoplay=1'
-      return `https://www.youtube.com/embed/${this.id}${query}`
+      return `https://www.youtube${
+        this.noCookie ? '-nocookie' : ''
+      }.com/embed/${this.id}${query}`
     },
     clickHandler() {
       this.isVideoLoaded = true
