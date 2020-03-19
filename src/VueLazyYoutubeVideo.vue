@@ -5,13 +5,17 @@
         <picture>
           <source
             :srcset="
-              `https://i.ytimg.com/vi_webp/${id}/${previewImageSize}.webp`
+              thumbnail ||
+                `https://i.ytimg.com/vi_webp/${id}/${previewImageSize}.webp`
             "
             type="image/webp"
           />
           <img
             class="y-video__media y-video__media--type--img"
-            :src="`https://i.ytimg.com/vi/${id}/${previewImageSize}.jpg`"
+            :src="
+              thumbnail ||
+                `https://i.ytimg.com/vi/${id}/${previewImageSize}.jpg`
+            "
             :alt="alt"
           />
         </picture>
@@ -76,6 +80,9 @@ export default Vue.extend({
           'hqdefault',
           'maxresdefault',
         ].indexOf(value) !== -1,
+    },
+    thumbnail: {
+      type: String,
     },
   },
   data() {
