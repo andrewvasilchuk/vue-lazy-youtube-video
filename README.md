@@ -87,8 +87,6 @@ npm run test
 
 ## Powered by
 
-- Babel
-- Webpack 4
 - Vue
 
 ## Inspiration
