@@ -1,5 +1,5 @@
 import { Wrapper } from '@vue/test-utils'
-import Component from '../../src/VueLazyYoutubeVideo.vue'
+import Component from '../../src/VueLazyYoutubeVideo'
 
 export async function clickAndGetIframe(wrapper: Wrapper<Component>) {
   wrapper.trigger('click')
