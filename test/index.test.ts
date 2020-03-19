@@ -1,5 +1,6 @@
 import { shallowMount } from '@vue/test-utils'
 import VueLazyYoutubeVideo from '../dist/vue-lazy-youtube-video'
+import { classes } from './config'
 import { defaultProps } from './fixtures'
 
 const factory = (props = {}) => {
@@ -23,12 +24,12 @@ describe('VueLazyYoutubeVideo', () => {
     )
   })
 
-  it('should correctly set `padding bottom` of the `<element class="y-video__inner"></element>`', () => {
+  it(`should correctly set \`padding bottom\` of the \`<element class="${classes.inner}"></element>\``, () => {
     const [a, b] = [16, 9]
     const wrapper = factory({
       aspectRatio: `${a}:${b}`,
     })
-    expect(wrapper.find('.y-video__inner').element.style.paddingBottom).toBe(
+    expect(wrapper.find(classes.inner).element.style.paddingBottom).toBe(
       `${(b / a) * 100}%`
     )
   })
@@ -46,9 +47,9 @@ describe('VueLazyYoutubeVideo', () => {
     const wrapper = factory({
       buttonLabel,
     })
-    expect(wrapper.find('button').element.getAttribute('aria-label')).toBe(
-      buttonLabel
-    )
+    expect(
+      wrapper.find(classes.button).element.getAttribute('aria-label')
+    ).toBe(buttonLabel)
   })
 
   it('should correctly set size of the preview image', () => {
