@@ -29,6 +29,12 @@ describe('VueLazyYoutubeVideo', () => {
     )
   })
 
+  it('should call `console.error` when invalid value is passed', () => {
+    const error = jest.spyOn(global.console, 'error')
+    factory({ url: 'INVALID_URL' })
+    expect(error).toHaveBeenCalled()
+  })
+
   it(`should correctly set \`padding bottom\` of the \`<element class="${classes.inner}"></element>\``, () => {
     const [a, b] = [16, 9]
     const wrapper = factory({
@@ -65,6 +71,17 @@ describe('VueLazyYoutubeVideo', () => {
     const srcAttribute = wrapper.find('img').element.getAttribute('src')
     if (srcAttribute !== null) {
       expect(srcAttribute.includes(previewImageSize)).toBeTruthy()
+    }
+  })
+
+  it('should correctly set `src` attribute of the `<iframe />` when truthy value is passed', async () => {
+    const wrapper = factory({ noCookie: true })
+    const iframe = await clickAndGetIframe(wrapper)
+    const srcAttribute = iframe.element.getAttribute('src')
+    if (srcAttribute !== null) {
+      expect(
+        srcAttribute.startsWith('https://www.youtube-nocookie.com/embed/')
+      ).toBeTruthy()
     }
   })
 })
