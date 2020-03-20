@@ -136,14 +136,32 @@ describe('VueLazyYoutubeVideo', () => {
     })
   })
 
-  it('should correctly set `aria-label` attribute of the `<button></button>` when valid value is passed', () => {
-    const buttonLabel = 'Simple dummy text'
-    const wrapper = factory({
-      buttonLabel,
+  describe('buttonLabel', () => {
+    it('should correctly set `aria-label` attribute of the `<button></button>` when no value is passed', () => {
+      const wrapper = factory()
+      expect(
+        wrapper.find(classes.button).element.getAttribute('aria-label')
+      ).toBe('Play video')
     })
-    expect(
-      wrapper.find(classes.button).element.getAttribute('aria-label')
-    ).toBe(buttonLabel)
+
+    it('should correctly set `aria-label` attribute of the `<button></button>` when valid value is passed', () => {
+      const buttonLabel = 'Simple dummy text'
+      const wrapper = factory({
+        buttonLabel,
+      })
+      expect(
+        wrapper.find(classes.button).element.getAttribute('aria-label')
+      ).toBe(buttonLabel)
+    })
+
+    it('should call `console.error` when value with invalid type is passed', () => {
+      const error = jest.spyOn(global.console, 'error')
+      const invalidProps = [0, true, {}, [], () => {}]
+      invalidProps.forEach(prop => {
+        factory({ buttonLabel: prop })
+      })
+      expect(error).toHaveBeenCalledTimes(invalidProps.length)
+    })
   })
 
   describe('previewImageSize', () => {
