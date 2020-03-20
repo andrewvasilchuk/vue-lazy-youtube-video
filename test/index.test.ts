@@ -46,6 +46,12 @@ describe('VueLazyYoutubeVideo', () => {
         factory({ src: 'INVALID_SRC' })
         expect(error).toHaveBeenCalled()
       })
+
+      it('should call `console.error` when no value is passed', () => {
+        const error = jest.spyOn(global.console, 'error')
+        factory({ src: undefined })
+        expect(error).toHaveBeenCalled()
+      })
     })
 
     describe('aspectRatio', () => {
