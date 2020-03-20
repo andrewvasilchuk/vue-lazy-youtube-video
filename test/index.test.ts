@@ -197,6 +197,25 @@ describe('VueLazyYoutubeVideo', () => {
         })
         expect(error).toHaveBeenCalledTimes(invalidProps.length)
       })
+
+      it('should correctly set `srcset` and `src` attributes of `<source />` and `<img />` when no value is passed', () => {
+        const wrapper = factory()
+        const { img, source } = getImgAndSourceElements(wrapper)
+        const srcAttribute = img.getAttribute('src')
+        const srcsetAttribute = source.getAttribute('srcset')
+
+        if (srcAttribute) {
+          expect(srcAttribute).toBe(
+            `https://i.ytimg.com/vi/${VIDEO_ID}/maxresdefault.jpg`
+          )
+        }
+
+        if (srcsetAttribute) {
+          expect(srcsetAttribute).toBe(
+            `https://i.ytimg.com/vi_webp/${VIDEO_ID}/maxresdefault.webp`
+          )
+        }
+      })
     })
 
     describe('thumbnail', () => {
