@@ -82,14 +82,39 @@ describe('VueLazyYoutubeVideo', () => {
     })
   })
 
-  it(`should correctly set \`padding bottom\` of the \`<element class="${classes.inner}"></element>\``, () => {
-    const [a, b] = [16, 9]
-    const wrapper = factory({
-      aspectRatio: `${a}:${b}`,
+  describe('aspectRatio', () => {
+    it(`should correctly set \`padding bottom\` of the \`<element class="${classes.inner}"></element>\` when no value is passed`, () => {
+      const wrapper = factory()
+      expect(wrapper.find(classes.inner).element.style.paddingBottom).toBe(
+        `${(9 / 16) * 100}%`
+      )
     })
-    expect(wrapper.find(classes.inner).element.style.paddingBottom).toBe(
-      `${(b / a) * 100}%`
-    )
+
+    it(`should correctly set \`padding bottom\` of the \`<element class="${classes.inner}"></element>\` when valid value is passed`, () => {
+      const [a, b] = [4, 3]
+      const wrapper = factory({
+        aspectRatio: `${a}:${b}`,
+      })
+      expect(wrapper.find(classes.inner).element.style.paddingBottom).toBe(
+        `${(b / a) * 100}%`
+      )
+    })
+
+    it(`should correctly set \`padding bottom\` of the \`<element class="${classes.inner}"></element>\` when invalid value is passed`, () => {
+      const wrapper = factory({ aspectRatio: 'foo' })
+      expect(wrapper.find(classes.inner).element.style.paddingBottom).toBe(
+        `${(9 / 16) * 100}%`
+      )
+    })
+
+    it('should call `console.error` when value with invalid type is passed', () => {
+      const error = jest.spyOn(global.console, 'error')
+      const invalidProps = [0, true, {}, [], () => {}]
+      invalidProps.forEach(prop => {
+        factory({ aspectRatio: prop })
+      })
+      expect(error).toHaveBeenCalledTimes(invalidProps.length)
+    })
   })
 
   describe('alt', () => {
