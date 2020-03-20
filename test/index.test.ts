@@ -252,6 +252,20 @@ describe('VueLazyYoutubeVideo', () => {
         })
         expect(error).toHaveBeenCalledTimes(invalidProps.length)
       })
+
+      it('should correctly set attributes of the `<iframe />` when no value is passed ', async () => {
+        const wrapper = factory()
+        const iframe = await clickAndGetIframe(wrapper)
+        const { element } = iframe
+        const allowfullscreen = element.getAttribute('allowfullscreen')
+        expect(allowfullscreen).toEqual('allowfullscreen')
+        const frameborder = element.getAttribute('frameborder')
+        expect(frameborder).toEqual('0')
+        const allow = element.getAttribute('allow')
+        expect(allow).toEqual(
+          'accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture'
+        )
+      })
     })
   })
 
