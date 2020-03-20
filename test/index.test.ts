@@ -30,6 +30,13 @@ describe('VueLazyYoutubeVideo', () => {
     expect(iframe.exists()).toBeTruthy()
   })
 
+  it('should remove button and thumbnail when clicked', async () => {
+    const wrapper = factory()
+    await clickAndGetIframe(wrapper)
+    expect(wrapper.find(classes.button).exists()).toBeFalsy()
+    expect(wrapper.find('picture').exists()).toBeFalsy()
+  })
+
   describe('props', () => {
     describe('src', () => {
       it('should correctly set `src` attribute of the `<iframe />`', async () => {
