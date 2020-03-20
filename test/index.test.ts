@@ -1,7 +1,7 @@
 import { shallowMount } from '@vue/test-utils'
 import VueLazyYoutubeVideo from '../src/VueLazyYoutubeVideo.vue'
 import { classes } from './config'
-import { defaultProps } from './fixtures'
+import { defaultProps, getDefaultProps, VIDEO_ID } from './fixtures'
 import { clickAndGetIframe } from './helpers'
 
 beforeEach(() => {
@@ -31,7 +31,7 @@ describe('VueLazyYoutubeVideo', () => {
           `${defaultProps.src}?autoplay=1`
         )
         const query = '?loop=1'
-        wrapper = factory({ src: `${defaultProps.src}${query}` })
+        wrapper = factory(getDefaultProps({ query }))
         iframe = await clickAndGetIframe(wrapper)
         expect(iframe.element.getAttribute('src')).toBe(
           `${defaultProps.src}${query}&autoplay=1`
@@ -155,12 +155,12 @@ describe('VueLazyYoutubeVideo', () => {
 
         if (srcAttribute !== null) {
           expect(srcAttribute).toBe(
-            `https://i.ytimg.com/vi/4JS70KB9GS0/${previewImageSize}.jpg`
+            `https://i.ytimg.com/vi/${VIDEO_ID}/${previewImageSize}.jpg`
           )
         }
         if (srcsetAttribute !== null) {
           expect(srcsetAttribute).toBe(
-            `https://i.ytimg.com/vi_webp/4JS70KB9GS0/${previewImageSize}.webp`
+            `https://i.ytimg.com/vi_webp/${VIDEO_ID}/${previewImageSize}.webp`
           )
         }
       })
