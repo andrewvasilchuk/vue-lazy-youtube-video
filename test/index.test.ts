@@ -286,6 +286,29 @@ describe('VueLazyYoutubeVideo', () => {
         )
       })
     })
+
+    describe('webp', () => {
+      it('should not render `<source />` element when `false` is passed', () => {
+        const wrapper = factory({ propsData: { webp: false } })
+        const source = wrapper.find('source')
+        expect(source.exists()).toBeFalsy()
+      })
+
+      it('should render `<source />` element when `true` is passed', () => {
+        const wrapper = factory({ propsData: { webp: true } })
+        const source = wrapper.find('source')
+        expect(source.exists()).toBeTruthy()
+      })
+
+      it('should call `console.error` when value with invalid type is passed', () => {
+        const error = jest.spyOn(global.console, 'error')
+        const invalidProps = [1, 'foo', [], () => {}]
+        invalidProps.forEach(prop => {
+          factory({ propsData: { iframeAttributes: prop } })
+        })
+        expect(error).toHaveBeenCalledTimes(invalidProps.length)
+      })
+    })
   })
 
   describe('slots', () => {
