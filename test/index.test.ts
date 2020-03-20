@@ -1,4 +1,4 @@
-import { shallowMount } from '@vue/test-utils'
+import { shallowMount, ThisTypedShallowMountOptions } from '@vue/test-utils'
 import VueLazyYoutubeVideo from '../src/VueLazyYoutubeVideo.vue'
 import { classes } from './config'
 import { defaultProps, getDefaultProps, VIDEO_ID } from './fixtures'
@@ -9,9 +9,17 @@ beforeEach(() => {
   console.warn = jest.fn()
 })
 
-const factory = (props = {}) => {
+const factory = (options?: ThisTypedShallowMountOptions<Vue>) => {
   return shallowMount(VueLazyYoutubeVideo, {
-    propsData: Object.assign({}, defaultProps, props),
+    ...options,
+    propsData: {
+      ...defaultProps,
+      ...(options !== undefined
+        ? options.propsData !== undefined
+          ? options.propsData
+          : {}
+        : {}),
+    },
   })
 }
 
@@ -31,7 +39,7 @@ describe('VueLazyYoutubeVideo', () => {
           `${defaultProps.src}?autoplay=1`
         )
         const query = '?loop=1'
-        wrapper = factory(getDefaultProps({ query }))
+        wrapper = factory({ propsData: getDefaultProps({ query }) })
         iframe = await clickAndGetIframe(wrapper)
         expect(iframe.element.getAttribute('src')).toBe(
           `${defaultProps.src}${query}&autoplay=1`
@@ -42,20 +50,20 @@ describe('VueLazyYoutubeVideo', () => {
         const error = jest.spyOn(global.console, 'error')
         const invalidProps = [0, true, {}, [], () => {}]
         invalidProps.forEach(prop => {
-          factory({ src: prop })
+          factory({ propsData: { src: prop } })
         })
         expect(error).toHaveBeenCalledTimes(invalidProps.length)
       })
 
       it('should call `console.error` when invalid value is passed', () => {
         const error = jest.spyOn(global.console, 'error')
-        factory({ src: 'INVALID_SRC' })
+        factory({ propsData: { src: 'INVALID_SRC' } })
         expect(error).toHaveBeenCalled()
       })
 
       it('should call `console.error` when no value is passed', () => {
         const error = jest.spyOn(global.console, 'error')
-        factory({ src: undefined })
+        factory({ propsData: { src: undefined } })
         expect(error).toHaveBeenCalled()
       })
     })
@@ -71,7 +79,7 @@ describe('VueLazyYoutubeVideo', () => {
       it(`should correctly set \`padding bottom\` of the \`<element class="${classes.inner}"></element>\` when valid value is passed`, () => {
         const [a, b] = [4, 3]
         const wrapper = factory({
-          aspectRatio: `${a}:${b}`,
+          propsData: { aspectRatio: `${a}:${b}` },
         })
         expect(wrapper.find(classes.inner).element.style.paddingBottom).toBe(
           `${(b / a) * 100}%`
@@ -79,7 +87,7 @@ describe('VueLazyYoutubeVideo', () => {
       })
 
       it(`should correctly set \`padding bottom\` of the \`<element class="${classes.inner}"></element>\` when invalid value is passed`, () => {
-        const wrapper = factory({ aspectRatio: 'foo' })
+        const wrapper = factory({ propsData: { aspectRatio: 'foo' } })
         expect(wrapper.find(classes.inner).element.style.paddingBottom).toBe(
           `${(9 / 16) * 100}%`
         )
@@ -89,7 +97,7 @@ describe('VueLazyYoutubeVideo', () => {
         const error = jest.spyOn(global.console, 'error')
         const invalidProps = [0, true, {}, [], () => {}]
         invalidProps.forEach(prop => {
-          factory({ aspectRatio: prop })
+          factory({ propsData: { aspectRatio: prop } })
         })
         expect(error).toHaveBeenCalledTimes(invalidProps.length)
       })
@@ -99,7 +107,7 @@ describe('VueLazyYoutubeVideo', () => {
       it('should correctly set `alt` attribute of the preview `<img />` when valid value is passed', () => {
         const alt = 'foo'
         const wrapper = factory({
-          alt,
+          propsData: { alt },
         })
         expect(wrapper.find('img').element.getAttribute('alt')).toBe(alt)
       })
@@ -108,7 +116,7 @@ describe('VueLazyYoutubeVideo', () => {
         const error = jest.spyOn(global.console, 'error')
         const invalidProps = [0, true, {}, [], () => {}]
         invalidProps.forEach(prop => {
-          factory({ alt: prop })
+          factory({ propsData: { alt: prop } })
         })
         expect(error).toHaveBeenCalledTimes(invalidProps.length)
       })
@@ -132,7 +140,7 @@ describe('VueLazyYoutubeVideo', () => {
       it('should correctly set `aria-label` attribute of the `<button></button>` when valid value is passed', () => {
         const buttonLabel = 'Simple dummy text'
         const wrapper = factory({
-          buttonLabel,
+          propsData: { buttonLabel },
         })
         expect(
           wrapper.find(classes.button).element.getAttribute('aria-label')
@@ -143,7 +151,7 @@ describe('VueLazyYoutubeVideo', () => {
         const error = jest.spyOn(global.console, 'error')
         const invalidProps = [0, true, {}, [], () => {}]
         invalidProps.forEach(prop => {
-          factory({ buttonLabel: prop })
+          factory({ propsData: { buttonLabel: prop } })
         })
         expect(error).toHaveBeenCalledTimes(invalidProps.length)
       })
@@ -153,7 +161,9 @@ describe('VueLazyYoutubeVideo', () => {
       it('should correctly set `srcset` and `src` attributes of `<source />` and `<img />` when valid value is passed', () => {
         const previewImageSize = 'hqdefault'
         const wrapper = factory({
-          previewImageSize,
+          propsData: {
+            previewImageSize,
+          },
         })
         const srcAttribute = wrapper.find('img').element.getAttribute('src')
         const srcsetAttribute = wrapper
@@ -176,7 +186,7 @@ describe('VueLazyYoutubeVideo', () => {
         const error = jest.spyOn(global.console, 'error')
         const invalidProps = [0, true, {}, [], () => {}]
         invalidProps.forEach(prop => {
-          factory({ previewImageSize: prop })
+          factory({ propsData: { previewImageSize: prop } })
         })
         expect(error).toHaveBeenCalledTimes(invalidProps.length)
       })
@@ -185,7 +195,7 @@ describe('VueLazyYoutubeVideo', () => {
     describe('thumbnail', () => {
       it('should correctly set `srcset` and `src` attributes of thumbnails when valid value is passed', () => {
         const thumbnail = { webp: 'w', jpg: 'j' }
-        const wrapper = factory({ thumbnail })
+        const wrapper = factory({ propsData: { thumbnail } })
         const picture = wrapper.find('picture')
         expect(picture.find('source').element.getAttribute('srcset')).toEqual(
           thumbnail.webp
@@ -199,15 +209,15 @@ describe('VueLazyYoutubeVideo', () => {
         const error = jest.spyOn(global.console, 'error')
         const invalidProps = [0, '0', true, [], () => {}]
         invalidProps.forEach(prop => {
-          factory({ thumbnail: prop })
+          factory({ propsData: { thumbnail: prop } })
         })
         expect(error).toHaveBeenCalledTimes(invalidProps.length)
       })
 
       it('should call `console.error` when value with invalid value is passed', () => {
         const error = jest.spyOn(global.console, 'error')
-        factory({ thumbnail: { jpg: 'j' } })
-        factory({ thumbnail: { webp: 'w' } })
+        factory({ propsData: { thumbnail: { jpg: 'j' } } })
+        factory({ propsData: { thumbnail: { webp: 'w' } } })
         expect(error).toHaveBeenCalledTimes(2)
       })
     })
@@ -215,7 +225,7 @@ describe('VueLazyYoutubeVideo', () => {
     describe('iframeAttributes', () => {
       it('should correctly set attributes of the `<iframe />` when valid value is passed', async done => {
         const iframeAttributes = { foo: 'bar', baz: 'vue' }
-        const wrapper = factory({ iframeAttributes })
+        const wrapper = factory({ propsData: { iframeAttributes } })
         const iframe = await clickAndGetIframe(wrapper)
 
         Object.entries(iframeAttributes).forEach(([key, value]) => {
@@ -235,7 +245,7 @@ describe('VueLazyYoutubeVideo', () => {
         const error = jest.spyOn(global.console, 'error')
         const invalidProps = [0, '0', true, [], () => {}]
         invalidProps.forEach(prop => {
-          factory({ iframeAttributes: prop })
+          factory({ propsData: { iframeAttributes: prop } })
         })
         expect(error).toHaveBeenCalledTimes(invalidProps.length)
       })
