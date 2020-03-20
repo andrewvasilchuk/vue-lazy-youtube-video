@@ -85,4 +85,33 @@ describe('VueLazyYoutubeVideo', () => {
       ).toBeTruthy()
     }
   })
+
+  describe('iframeAttributes', () => {
+    it('should correctly set attributes of the `<iframe />` when valid value is passed', async done => {
+      const iframeAttributes = { foo: 'bar', baz: 'vue' }
+      const wrapper = factory({ iframeAttributes })
+      const iframe = await clickAndGetIframe(wrapper)
+
+      Object.entries(iframeAttributes).forEach(([key, value]) => {
+        const attribute = iframe.element.getAttribute(key)
+
+        if (attribute !== null) {
+          expect(attribute).toEqual(value)
+        } else {
+          done.fail()
+        }
+      })
+
+      done()
+    })
+
+    it('should call `console.error` when value with invalid type is passed', () => {
+      const error = jest.spyOn(global.console, 'error')
+      const invalidProps = [0, '0', true, [], () => {}]
+      invalidProps.forEach(prop => {
+        factory({ iframeAttributes: prop })
+      })
+      expect(error).toHaveBeenCalledTimes(invalidProps.length)
+    })
+  })
 })
