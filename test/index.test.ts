@@ -181,6 +181,14 @@ describe('VueLazyYoutubeVideo', () => {
         }
       })
 
+      it('should call `console.error` when invalid value is passed', () => {
+        const error = jest.spyOn(global.console, 'error')
+        factory({
+          propsData: { previewImageSize: 'INVALID_PREVIEW_IMAGE_SIZE' },
+        })
+        expect(error).toHaveBeenCalled()
+      })
+
       it('should call `console.error` when value with invalid type is passed', () => {
         const error = jest.spyOn(global.console, 'error')
         const invalidProps = [0, true, {}, [], () => {}]
