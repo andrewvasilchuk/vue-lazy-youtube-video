@@ -36,6 +36,40 @@ describe('VueLazyYoutubeVideo', () => {
     expect(error).toHaveBeenCalled()
   })
 
+  describe('query', () => {
+    it('should correctly set `src` attribute of the `<iframe />` when no value is passed', async () => {
+      const wrapper = factory()
+      const iframe = await clickAndGetIframe(wrapper)
+      const srcAttribute = iframe.element.getAttribute('src')
+      if (srcAttribute !== null) {
+        expect(srcAttribute).toEqual(
+          'https://www.youtube.com/embed/4JS70KB9GS0?autoplay=1'
+        )
+      }
+    })
+
+    it('should correctly set `src` attribute of the `<iframe />` when valid value is passed', async () => {
+      const query = '?foo=bar&baz=vue'
+      const wrapper = factory({ query })
+      const iframe = await clickAndGetIframe(wrapper)
+      const srcAttribute = iframe.element.getAttribute('src')
+      if (srcAttribute !== null) {
+        expect(srcAttribute).toEqual(
+          `https://www.youtube.com/embed/4JS70KB9GS0${query}`
+        )
+      }
+    })
+
+    it('should call `console.error` when value with invalid type is passed', () => {
+      const error = jest.spyOn(global.console, 'error')
+      const invalidProps = [0, true, {}, [], () => {}]
+      invalidProps.forEach(prop => {
+        factory({ query: prop })
+      })
+      expect(error).toHaveBeenCalledTimes(invalidProps.length)
+    })
+  })
+
   it(`should correctly set \`padding bottom\` of the \`<element class="${classes.inner}"></element>\``, () => {
     const [a, b] = [16, 9]
     const wrapper = factory({
