@@ -112,6 +112,13 @@ describe('VueLazyYoutubeVideo', () => {
         })
         expect(error).toHaveBeenCalledTimes(invalidProps.length)
       })
+
+      it('should correctly set `alt` attribute of the preview `<img />` when no value is passed', () => {
+        const wrapper = factory()
+        expect(wrapper.find('img').element.getAttribute('alt')).toBe(
+          'Video thumbnail'
+        )
+      })
     })
 
     describe('buttonLabel', () => {
