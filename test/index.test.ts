@@ -309,6 +309,24 @@ describe('VueLazyYoutubeVideo', () => {
         expect(error).toHaveBeenCalledTimes(invalidProps.length)
       })
     })
+
+    describe('autoplay', () => {
+      it('should set initial value of `activated` data property', () => {
+        const autoplay = true
+        const wrapper = factory({ propsData: { autoplay } })
+        // @ts-ignore
+        expect(wrapper.vm.activated).toBe(autoplay)
+      })
+
+      it('should call `console.error` when value with invalid type is passed', () => {
+        const error = jest.spyOn(global.console, 'error')
+        const invalidProps = [1, 'foo', [], () => {}]
+        invalidProps.forEach(prop => {
+          factory({ propsData: { autoplay: prop } })
+        })
+        expect(error).toHaveBeenCalledTimes(invalidProps.length)
+      })
+    })
   })
 
   describe('slots', () => {
