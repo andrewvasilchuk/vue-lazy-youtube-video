@@ -25,10 +25,16 @@ describe('VueLazyYoutubeVideo', () => {
   describe('props', () => {
     describe('src', () => {
       it('should correctly set `src` attribute of the `<iframe />`', async () => {
-        const wrapper = factory()
-        const iframe = await clickAndGetIframe(wrapper)
+        let wrapper = factory()
+        let iframe = await clickAndGetIframe(wrapper)
         expect(iframe.element.getAttribute('src')).toBe(
           `${defaultProps.src}?autoplay=1`
+        )
+        const query = '?loop=1'
+        wrapper = factory({ src: `${defaultProps.src}${query}` })
+        iframe = await clickAndGetIframe(wrapper)
+        expect(iframe.element.getAttribute('src')).toBe(
+          `${defaultProps.src}${query}&autoplay=1`
         )
       })
 
