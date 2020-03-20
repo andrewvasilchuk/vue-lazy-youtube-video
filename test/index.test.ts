@@ -80,12 +80,23 @@ describe('VueLazyYoutubeVideo', () => {
     )
   })
 
-  it('should correctly set `alt` attribute of the preview `<img />`', () => {
-    const alt = 'Simple dummy text'
-    const wrapper = factory({
-      alt,
+  describe('alt', () => {
+    it('should correctly set `alt` attribute of the preview `<img />` when valid value is passed', () => {
+      const alt = 'foo'
+      const wrapper = factory({
+        alt,
+      })
+      expect(wrapper.find('img').element.getAttribute('alt')).toBe(alt)
     })
-    expect(wrapper.find('img').element.getAttribute('alt')).toBe(alt)
+
+    it('should call `console.error` when value with invalid type is passed', () => {
+      const error = jest.spyOn(global.console, 'error')
+      const invalidProps = [0, true, {}, [], () => {}]
+      invalidProps.forEach(prop => {
+        factory({ alt: prop })
+      })
+      expect(error).toHaveBeenCalledTimes(invalidProps.length)
+    })
   })
 
   it('should correctly set `aria-label` attribute of the `<button></button>` when valid value is passed', () => {
