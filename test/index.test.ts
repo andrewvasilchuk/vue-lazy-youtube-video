@@ -64,15 +64,37 @@ describe('VueLazyYoutubeVideo', () => {
     ).toBe(buttonLabel)
   })
 
-  it('should correctly set size of the preview image', () => {
-    const previewImageSize = 'hqdefault'
-    const wrapper = factory({
-      previewImageSize,
+  describe('previewImageSize', () => {
+    it('should correctly set `srcset` and `src` attributes of `<source />` and `<img />` when valid value is passed', () => {
+      const previewImageSize = 'hqdefault'
+      const wrapper = factory({
+        previewImageSize,
+      })
+      const srcAttribute = wrapper.find('img').element.getAttribute('src')
+      const srcsetAttribute = wrapper
+        .find('source')
+        .element.getAttribute('srcset')
+
+      if (srcAttribute !== null) {
+        expect(srcAttribute).toBe(
+          `https://i.ytimg.com/vi/4JS70KB9GS0/${previewImageSize}.jpg`
+        )
+      }
+      if (srcsetAttribute !== null) {
+        expect(srcsetAttribute).toBe(
+          `https://i.ytimg.com/vi_webp/4JS70KB9GS0/${previewImageSize}.webp`
+        )
+      }
     })
-    const srcAttribute = wrapper.find('img').element.getAttribute('src')
-    if (srcAttribute !== null) {
-      expect(srcAttribute.includes(previewImageSize)).toBeTruthy()
-    }
+
+    it('should call `console.error` when value with invalid type is passed', () => {
+      const error = jest.spyOn(global.console, 'error')
+      const invalidProps = [0, true, {}, [], () => {}]
+      invalidProps.forEach(prop => {
+        factory({ previewImageSize: prop })
+      })
+      expect(error).toHaveBeenCalledTimes(invalidProps.length)
+    })
   })
 
   it('should correctly set `src` attribute of the `<iframe />` when truthy value is passed', async () => {
