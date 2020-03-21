@@ -73,7 +73,7 @@ export default Vue.extend({
     },
     alt: {
       type: String,
-      default: 'Video alternative image',
+      default: 'Video thumbnail',
     },
     buttonLabel: {
       type: String,
