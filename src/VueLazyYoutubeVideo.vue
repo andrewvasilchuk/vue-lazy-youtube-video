@@ -4,12 +4,12 @@
       <template v-if="!isVideoLoaded">
         <picture>
           <source
-            :srcset="`https://i.ytimg.com/vi_webp/${id}/${size}.webp`"
+            :srcset="`https://i.ytimg.com/vi_webp/${id}/${previewImageSize}.webp`"
             type="image/webp"
           >
           <img
             class="y-video__media"
-            :src="`https://i.ytimg.com/vi/${id}/${size}.jpg`"
+            :src="`https://i.ytimg.com/vi/${id}/${previewImageSize}.jpg`"
             :alt="alt"
           >
         </picture>
@@ -55,7 +55,7 @@ export default {
         return pattern.test(value);
       }
     },
-    size: {
+    previewImageSize: {
       type: String,
       default: "maxresdefault",
       validator: value =>
