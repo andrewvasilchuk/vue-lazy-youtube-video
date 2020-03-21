@@ -3,6 +3,7 @@
     <div class="y-video__inner" :style="styleObj">
       <iframe
         v-if="clicked"
+        v-bind="iframeAttributes"
         :src="generateURL()"
         allowfullscreen
         allow="autoplay"
@@ -99,6 +100,9 @@ export default Vue.extend({
     noCookie: {
       type: Boolean,
       default: false,
+    },
+    iframeAttributes: {
+      type: Object,
     },
   },
   data() {
