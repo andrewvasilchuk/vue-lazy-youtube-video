@@ -4,9 +4,10 @@
 
 ## Features
 
-- a11y included
-- `.webp` preview img format for modern browsers that support it, with `.jpg` fallback for browsers that don't
-- reduced initial load size by ~1.1MB per video
+- reduces initial load size by ~1.1MB per video
+- built with a11y in mind – fully accessible via keyboard and to screen readers
+- `.webp` thumbnail format for modern browsers that support it, with `.jpg` fallback for browsers that don't
+- fully customizable through `props` and `slots`
 
 ## 💿 Installation
 
