@@ -64,7 +64,7 @@ export default Vue.extend({
     },
     query: {
       type: String,
-      default: '?showinfo=0&autoplay=1',
+      default: '?autoplay=1',
     },
     alt: {
       type: String,
