@@ -142,6 +142,36 @@ describe('VueLazyYoutubeVideo', () => {
     })
   })
 
+  describe('thumbnail', () => {
+    it('should correctly set `srcset` and `src` attributes of thumbnails when valid value is passed', () => {
+      const thumbnail = { webp: 'w', jpg: 'j' }
+      const wrapper = factory({ thumbnail })
+      const picture = wrapper.find('picture')
+      expect(picture.find('source').element.getAttribute('srcset')).toEqual(
+        thumbnail.webp
+      )
+      expect(picture.find('img').element.getAttribute('src')).toEqual(
+        thumbnail.jpg
+      )
+    })
+
+    it('should call `console.error` when value with invalid type is passed', () => {
+      const error = jest.spyOn(global.console, 'error')
+      const invalidProps = [0, '0', true, [], () => {}]
+      invalidProps.forEach(prop => {
+        factory({ thumbnail: prop })
+      })
+      expect(error).toHaveBeenCalledTimes(invalidProps.length)
+    })
+
+    it('should call `console.error` when value with invalid value is passed', () => {
+      const error = jest.spyOn(global.console, 'error')
+      factory({ thumbnail: { jpg: 'j' } })
+      factory({ thumbnail: { webp: 'w' } })
+      expect(error).toHaveBeenCalledTimes(2)
+    })
+  })
+
   it('should correctly set `src` attribute of the `<iframe />` when truthy value is passed', async () => {
     const wrapper = factory({ noCookie: true })
     const iframe = await clickAndGetIframe(wrapper)
