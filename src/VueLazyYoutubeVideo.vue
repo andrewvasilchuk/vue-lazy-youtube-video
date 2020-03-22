@@ -96,10 +96,6 @@ export default Vue.extend({
       type: Object as () => { webp: string; jpg: string },
       validator: val => 'jpg' in val && 'webp' in val,
     },
-    noCookie: {
-      type: Boolean,
-      default: false,
-    },
     iframeAttributes: {
       type: Object,
     },
@@ -128,9 +124,7 @@ export default Vue.extend({
   },
   methods: {
     generateURL() {
-      return `https://www.youtube${
-        this.noCookie ? '-nocookie' : ''
-      }.com/embed/${this.id}${this.query}`
+      return `https://www.youtube.com/embed/${this.id}${this.query}`
     },
     clickHandler() {
       this.clicked = true
