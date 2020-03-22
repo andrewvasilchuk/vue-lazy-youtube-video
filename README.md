@@ -145,6 +145,7 @@ The list of available `props` (with their types, default values and descriptions
 | `thumbnail`        | `false`  | `{ webp: string, jpg: string}` |                   | Custom thumbnail object, which should contain two keys: `webp` and `jpg`. Value of the key is the path to the custom thumbnail image               |
 | `noCookie`         | `false`  | `boolean`                      | `false`           | Whether or not to enable privacy-enhanced mode. If `true` – component will insert `-nocookie` part into the generated embed link                   |
 | `iframeAttributes` | `false`  | `object`                       |                   | Custom attributes that will be assigned to the `<iframe />` element                                                                                |
+| `autoplay`         | `false`  | `boolean`                      | `false`           | Whether or not to play video as soon as component mounts into the DOM                                                                              |
 
 ### Slots
 
