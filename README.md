@@ -61,7 +61,7 @@ export default {
 | Property         | Required | Type    | Default                     | Description                                                                                                                          |
 | ---------------- | -------- | ------- | --------------------------- | ------------------------------------------------------------------------------------------------------------------------------------ |
 | url              | `true`   | String  |                             | Video `URL` in https://www.youtube.com/watch?v=VIDEO_ID format                                                                       |
-| query            | `false`  | String  | `'?showinfo=0&autoplay=1'`  | [Query string](https://en.wikipedia.org/wiki/Query_string) which will be appended to the generated embed URL                         |
+| query            | `false`  | String  | `'?autoplay=1'`             | [Query string](https://en.wikipedia.org/wiki/Query_string) which will be appended to the generated embed URL                         |
 | alt              | `false`  | String  | `'Video alternative image'` | Value of the `alt` attribute of the thumbnail `<img />` element                                                                      |
 | buttonLabel      | `false`  | String  | `'Play video'`              | Value of the `aria-label` attribute of the play `<button></button>` element. Improves a11y                                           |
 | aspectRatio      | `false`  | String  | `'16:9'`                    | Aspect ratio. It helps to save proportions of the video on different container sizes                                                 |
