@@ -147,7 +147,7 @@ Jest is used for unit-tests.
 You can run unit tests by running the next command:
 
 ```bash
-npm run test
+npm run test:unit
 ```
 
 ## Development
