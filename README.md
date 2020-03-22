@@ -132,11 +132,11 @@ Vue.use(Plugin)
 
 The list of available `props` (with their types, default values and descriptions) is listed below:
 
-[1]: https://stackoverflow.com/questions/2068344/how-do-i-get-a-youtube-video-thumbnail-from-the-youtube-api
+[1]: https://gist.github.com/rodrigoborgesdeoliveira/987683cfbfcc8d800192da1e73adc486
 
 | Property           | Required | Type                           | Default           | Description                                                                                                                                        |
 | ------------------ | -------- | ------------------------------ | ----------------- | -------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `url`              | `true`   | `string`                       |                   | Video `URL` in `https://www.youtube.com/watch?v=[VIDEO_ID]` format                                                                                 |
+| `url`              | `true`   | `string`                       |                   | Video `URL` in `https://www.youtube.com/watch?v=[VIDEO_ID]` format. Supported `URL`s are listed [here][1]                                          |
 | `query`            | `false`  | `string`                       | `?autoplay=1`     | [Query string](https://en.wikipedia.org/wiki/Query_string) which will be appended to the generated embed URL                                       |
 | `alt`              | `false`  | `string`                       | `Video thumbnail` | Value of the `alt` attribute of the thumbnail `<img />` element                                                                                    |
 | `buttonLabel`      | `false`  | `string`                       | `Play video`      | Value of the `aria-label` attribute of the play `<button></button>` element. Improves a11y                                                         |
