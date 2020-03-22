@@ -99,6 +99,8 @@ Vue.use(Plugin)
 
 ### Properties
 
+> 🚨 Value of the `url` property must be a **DIRECT** link to the video (e.g. https://www.youtube.com/watch?v=4JS70KB9GS0), but not the **EMBED** link (e.g. https://www.youtube.com/embed/4JS70KB9GS0). Component itself will generate appropriate `src` attribute for the `<iframe />` element
+
 | Property         | Required | Type    | Default             | Description                                                                                                                          |
 | ---------------- | -------- | ------- | ------------------- | ------------------------------------------------------------------------------------------------------------------------------------ |
 | url              | `true`   | String  |                     | Video `URL` in https://www.youtube.com/watch?v=VIDEO_ID format                                                                       |
