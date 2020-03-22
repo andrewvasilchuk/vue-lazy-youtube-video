@@ -142,6 +142,7 @@ The list of available `props` (with their types, default values and descriptions
 | `thumbnail`        | `false`  | `{ webp: string, jpg: string}` |                                                                                                                               | Custom thumbnail object, which should contain two keys: `webp` and `jpg`. Value of the key is the path to the custom thumbnail image                                   |
 | `iframeAttributes` | `false`  | `object`                       | `{ allowfullscreen: true, frameborder: 0, allow: 'accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture' }` | Custom attributes that will be assigned to the `<iframe />` element                                                                                                    |
 | `webp`             | `false`  | `boolean`                      | `true`                                                                                                                        | Whether or not try to load `.webp` thumbnail in favor of `.jpg`. Note that old videos may not have generated `.webp` thumbnail.                                        |
+| `autoplay`         | `false`  | `boolean`                      | `false`                                                                                                                       | Whether or not to play video as soon as component mounts into the DOM                                                                                                  |
 
 ### Slots
 
