@@ -194,17 +194,6 @@ describe('VueLazyYoutubeVideo', () => {
       })
     })
 
-    it('should correctly set `src` attribute of the `<iframe />` when truthy value is passed', async () => {
-      const wrapper = factory({ noCookie: true })
-      const iframe = await clickAndGetIframe(wrapper)
-      const srcAttribute = iframe.element.getAttribute('src')
-      if (srcAttribute !== null) {
-        expect(
-          srcAttribute.startsWith('https://www.youtube-nocookie.com/embed/')
-        ).toBeTruthy()
-      }
-    })
-
     describe('iframeAttributes', () => {
       it('should correctly set attributes of the `<iframe />` when valid value is passed', async done => {
         const iframeAttributes = { foo: 'bar', baz: 'vue' }
