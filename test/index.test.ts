@@ -23,12 +23,12 @@ describe('VueLazyYoutubeVideo', () => {
   })
 
   describe('props', () => {
-    describe('url', () => {
+    describe('src', () => {
       it('should correctly set `src` attribute of the `<iframe />`', async () => {
         const wrapper = factory()
         const iframe = await clickAndGetIframe(wrapper)
         expect(iframe.element.getAttribute('src')).toBe(
-          `https://www.youtube.com/embed/eJnQBXmZ7Ek?rel=0&showinfo=0&autoplay=1`
+          `${defaultProps.src}?autoplay=1`
         )
       })
 
@@ -36,15 +36,14 @@ describe('VueLazyYoutubeVideo', () => {
         const error = jest.spyOn(global.console, 'error')
         const invalidProps = [0, true, {}, [], () => {}]
         invalidProps.forEach(prop => {
-          factory({ url: prop })
+          factory({ src: prop })
         })
-        // * 2 – validator messages
-        expect(error).toHaveBeenCalledTimes(invalidProps.length * 2)
+        expect(error).toHaveBeenCalledTimes(invalidProps.length)
       })
 
       it('should call `console.error` when invalid value is passed', () => {
         const error = jest.spyOn(global.console, 'error')
-        factory({ url: 'INVALID_URL' })
+        factory({ src: 'INVALID_SRC' })
         expect(error).toHaveBeenCalled()
       })
     })
