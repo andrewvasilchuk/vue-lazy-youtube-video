@@ -118,7 +118,7 @@ Vue.use(Plugin)
 
 ```vue
 <template>
-  <LazyYoutubeVideo url="https://www.youtube.com/watch?v=[VIDEO_ID]" />
+  <LazyYoutubeVideo src="https://www.youtube.com/embed/4JS70KB9GS0" />
 </template>
 ```
 
