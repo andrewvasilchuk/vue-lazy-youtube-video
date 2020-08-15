@@ -360,6 +360,26 @@ describe('VueLazyYoutubeVideo', () => {
     })
   })
 
+  describe('events', () => {
+    describe('load:iframe', () => {
+      it("should emit event when `<iframe />`' `load` event happens", async () => {
+        const wrapper = factory()
+        const iframe = await clickAndGetIframe(wrapper)
+        iframe.trigger('load')
+        expect(wrapper.emitted()['load:iframe']).toBeTruthy()
+      })
+
+      it('should provide correct payload', async () => {
+        const wrapper = factory()
+        const iframe = await clickAndGetIframe(wrapper)
+        iframe.trigger('load')
+        expect(wrapper.emitted()['load:iframe'][0][0].iframe).toEqual(
+          iframe.element
+        )
+      })
+    })
+  })
+
   describe('slots', () => {
     describe('icon', () => {
       it('should render when passed', async () => {

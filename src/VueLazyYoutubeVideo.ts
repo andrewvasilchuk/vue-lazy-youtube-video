@@ -1,4 +1,5 @@
 import Vue, { VNode } from 'vue'
+import { LoadIframeEventPayload } from './types'
 import { startsWith } from './helpers'
 
 const component = Vue.extend({
@@ -122,6 +123,13 @@ const component = Vue.extend({
     getPaddingBottomValue(a: number, b: number) {
       return `${(b / a) * 100}%`
     },
+    onIframeLoad() {
+      const payload: LoadIframeEventPayload = { iframe: this.getIframe() }
+      this.$emit('load:iframe', payload)
+    },
+    getIframe() {
+      return this.$refs.iframe as HTMLIFrameElement | undefined
+    },
     warn(message: string) {
       console.warn(`[vue-lazy-youtube-video]: ${message}`)
     },
@@ -150,8 +158,13 @@ const component = Vue.extend({
         h('div', { staticClass: 'y-video__inner', style: styleObj }, [
           activated
             ? h('iframe', {
+                ref: 'iframe',
                 staticClass: 'y-video__media',
-                attrs: { ...iframeAttributes, src: srcAttribute },
+                attrs: {
+                  ...iframeAttributes,
+                  src: srcAttribute,
+                },
+                on: { load: this.onIframeLoad },
               })
             : [
                 h('picture', {}, [

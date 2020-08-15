@@ -24,9 +24,11 @@
     </li>
     <li>
       <LazyYoutubeVideo
-        src="https://www.youtube.com/embed/4JS70KB9GS0?start=8"
+        src="https://www.youtube.com/embed/4JS70KB9GS0?start=8&enablejsapi=1"
         :webp="false"
         autoplay
+        :iframe-attributes="iframeAttributes"
+        @load:iframe="onIframeLoad"
       />
     </li>
   </ul>
@@ -34,6 +36,8 @@
 
 <script lang="ts">
 import Vue from 'vue'
+
+import { LoadIframeEventPayload } from '../src/types'
 
 export default Vue.extend({
   name: 'AppPage',
@@ -44,7 +48,22 @@ export default Vue.extend({
           console.log('load')
         },
       },
+      iframeAttributes: {
+        id: 'foo',
+      },
     }
+  },
+  methods: {
+    onIframeLoad({ iframe }: LoadIframeEventPayload) {
+      console.log('<iframe />: ', iframe)
+      const id = iframe ? iframe.id : this.iframeAttributes.id
+      console.log('Resolved <iframe /> id: ', id)
+      const player = new YT.Player(id, {})
+      console.log('YT.Player instance: ', player)
+      setTimeout(() => {
+        player.stopVideo()
+      }, 3000)
+    },
   },
 })
 </script>
