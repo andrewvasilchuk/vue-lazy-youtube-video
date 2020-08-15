@@ -22,7 +22,7 @@ cpFile(PATH_TO_FILE, path.join(__dirname, '../dist/style.css')).then(() => {
       from: PATH_TO_FILE,
       to: PATH_TO_MINIFIED_FILE,
     })
-    .then(result => {
+    .then((result) => {
       fs.writeFile(PATH_TO_MINIFIED_FILE, result.css, () => true)
     })
 
@@ -35,14 +35,14 @@ cpFile(PATH_TO_FILE, path.join(__dirname, '../dist/style.css')).then(() => {
       from: PATH_TO_FILE,
       to: PATH_TO_SIMPLIFIED_FILE,
     })
-    .then(result => {
+    .then((result) => {
       fs.writeFile(PATH_TO_SIMPLIFIED_FILE, result.css, () => {
         postcss([cssnano()])
           .process(fs.readFileSync(PATH_TO_SIMPLIFIED_FILE), {
             from: PATH_TO_SIMPLIFIED_FILE,
             to: PATH_TO_SIMPLIFIED_MINIFIED_FILE,
           })
-          .then(result => {
+          .then((result) => {
             fs.writeFile(
               PATH_TO_SIMPLIFIED_MINIFIED_FILE,
               result.css,

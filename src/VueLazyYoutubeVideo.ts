@@ -9,7 +9,7 @@ export default Vue.extend({
     src: {
       type: String,
       required: true,
-      validator: value =>
+      validator: (value) =>
         startsWith(value, 'https://www.youtube.com/embed/') ||
         startsWith(value, 'https://www.youtube-nocookie.com/embed/'),
     },
@@ -24,7 +24,7 @@ export default Vue.extend({
     aspectRatio: {
       type: String,
       default: '16:9',
-      validator: value => {
+      validator: (value) => {
         const pattern = /^\d+:\d+$/
         return pattern.test(value)
       },
@@ -32,7 +32,7 @@ export default Vue.extend({
     previewImageSize: {
       type: String,
       default: 'maxresdefault',
-      validator: value =>
+      validator: (value) =>
         [
           'default',
           'mqdefault',
@@ -43,7 +43,7 @@ export default Vue.extend({
     },
     thumbnail: {
       type: Object as () => { webp: string; jpg: string },
-      validator: val => 'jpg' in val && 'webp' in val,
+      validator: (val) => 'jpg' in val && 'webp' in val,
     },
     iframeAttributes: {
       type: Object as () => {},
