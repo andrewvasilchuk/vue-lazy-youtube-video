@@ -2,9 +2,7 @@ import path from 'path'
 import typescript from 'rollup-plugin-typescript2'
 import replace from 'rollup-plugin-replace'
 import { terser } from 'rollup-plugin-terser'
-import css from 'rollup-plugin-css-only'
 
-import typescriptPluginOptions from './base/plugins/typescript'
 import basePlugins from './base/plugins/index'
 
 const SOURCE = path.join(__dirname, '../src/index.ts')
@@ -45,11 +43,9 @@ export default [
       },
     ],
     plugins: [
-      typescript(
-        Object.assign({}, typescriptPluginOptions, {
-          tsconfig: './tsconfig.prod.json',
-        })
-      ),
+      typescript({
+        tsconfig: './tsconfig.prod.json',
+      }),
     ].concat(plugins),
   },
   {
@@ -63,11 +59,9 @@ export default [
       name,
     },
     plugins: [
-      typescript(
-        Object.assign({}, typescriptPluginOptions, {
-          tsconfig: './tsconfig.prod.umd.json',
-        })
-      ),
+      typescript({
+        tsconfig: './tsconfig.prod.umd.json',
+      }),
       terser({ output: { comments: false } }),
     ].concat(plugins),
   },

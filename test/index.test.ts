@@ -59,7 +59,7 @@ describe('VueLazyYoutubeVideo', () => {
       it('should call `console.error` when value with invalid type is passed', () => {
         const error = jest.spyOn(global.console, 'error')
         const invalidProps = [0, true, {}, [], () => {}]
-        invalidProps.forEach(prop => {
+        invalidProps.forEach((prop) => {
           factory({ propsData: { src: prop } })
         })
         expect(error).toHaveBeenCalledTimes(invalidProps.length)
@@ -106,7 +106,7 @@ describe('VueLazyYoutubeVideo', () => {
       it('should call `console.error` when value with invalid type is passed', () => {
         const error = jest.spyOn(global.console, 'error')
         const invalidProps = [0, true, {}, [], () => {}]
-        invalidProps.forEach(prop => {
+        invalidProps.forEach((prop) => {
           factory({ propsData: { aspectRatio: prop } })
         })
         expect(error).toHaveBeenCalledTimes(invalidProps.length)
@@ -125,7 +125,7 @@ describe('VueLazyYoutubeVideo', () => {
       it('should call `console.error` when value with invalid type is passed', () => {
         const error = jest.spyOn(global.console, 'error')
         const invalidProps = [0, true, {}, [], () => {}]
-        invalidProps.forEach(prop => {
+        invalidProps.forEach((prop) => {
           factory({ propsData: { alt: prop } })
         })
         expect(error).toHaveBeenCalledTimes(invalidProps.length)
@@ -160,7 +160,7 @@ describe('VueLazyYoutubeVideo', () => {
       it('should call `console.error` when value with invalid type is passed', () => {
         const error = jest.spyOn(global.console, 'error')
         const invalidProps = [0, true, {}, [], () => {}]
-        invalidProps.forEach(prop => {
+        invalidProps.forEach((prop) => {
           factory({ propsData: { buttonLabel: prop } })
         })
         expect(error).toHaveBeenCalledTimes(invalidProps.length)
@@ -202,7 +202,7 @@ describe('VueLazyYoutubeVideo', () => {
       it('should call `console.error` when value with invalid type is passed', () => {
         const error = jest.spyOn(global.console, 'error')
         const invalidProps = [0, true, {}, [], () => {}]
-        invalidProps.forEach(prop => {
+        invalidProps.forEach((prop) => {
           factory({ propsData: { previewImageSize: prop } })
         })
         expect(error).toHaveBeenCalledTimes(invalidProps.length)
@@ -240,7 +240,7 @@ describe('VueLazyYoutubeVideo', () => {
       it('should call `console.error` when value with invalid type is passed', () => {
         const error = jest.spyOn(global.console, 'error')
         const invalidProps = [0, '0', true, [], () => {}]
-        invalidProps.forEach(prop => {
+        invalidProps.forEach((prop) => {
           factory({ propsData: { thumbnail: prop } })
         })
         expect(error).toHaveBeenCalledTimes(invalidProps.length)
@@ -255,7 +255,7 @@ describe('VueLazyYoutubeVideo', () => {
     })
 
     describe('iframeAttributes', () => {
-      it('should correctly set attributes of the `<iframe />` when valid value is passed', async done => {
+      it('should correctly set attributes of the `<iframe />` when valid value is passed', async (done) => {
         const iframeAttributes = { foo: 'bar', baz: 'vue' }
         const wrapper = factory({ propsData: { iframeAttributes } })
         const iframe = await clickAndGetIframe(wrapper)
@@ -279,7 +279,7 @@ describe('VueLazyYoutubeVideo', () => {
       it('should call `console.error` when value with invalid type is passed', () => {
         const error = jest.spyOn(global.console, 'error')
         const invalidProps = [0, '0', true, [], () => {}]
-        invalidProps.forEach(prop => {
+        invalidProps.forEach((prop) => {
           factory({ propsData: { iframeAttributes: prop } })
         })
         expect(error).toHaveBeenCalledTimes(invalidProps.length)
@@ -316,7 +316,7 @@ describe('VueLazyYoutubeVideo', () => {
       it('should call `console.error` when value with invalid type is passed', () => {
         const error = jest.spyOn(global.console, 'error')
         const invalidProps = [1, 'foo', [], () => {}]
-        invalidProps.forEach(prop => {
+        invalidProps.forEach((prop) => {
           factory({ propsData: { iframeAttributes: prop } })
         })
         expect(error).toHaveBeenCalledTimes(invalidProps.length)
@@ -333,7 +333,7 @@ describe('VueLazyYoutubeVideo', () => {
       it('should call `console.error` when value with invalid type is passed', () => {
         const error = jest.spyOn(global.console, 'error')
         const invalidProps = [1, 'foo', [], () => {}]
-        invalidProps.forEach(prop => {
+        invalidProps.forEach((prop) => {
           factory({ propsData: { autoplay: prop } })
         })
         expect(error).toHaveBeenCalledTimes(invalidProps.length)
@@ -354,7 +354,7 @@ describe('VueLazyYoutubeVideo', () => {
       it('should call `console.error` and throw an error when value with invalid type is passed', () => {
         const error = jest.spyOn(global.console, 'error')
         const invalidProps = [1, 'foo', true, [], () => {}]
-        invalidProps.forEach(prop => {
+        invalidProps.forEach((prop) => {
           try {
             factory({ propsData: { thumbnailListeners: prop } })
           } catch (e) {}
@@ -377,7 +377,7 @@ describe('VueLazyYoutubeVideo', () => {
         const wrapper = factory()
         const iframe = await clickAndGetIframe(wrapper)
         iframe.trigger('load')
-        expect(wrapper.emitted()['load:iframe'][0][0].iframe).toEqual(
+        expect(wrapper.emitted()['load:iframe']![0][0].iframe).toEqual(
           iframe.element
         )
       })

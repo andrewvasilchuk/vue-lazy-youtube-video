@@ -6,7 +6,6 @@ import livereload from 'rollup-plugin-livereload'
 import replace from 'rollup-plugin-replace'
 import css from 'rollup-plugin-css-only'
 
-import typescriptPluginOptions from './base/plugins/typescript'
 import plugins from './base/plugins/index'
 
 const DEMO_DIR = path.join(__dirname, '../demo')
@@ -21,7 +20,7 @@ export default {
     sourcemap: true,
   },
   plugins: [
-    typescript(typescriptPluginOptions),
+    typescript(),
     vue(),
     css(),
     replace({
