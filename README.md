@@ -19,8 +19,8 @@
   - [Demo](#demo)
   - [API](#api)
     - [Properties](#properties)
-    - [Slots](#slots)
     - [Events](#events)
+    - [Slots](#slots)
   - [Tests](#tests)
     - [Unit](#unit)
   - [Development](#development)
@@ -146,6 +146,12 @@ The list of available `props` (with their types, default values and descriptions
 | `webp`               | `false`  | `boolean`                                | `true`                                                                                                                        | Whether or not try to load `.webp` thumbnail in favor of `.jpg`. Note that old videos may not have generated `.webp` thumbnail.                                        |
 | `autoplay`           | `false`  | `boolean`                                | `false`                                                                                                                       | Whether or not to play video as soon as component mounts into the DOM                                                                                                  |
 | `thumbnailListeners` | `false`  | `Record<string, Function \| Function[]>` |                                                                                                                               | Listeners that will be attached to the preview thumbnail                                                                                                               |
+
+### Events
+
+| Name            | Payload                          | Description                                                  |
+| --------------- | -------------------------------- | ------------------------------------------------------------ |
+| `'load:iframe'` | `{ iframe?: HTMLIFrameElement }` | Happens when native' `<iframe />` element `load` event fires |
 
 ### Slots
 
