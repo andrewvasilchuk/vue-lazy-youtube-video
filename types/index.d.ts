@@ -1,6 +1,6 @@
 import { PluginObject } from 'vue'
-import { IVueLazyYoutubeVideo } from '../src/VueLazyYoutubeVideo'
+import VueLazyYoutubeVideo from '../src/VueLazyYoutubeVideo'
 
-export default IVueLazyYoutubeVideo
+export default VueLazyYoutubeVideo
 
 export declare const Plugin: PluginObject<never>

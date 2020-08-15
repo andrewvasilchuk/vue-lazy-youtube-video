@@ -3,7 +3,7 @@ import { LoadIframeEventPayload } from './types'
 import { startsWith } from './helpers'
 import { DEFAULT_IFRAME_ATTRIBUTES } from './constants'
 
-const component = Vue.extend({
+export default Vue.extend({
   name: 'VueLazyYoutubeVideo',
   props: {
     src: {
@@ -225,7 +225,3 @@ const component = Vue.extend({
     )
   },
 })
-
-export default component
-
-export type IVueLazyYoutubeVideo = typeof component
