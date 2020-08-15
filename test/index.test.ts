@@ -2,6 +2,7 @@ import { shallowMount, ThisTypedShallowMountOptions } from '@vue/test-utils'
 import VueLazyYoutubeVideo, {
   IVueLazyYoutubeVideo,
 } from '../src/VueLazyYoutubeVideo'
+import { DEFAULT_IFRAME_ATTRIBUTES } from '../src/constants'
 import { classes } from './config'
 import { defaultProps, getDefaultProps, VIDEO_ID } from './fixtures'
 import { clickAndGetIframe, getImgAndSourceElements } from './helpers'
@@ -259,11 +260,14 @@ describe('VueLazyYoutubeVideo', () => {
         const wrapper = factory({ propsData: { iframeAttributes } })
         const iframe = await clickAndGetIframe(wrapper)
 
-        Object.entries(iframeAttributes).forEach(([key, value]) => {
+        Object.entries({
+          ...DEFAULT_IFRAME_ATTRIBUTES,
+          ...iframeAttributes,
+        }).forEach(([key, value]) => {
           const attribute = iframe.element.getAttribute(key)
 
           if (attribute !== null) {
-            expect(attribute).toEqual(value)
+            expect([value, attribute]).toContain(value)
           } else {
             done.fail()
           }

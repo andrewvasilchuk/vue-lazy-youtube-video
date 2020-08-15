@@ -1,6 +1,7 @@
 import Vue, { VNode } from 'vue'
 import { LoadIframeEventPayload } from './types'
 import { startsWith } from './helpers'
+import { DEFAULT_IFRAME_ATTRIBUTES } from './constants'
 
 const component = Vue.extend({
   name: 'VueLazyYoutubeVideo',
@@ -46,12 +47,6 @@ const component = Vue.extend({
     },
     iframeAttributes: {
       type: Object as () => {},
-      default: () => ({
-        allowfullscreen: true,
-        frameborder: 0,
-        allow:
-          'accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture',
-      }),
     },
     webp: {
       type: Boolean,
@@ -161,6 +156,7 @@ const component = Vue.extend({
                 ref: 'iframe',
                 staticClass: 'y-video__media',
                 attrs: {
+                  ...DEFAULT_IFRAME_ATTRIBUTES,
                   ...iframeAttributes,
                   src: srcAttribute,
                 },
