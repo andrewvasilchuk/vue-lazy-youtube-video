@@ -1,7 +1,5 @@
 import { shallowMount, ThisTypedShallowMountOptions } from '@vue/test-utils'
-import VueLazyYoutubeVideo, {
-  IVueLazyYoutubeVideo,
-} from '../src/VueLazyYoutubeVideo'
+import VueLazyYoutubeVideo from '../src/VueLazyYoutubeVideo'
 import { DEFAULT_IFRAME_ATTRIBUTES } from '../src/constants'
 import { classes } from './config'
 import { defaultProps, getDefaultProps, VIDEO_ID } from './fixtures'
@@ -13,17 +11,20 @@ beforeEach(() => {
 })
 
 const factory = (options?: ThisTypedShallowMountOptions<Vue>) => {
-  return shallowMount<InstanceType<IVueLazyYoutubeVideo>>(VueLazyYoutubeVideo, {
-    ...options,
-    propsData: {
-      ...defaultProps,
-      ...(options !== undefined
-        ? options.propsData !== undefined
-          ? options.propsData
-          : {}
-        : {}),
-    },
-  })
+  return shallowMount<InstanceType<typeof VueLazyYoutubeVideo>>(
+    VueLazyYoutubeVideo,
+    {
+      ...options,
+      propsData: {
+        ...defaultProps,
+        ...(options !== undefined
+          ? options.propsData !== undefined
+            ? options.propsData
+            : {}
+          : {}),
+      },
+    }
+  )
 }
 
 describe('VueLazyYoutubeVideo', () => {
