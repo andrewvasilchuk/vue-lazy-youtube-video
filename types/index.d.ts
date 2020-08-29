@@ -4,3 +4,5 @@ import VueLazyYoutubeVideo from '../src/VueLazyYoutubeVideo'
 export default VueLazyYoutubeVideo
 
 export declare const Plugin: PluginObject<never>
+
+export * from '../src/types'

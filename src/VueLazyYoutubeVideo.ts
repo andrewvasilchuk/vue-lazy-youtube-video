@@ -1,7 +1,7 @@
-import Vue, { VNode } from 'vue'
-import { LoadIframeEventPayload } from './types'
+import Vue, { PropType, VNode } from 'vue'
+import type { LoadIframeEventPayload } from './types'
 import { startsWith } from './helpers'
-import { DEFAULT_IFRAME_ATTRIBUTES } from './constants'
+import { PREVIEW_IMAGE_SIZES, DEFAULT_IFRAME_ATTRIBUTES } from './constants'
 
 export default Vue.extend({
   name: 'VueLazyYoutubeVideo',
@@ -32,21 +32,14 @@ export default Vue.extend({
     previewImageSize: {
       type: String,
       default: 'maxresdefault',
-      validator: (value) =>
-        [
-          'default',
-          'mqdefault',
-          'sddefault',
-          'hqdefault',
-          'maxresdefault',
-        ].indexOf(value) !== -1,
+      validator: (value: any) => PREVIEW_IMAGE_SIZES.indexOf(value) !== -1,
     },
     thumbnail: {
-      type: Object as () => { webp: string; jpg: string },
+      type: Object as PropType<{ webp: string; jpg: string }>,
       validator: (val) => 'jpg' in val && 'webp' in val,
     },
     iframeAttributes: {
-      type: Object as () => {},
+      type: Object as PropType<Record<string, string | boolean | number>>,
     },
     webp: {
       type: Boolean,
@@ -57,13 +50,12 @@ export default Vue.extend({
       default: false,
     },
     thumbnailListeners: {
-      type: Object as () => Record<string, Function | Function[]>,
+      type: Object as PropType<Record<string, Function | Function[]>>,
     },
   },
-  data(): { activated: boolean } {
-    const self = this
+  data() {
     return {
-      activated: self.autoplay,
+      activated: this.autoplay,
     }
   },
   computed: {

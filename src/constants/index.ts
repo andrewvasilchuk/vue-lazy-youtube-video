@@ -4,3 +4,11 @@ export const DEFAULT_IFRAME_ATTRIBUTES = {
   allow:
     'accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture',
 }
+
+export const PREVIEW_IMAGE_SIZES = [
+  'default',
+  'mqdefault',
+  'sddefault',
+  'hqdefault',
+  'maxresdefault',
+] as const
