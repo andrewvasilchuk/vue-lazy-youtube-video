@@ -12,3 +12,5 @@ export const PREVIEW_IMAGE_SIZES = [
   'hqdefault',
   'maxresdefault',
 ] as const
+
+export const PLAYER_SCRIPT_SRC = 'https://www.youtube.com/player_api'

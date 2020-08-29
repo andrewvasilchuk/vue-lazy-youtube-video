@@ -28,6 +28,9 @@ export default Vue.extend({
         player.stopVideo()
       }, 3000)
     },
+    onPlayerInit(player: YT.Player) {
+      console.log(player)
+    },
   },
   render(h): VNode {
     return h('ul', {}, [
@@ -66,9 +69,12 @@ export default Vue.extend({
             webp: false,
             autoplay: true,
             iframeAttributes: this.iframeAttributes,
+            enablejsapi: true,
+            injectPlayerScript: true,
           },
           on: {
             'load:iframe': this.onIframeLoad,
+            'init:player': this.onPlayerInit,
           },
         }),
       ]),

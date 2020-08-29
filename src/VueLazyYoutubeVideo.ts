@@ -1,9 +1,13 @@
-import Vue, { PropType, VNode } from 'vue'
-import type { LoadIframeEventPayload } from './types'
+import Vue, { VueConstructor, PropType, VNode } from 'vue'
+import type { LoadIframeEventPayload, Refs } from './types'
 import { startsWith } from './helpers'
-import { PREVIEW_IMAGE_SIZES, DEFAULT_IFRAME_ATTRIBUTES } from './constants'
+import {
+  PREVIEW_IMAGE_SIZES,
+  DEFAULT_IFRAME_ATTRIBUTES,
+  PLAYER_SCRIPT_SRC,
+} from './constants'
 
-export default Vue.extend({
+export default (Vue as VueConstructor<Vue & { $refs: Refs }>).extend({
   name: 'VueLazyYoutubeVideo',
   props: {
     src: {
@@ -52,10 +56,24 @@ export default Vue.extend({
     thumbnailListeners: {
       type: Object as PropType<Record<string, Function | Function[]>>,
     },
+    enablejsapi: {
+      type: Boolean,
+      default: false,
+    },
+    playerOptions: {
+      type: Object as PropType<YT.PlayerOptions>,
+      default: () => ({}),
+    },
+    injectPlayerScript: {
+      type: Boolean,
+      default: false,
+    },
   },
   data() {
     return {
       activated: this.autoplay,
+      playerInstance: null as YT.Player | null,
+      __interval__: null as NodeJS.Timeout | null,
     }
   },
   computed: {
@@ -72,7 +90,9 @@ export default Vue.extend({
     srcAttribute(): string {
       const hasQuestionMark =
         typeof this.src === 'string' && this.src.indexOf('?') !== -1
-      return `${this.src}${hasQuestionMark ? '&' : '?'}autoplay=1`
+      return `${this.src}${hasQuestionMark ? '&' : '?'}autoplay=1${
+        this.enablejsapi ? '&enablejsapi=1' : ''
+      }`
     },
     styleObj(): object {
       return {
@@ -113,9 +133,61 @@ export default Vue.extend({
     onIframeLoad() {
       const payload: LoadIframeEventPayload = { iframe: this.getIframe() }
       this.$emit('load:iframe', payload)
+
+      if (this.enablejsapi) {
+        try {
+          window.YT.Player
+          this.initPlayerInstance()
+        } catch (e) {
+          if (this.injectPlayerScript) {
+            this.doInjectPlayerScript()
+          } else {
+            console.error(
+              '[vue-lazy-youtube-video]: window.YT.Player is not defined. Make sure you either included the IFrame Player API or passed `injectPlayerScript` prop'
+            )
+            throw e
+          }
+        }
+      }
     },
     getIframe() {
       return this.$refs.iframe as HTMLIFrameElement | undefined
+    },
+    checkPlayer() {
+      if (YT.Player) {
+        if (this.__interval__) {
+          clearInterval(this.__interval__)
+        }
+
+        this.initPlayerInstance()
+        return true
+      }
+      return false
+    },
+    initPlayerInstance() {
+      const { iframe } = this.$refs
+      if (!iframe)
+        throw new Error(
+          '[vue-lazy-youtube-video]: YT.Player can not be instantiated without iframe element'
+        )
+      this.playerInstance = new YT.Player(iframe, this.playerOptions)
+      this.$emit('init:player', this.playerInstance)
+      return this.playerInstance
+    },
+    getPlayerInstance() {
+      return this.playerInstance
+    },
+    doInjectPlayerScript() {
+      const script = document.createElement('script')
+      script.setAttribute('src', PLAYER_SCRIPT_SRC)
+
+      script.onload = () => {
+        this.__interval__ = setInterval(() => {
+          this.checkPlayer()
+        }, 32)
+      }
+
+      document.head.appendChild(script)
     },
     warn(message: string) {
       console.warn(`[vue-lazy-youtube-video]: ${message}`)
