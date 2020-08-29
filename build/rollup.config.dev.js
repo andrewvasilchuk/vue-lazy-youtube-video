@@ -1,9 +1,9 @@
 import path from 'path'
-import typescript from 'rollup-plugin-typescript2'
+import typescript from '@rollup/plugin-typescript'
 import vue from 'rollup-plugin-vue'
 import serve from 'rollup-plugin-serve'
 import livereload from 'rollup-plugin-livereload'
-import replace from 'rollup-plugin-replace'
+import replace from '@rollup/plugin-replace'
 import css from 'rollup-plugin-css-only'
 
 import plugins from './base/plugins/index'

@@ -1,6 +1,6 @@
 import path from 'path'
-import typescript from 'rollup-plugin-typescript2'
-import replace from 'rollup-plugin-replace'
+import typescript from '@rollup/plugin-typescript'
+import replace from '@rollup/plugin-replace'
 import { terser } from 'rollup-plugin-terser'
 
 import basePlugins from './base/plugins/index'
