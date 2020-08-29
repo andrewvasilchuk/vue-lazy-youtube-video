@@ -1,6 +1,5 @@
 import path from 'path'
 import typescript from '@rollup/plugin-typescript'
-import vue from 'rollup-plugin-vue'
 import serve from 'rollup-plugin-serve'
 import livereload from 'rollup-plugin-livereload'
 import replace from '@rollup/plugin-replace'
@@ -21,7 +20,6 @@ export default {
   },
   plugins: [
     typescript(),
-    vue(),
     css(),
     replace({
       'process.env.NODE_ENV': JSON.stringify('development'),
