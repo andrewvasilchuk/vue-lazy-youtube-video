@@ -2,10 +2,17 @@ import Vue, { VueConstructor, PropType, VNode } from 'vue'
 import type { LoadIframeEventPayload, Refs } from './types'
 import { startsWith } from './helpers'
 import {
+  DEFAULT_ALT_ATTRIBUTE,
+  DEFAULT_BUTTON_LABEL,
   PREVIEW_IMAGE_SIZES,
+  DEFAULT_PREVIEW_IMAGE_SIZE,
+  DEFAULT_ASPECT_RATIO,
   DEFAULT_IFRAME_ATTRIBUTES,
+  YOUTUBE_REGEX,
   PLAYER_SCRIPT_SRC,
+  PLAYER_CHECK_MS,
 } from './constants'
+import { Event } from './event'
 
 export default (Vue as VueConstructor<Vue & { $refs: Refs }>).extend({
   name: 'VueLazyYoutubeVideo',
@@ -19,15 +26,15 @@ export default (Vue as VueConstructor<Vue & { $refs: Refs }>).extend({
     },
     alt: {
       type: String,
-      default: 'Video thumbnail',
+      default: DEFAULT_ALT_ATTRIBUTE,
     },
     buttonLabel: {
       type: String,
-      default: 'Play video',
+      default: DEFAULT_BUTTON_LABEL,
     },
     aspectRatio: {
       type: String,
-      default: '16:9',
+      default: DEFAULT_ASPECT_RATIO,
       validator: (value) => {
         const pattern = /^\d+:\d+$/
         return pattern.test(value)
@@ -35,7 +42,7 @@ export default (Vue as VueConstructor<Vue & { $refs: Refs }>).extend({
     },
     previewImageSize: {
       type: String,
-      default: 'maxresdefault',
+      default: DEFAULT_PREVIEW_IMAGE_SIZE,
       validator: (value: any) => PREVIEW_IMAGE_SIZES.indexOf(value) !== -1,
     },
     thumbnail: {
@@ -78,8 +85,7 @@ export default (Vue as VueConstructor<Vue & { $refs: Refs }>).extend({
   },
   computed: {
     id(): string {
-      const regExp = /^https:\/\/www\.youtube(?:-nocookie)?\.com\/embed\/(.+?)(?:\?.*)?$/
-      const executionResult = regExp.exec(this.src)
+      const executionResult = YOUTUBE_REGEX.exec(this.src)
       if (executionResult !== null) {
         return executionResult[1]
       } else {
@@ -106,21 +112,18 @@ export default (Vue as VueConstructor<Vue & { $refs: Refs }>).extend({
     },
     getPaddingBottom() {
       let { aspectRatio } = this
-      // Vue does not provide correct typescript support
-      // @ts-ignore
-      const defaultAspectRatio = this.$options.props.aspectRatio.default
-      const warningMessage = `Invalid value ${aspectRatio} supplied to \`aspectRatio\` property, instead fallback value ${defaultAspectRatio} is used `
+      const warningMessage = `Invalid value ${aspectRatio} supplied to \`aspectRatio\` property, instead fallback value ${DEFAULT_ASPECT_RATIO} is used `
 
       if (typeof aspectRatio === 'string') {
         const [a, b] = aspectRatio.split(':').map(Number)
 
         if (isFinite(a) === true && isFinite(b) === true) {
         } else {
-          aspectRatio = defaultAspectRatio
+          aspectRatio = DEFAULT_ASPECT_RATIO
           this.warn(warningMessage)
         }
       } else {
-        aspectRatio = defaultAspectRatio
+        aspectRatio = DEFAULT_ASPECT_RATIO
         this.warn(warningMessage)
       }
 
@@ -132,7 +135,7 @@ export default (Vue as VueConstructor<Vue & { $refs: Refs }>).extend({
     },
     onIframeLoad() {
       const payload: LoadIframeEventPayload = { iframe: this.getIframe() }
-      this.$emit('load:iframe', payload)
+      this.$emit(Event.LOAD_IFRAME, payload)
 
       if (this.enablejsapi) {
         try {
@@ -171,7 +174,7 @@ export default (Vue as VueConstructor<Vue & { $refs: Refs }>).extend({
           '[vue-lazy-youtube-video]: YT.Player can not be instantiated without iframe element'
         )
       this.playerInstance = new YT.Player(iframe, this.playerOptions)
-      this.$emit('init:player', this.playerInstance)
+      this.$emit(Event.INIT_PLAYER, { instance: this.playerInstance })
       return this.playerInstance
     },
     getPlayerInstance() {
@@ -184,7 +187,7 @@ export default (Vue as VueConstructor<Vue & { $refs: Refs }>).extend({
       script.onload = () => {
         this.__interval__ = setInterval(() => {
           this.checkPlayer()
-        }, 32)
+        }, PLAYER_CHECK_MS)
       }
 
       document.head.appendChild(script)
