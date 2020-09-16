@@ -1,5 +1,11 @@
 import Vue, { VueConstructor, PropType, VNode } from 'vue'
-import type { LoadIframeEventPayload, Refs } from './types'
+
+import type {
+  LoadIframeEventPayload,
+  InitPlayerEventPayload,
+  Refs,
+  Thumbnail,
+} from './types'
 import { startsWith } from './helpers'
 import {
   DEFAULT_ALT_ATTRIBUTE,
@@ -46,7 +52,7 @@ export default (Vue as VueConstructor<Vue & { $refs: Refs }>).extend({
       validator: (value: any) => PREVIEW_IMAGE_SIZES.indexOf(value) !== -1,
     },
     thumbnail: {
-      type: Object as PropType<{ webp: string; jpg: string }>,
+      type: Object as PropType<Thumbnail>,
       validator: (val) => 'jpg' in val && 'webp' in val,
     },
     iframeAttributes: {
@@ -134,7 +140,7 @@ export default (Vue as VueConstructor<Vue & { $refs: Refs }>).extend({
       return `${(b / a) * 100}%`
     },
     onIframeLoad() {
-      const payload: LoadIframeEventPayload = { iframe: this.getIframe() }
+      const payload: LoadIframeEventPayload = { iframe: this.$refs.iframe }
       this.$emit(Event.LOAD_IFRAME, payload)
 
       if (this.enablejsapi) {
@@ -152,9 +158,6 @@ export default (Vue as VueConstructor<Vue & { $refs: Refs }>).extend({
           }
         }
       }
-    },
-    getIframe() {
-      return this.$refs.iframe as HTMLIFrameElement | undefined
     },
     checkPlayer() {
       if (YT.Player) {
@@ -174,7 +177,8 @@ export default (Vue as VueConstructor<Vue & { $refs: Refs }>).extend({
           '[vue-lazy-youtube-video]: YT.Player can not be instantiated without iframe element'
         )
       this.playerInstance = new YT.Player(iframe, this.playerOptions)
-      this.$emit(Event.INIT_PLAYER, { instance: this.playerInstance })
+      const payload: InitPlayerEventPayload = { instance: this.playerInstance }
+      this.$emit(Event.INIT_PLAYER, payload)
       return this.playerInstance
     },
     getPlayerInstance() {
