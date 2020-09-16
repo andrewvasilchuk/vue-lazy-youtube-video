@@ -8,3 +8,7 @@ export function startsWith(
 ) {
   return string.indexOf(value, position) === position
 }
+
+export function isAspectRatio(value: string) {
+  return /^\d+:\d+$/.test(value)
+}
