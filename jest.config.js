@@ -1,15 +1,8 @@
 module.exports = {
-  moduleFileExtensions: [
-    'js',
-    'ts',
-    'json',
-    // tell Jest to handle `*.vue` files
-    'vue',
-  ],
+  moduleFileExtensions: ['js', 'ts', 'json'],
   transform: {
-    // process `*.vue` files with `vue-jest`
-    '.*\\.(vue)$': 'vue-jest',
     // process `*.ts` files with `ts-jest`
     '^.+\\.tsx?$': 'ts-jest',
   },
+  collectCoverageFrom: ['./src/VueLazyYoutubeVideo.ts'],
 }

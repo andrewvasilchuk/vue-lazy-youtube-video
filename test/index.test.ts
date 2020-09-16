@@ -1,42 +1,27 @@
-import { shallowMount, ThisTypedShallowMountOptions } from '@vue/test-utils'
-import VueLazyYoutubeVideo from '../src/VueLazyYoutubeVideo'
-import { DEFAULT_IFRAME_ATTRIBUTES } from '../src/constants'
+import {
+  DEFAULT_ALT_ATTRIBUTE,
+  DEFAULT_ASPECT_RATIO,
+  DEFAULT_IFRAME_ATTRIBUTES,
+  PLAYER_CHECK_MS,
+  DEFAULT_BUTTON_LABEL,
+  PREVIEW_IMAGE_SIZES,
+} from '../src/constants'
+import { Event } from '../src/event'
+
 import { classes } from './config'
 import { defaultProps, getDefaultProps, VIDEO_ID } from './fixtures'
-import { clickAndGetIframe, getImgAndSourceElements } from './helpers'
-
-beforeEach(() => {
-  console.error = jest.fn()
-  console.warn = jest.fn()
-})
-
-const factory = (options?: ThisTypedShallowMountOptions<Vue>) => {
-  return shallowMount<InstanceType<typeof VueLazyYoutubeVideo>>(
-    VueLazyYoutubeVideo,
-    {
-      ...options,
-      propsData: {
-        ...defaultProps,
-        ...(options !== undefined
-          ? options.propsData !== undefined
-            ? options.propsData
-            : {}
-          : {}),
-      },
-    }
-  )
-}
+import { TestManager } from './helpers'
 
 describe('VueLazyYoutubeVideo', () => {
   it('should insert `<iframe />` into the DOM when clicked', async () => {
-    const wrapper = factory()
-    const iframe = await clickAndGetIframe(wrapper)
+    const wrapper = TestManager.createWrapper()
+    const iframe = await TestManager.clickAndGetIframe(wrapper)
     expect(iframe.exists()).toBeTruthy()
   })
 
   it('should remove button and thumbnail when clicked', async () => {
-    const wrapper = factory()
-    await clickAndGetIframe(wrapper)
+    const wrapper = TestManager.createWrapper()
+    await TestManager.clickAndGetIframe(wrapper)
     expect(wrapper.find(classes.button).exists()).toBeFalsy()
     expect(wrapper.find('picture').exists()).toBeFalsy()
   })
@@ -44,44 +29,50 @@ describe('VueLazyYoutubeVideo', () => {
   describe('props', () => {
     describe('src', () => {
       it('should correctly set `src` attribute of the `<iframe />`', async () => {
-        let wrapper = factory()
-        let iframe = await clickAndGetIframe(wrapper)
+        let wrapper = TestManager.createWrapper()
+        let iframe = await TestManager.clickAndGetIframe(wrapper)
         expect(iframe.element.getAttribute('src')).toBe(
           `${defaultProps.src}?autoplay=1`
         )
         const query = '?loop=1'
-        wrapper = factory({ propsData: getDefaultProps({ query }) })
-        iframe = await clickAndGetIframe(wrapper)
+        wrapper = TestManager.createWrapper({
+          propsData: getDefaultProps({ query }),
+        })
+        iframe = await TestManager.clickAndGetIframe(wrapper)
         expect(iframe.element.getAttribute('src')).toBe(
           `${defaultProps.src}${query}&autoplay=1`
         )
       })
 
-      it('should call `console.error` when value with invalid type is passed', () => {
-        const error = jest.spyOn(global.console, 'error')
-        const invalidProps = [0, true, {}, [], () => {}]
-        invalidProps.forEach((prop) => {
-          factory({ propsData: { src: prop } })
+      it('should be required and `typeof "string"` and be validated', () => {
+        const definition = TestManager.getPropDefinition('src')
+        expect(definition).toMatchObject({
+          type: String,
+          required: true,
         })
-        expect(error).toHaveBeenCalledTimes(invalidProps.length)
-      })
 
-      it('should call `console.error` when invalid value is passed', () => {
-        const error = jest.spyOn(global.console, 'error')
-        factory({ propsData: { src: 'INVALID_SRC' } })
-        expect(error).toHaveBeenCalled()
-      })
-
-      it('should call `console.error` when no value is passed', () => {
-        const error = jest.spyOn(global.console, 'error')
-        factory({ propsData: { src: undefined } })
-        expect(error).toHaveBeenCalled()
+        if (typeof definition === 'object' && !Array.isArray(definition)) {
+          const { validator } = definition
+          if (validator) {
+            expect(validator('INVALID_VALUE')).toBeFalsy()
+            expect(
+              validator('https://www.youtube.com/embed/4JS70KB9GS0')
+            ).toBeTruthy()
+            expect(
+              validator('https://www.youtube-nocookie.com/embed/4JS70KB9GS0')
+            ).toBeTruthy()
+          } else {
+            throw new Error()
+          }
+        } else {
+          throw new Error()
+        }
       })
     })
 
     describe('aspectRatio', () => {
       it(`should correctly set \`padding bottom\` of the \`<element class="${classes.inner}"></element>\` when no value is passed`, () => {
-        const wrapper = factory()
+        const wrapper = TestManager.createWrapper()
         expect(wrapper.find(classes.inner).element.style.paddingBottom).toBe(
           `${(9 / 16) * 100}%`
         )
@@ -89,7 +80,7 @@ describe('VueLazyYoutubeVideo', () => {
 
       it(`should correctly set \`padding bottom\` of the \`<element class="${classes.inner}"></element>\` when valid value is passed`, () => {
         const [a, b] = [4, 3]
-        const wrapper = factory({
+        const wrapper = TestManager.createWrapper({
           propsData: { aspectRatio: `${a}:${b}` },
         })
         expect(wrapper.find(classes.inner).element.style.paddingBottom).toBe(
@@ -98,59 +89,74 @@ describe('VueLazyYoutubeVideo', () => {
       })
 
       it(`should correctly set \`padding bottom\` of the \`<element class="${classes.inner}"></element>\` when invalid value is passed`, () => {
-        const wrapper = factory({ propsData: { aspectRatio: 'foo' } })
-        expect(wrapper.find(classes.inner).element.style.paddingBottom).toBe(
-          `${(9 / 16) * 100}%`
-        )
+        const invalid = ['foo']
+        invalid.forEach((value) => {
+          const wrapper = TestManager.createWrapper({
+            propsData: { aspectRatio: value },
+          })
+          expect(wrapper.find(classes.inner).element.style.paddingBottom).toBe(
+            `${(9 / 16) * 100}%`
+          )
+        })
       })
 
-      it('should call `console.error` when value with invalid type is passed', () => {
-        const error = jest.spyOn(global.console, 'error')
-        const invalidProps = [0, true, {}, [], () => {}]
-        invalidProps.forEach((prop) => {
-          factory({ propsData: { aspectRatio: prop } })
+      it('should be and `typeof "string"` have default value and be validated', () => {
+        const definition = TestManager.getPropDefinition('aspectRatio')
+        expect(definition).toMatchObject({
+          type: String,
+          default: DEFAULT_ASPECT_RATIO,
         })
-        expect(error).toHaveBeenCalledTimes(invalidProps.length)
+
+        if (typeof definition === 'object' && !Array.isArray(definition)) {
+          const { validator } = definition
+          if (validator) {
+            expect(validator('INVALID_VALUE')).toBeFalsy()
+            expect(validator('4:3')).toBeTruthy()
+          } else {
+            throw new Error()
+          }
+        } else {
+          throw new Error()
+        }
       })
     })
 
     describe('alt', () => {
       it('should correctly set `alt` attribute of the preview `<img />` when valid value is passed', () => {
         const alt = 'foo'
-        const wrapper = factory({
+        const wrapper = TestManager.createWrapper({
           propsData: { alt },
         })
         expect(wrapper.find('img').element.getAttribute('alt')).toBe(alt)
       })
 
-      it('should call `console.error` when value with invalid type is passed', () => {
-        const error = jest.spyOn(global.console, 'error')
-        const invalidProps = [0, true, {}, [], () => {}]
-        invalidProps.forEach((prop) => {
-          factory({ propsData: { alt: prop } })
+      it('should be `String` and have default value', () => {
+        const definition = TestManager.getPropDefinition('alt')
+        expect(definition).toMatchObject({
+          type: String,
+          default: DEFAULT_ALT_ATTRIBUTE,
         })
-        expect(error).toHaveBeenCalledTimes(invalidProps.length)
       })
 
       it('should correctly set `alt` attribute of the preview `<img />` when no value is passed', () => {
-        const wrapper = factory()
+        const wrapper = TestManager.createWrapper()
         expect(wrapper.find('img').element.getAttribute('alt')).toBe(
-          'Video thumbnail'
+          DEFAULT_ALT_ATTRIBUTE
         )
       })
     })
 
     describe('buttonLabel', () => {
       it('should correctly set `aria-label` attribute of the `<button></button>` when no value is passed', () => {
-        const wrapper = factory()
+        const wrapper = TestManager.createWrapper()
         expect(
           wrapper.find(classes.button).element.getAttribute('aria-label')
-        ).toBe('Play video')
+        ).toBe(DEFAULT_BUTTON_LABEL)
       })
 
       it('should correctly set `aria-label` attribute of the `<button></button>` when valid value is passed', () => {
         const buttonLabel = 'Simple dummy text'
-        const wrapper = factory({
+        const wrapper = TestManager.createWrapper({
           propsData: { buttonLabel },
         })
         expect(
@@ -158,25 +164,24 @@ describe('VueLazyYoutubeVideo', () => {
         ).toBe(buttonLabel)
       })
 
-      it('should call `console.error` when value with invalid type is passed', () => {
-        const error = jest.spyOn(global.console, 'error')
-        const invalidProps = [0, true, {}, [], () => {}]
-        invalidProps.forEach((prop) => {
-          factory({ propsData: { buttonLabel: prop } })
+      it('should be `String` and have default value', () => {
+        const definition = TestManager.getPropDefinition('buttonLabel')
+        expect(definition).toMatchObject({
+          type: String,
+          default: DEFAULT_BUTTON_LABEL,
         })
-        expect(error).toHaveBeenCalledTimes(invalidProps.length)
       })
     })
 
     describe('previewImageSize', () => {
-      it('should correctly set `srcset` and `src` attributes of `<source />` and `<img />` when valid value is passed', () => {
-        const previewImageSize = 'hqdefault'
-        const wrapper = factory({
+      it('should correctly set `srcset` and `src` attributes of `<source />` and `<img />` when valid value is passed', (done) => {
+        const previewImageSize = PREVIEW_IMAGE_SIZES[0]
+        const wrapper = TestManager.createWrapper({
           propsData: {
             previewImageSize,
           },
         })
-        const { img, source } = getImgAndSourceElements(wrapper)
+        const { img, source } = TestManager.getImgAndSourceElements(wrapper)
         const srcAttribute = img.getAttribute('src')
         const srcsetAttribute = source.getAttribute('srcset')
 
@@ -184,34 +189,45 @@ describe('VueLazyYoutubeVideo', () => {
           expect(srcAttribute).toBe(
             `https://i.ytimg.com/vi/${VIDEO_ID}/${previewImageSize}.jpg`
           )
+        } else {
+          done.fail('Invalid `src` attribute')
         }
         if (srcsetAttribute !== null) {
           expect(srcsetAttribute).toBe(
             `https://i.ytimg.com/vi_webp/${VIDEO_ID}/${previewImageSize}.webp`
           )
+        } else {
+          done.fail('Invalid `srcset` attribute')
         }
+
+        done()
       })
 
-      it('should call `console.error` when invalid value is passed', () => {
-        const error = jest.spyOn(global.console, 'error')
-        factory({
-          propsData: { previewImageSize: 'INVALID_PREVIEW_IMAGE_SIZE' },
+      it('should be `String` have default value and be validated', (done) => {
+        const definition = TestManager.getPropDefinition('previewImageSize')
+        expect(definition).toMatchObject({
+          type: String,
+          default: 'maxresdefault',
         })
-        expect(error).toHaveBeenCalled()
-      })
 
-      it('should call `console.error` when value with invalid type is passed', () => {
-        const error = jest.spyOn(global.console, 'error')
-        const invalidProps = [0, true, {}, [], () => {}]
-        invalidProps.forEach((prop) => {
-          factory({ propsData: { previewImageSize: prop } })
-        })
-        expect(error).toHaveBeenCalledTimes(invalidProps.length)
+        if (typeof definition === 'object' && !Array.isArray(definition)) {
+          const { validator } = definition
+          if (validator) {
+            expect(validator('INVALID_VALUE')).toBeFalsy()
+            expect(validator(PREVIEW_IMAGE_SIZES[0])).toBeTruthy()
+          } else {
+            done.fail('Invalid validator definition')
+          }
+        } else {
+          done.fail('Invalid validator definition')
+        }
+
+        done()
       })
 
       it('should correctly set `srcset` and `src` attributes of `<source />` and `<img />` when no value is passed', () => {
-        const wrapper = factory()
-        const { img, source } = getImgAndSourceElements(wrapper)
+        const wrapper = TestManager.createWrapper()
+        const { img, source } = TestManager.getImgAndSourceElements(wrapper)
         const srcAttribute = img.getAttribute('src')
         const srcsetAttribute = source.getAttribute('srcset')
 
@@ -232,34 +248,40 @@ describe('VueLazyYoutubeVideo', () => {
     describe('thumbnail', () => {
       it('should correctly set `srcset` and `src` attributes of thumbnails when valid value is passed', () => {
         const thumbnail = { webp: 'w', jpg: 'j' }
-        const wrapper = factory({ propsData: { thumbnail } })
-        const { img, source } = getImgAndSourceElements(wrapper)
+        const wrapper = TestManager.createWrapper({ propsData: { thumbnail } })
+        const { img, source } = TestManager.getImgAndSourceElements(wrapper)
         expect(source.getAttribute('srcset')).toEqual(thumbnail.webp)
         expect(img.getAttribute('src')).toEqual(thumbnail.jpg)
       })
 
-      it('should call `console.error` when value with invalid type is passed', () => {
-        const error = jest.spyOn(global.console, 'error')
-        const invalidProps = [0, '0', true, [], () => {}]
-        invalidProps.forEach((prop) => {
-          factory({ propsData: { thumbnail: prop } })
+      it('should be `Object` and be validated', (done) => {
+        const definition = TestManager.getPropDefinition('thumbnail')
+        expect(definition).toMatchObject({
+          type: Object,
         })
-        expect(error).toHaveBeenCalledTimes(invalidProps.length)
-      })
 
-      it('should call `console.error` when value with invalid value is passed', () => {
-        const error = jest.spyOn(global.console, 'error')
-        factory({ propsData: { thumbnail: { jpg: 'j' } } })
-        factory({ propsData: { thumbnail: { webp: 'w' } } })
-        expect(error).toHaveBeenCalledTimes(2)
+        if (typeof definition === 'object' && !Array.isArray(definition)) {
+          const { validator } = definition
+          if (validator) {
+            expect(validator({ jpg: 'j', webp: 'w' })).toBeTruthy()
+          } else {
+            done.fail('Invalid validator definition')
+          }
+        } else {
+          done.fail('Invalid validator definition')
+        }
+
+        done()
       })
     })
 
     describe('iframeAttributes', () => {
       it('should correctly set attributes of the `<iframe />` when valid value is passed', async (done) => {
         const iframeAttributes = { foo: 'bar', baz: 'vue' }
-        const wrapper = factory({ propsData: { iframeAttributes } })
-        const iframe = await clickAndGetIframe(wrapper)
+        const wrapper = TestManager.createWrapper({
+          propsData: { iframeAttributes },
+        })
+        const iframe = await TestManager.clickAndGetIframe(wrapper)
 
         Object.entries({
           ...DEFAULT_IFRAME_ATTRIBUTES,
@@ -277,110 +299,249 @@ describe('VueLazyYoutubeVideo', () => {
         done()
       })
 
-      it('should call `console.error` when value with invalid type is passed', () => {
-        const error = jest.spyOn(global.console, 'error')
-        const invalidProps = [0, '0', true, [], () => {}]
-        invalidProps.forEach((prop) => {
-          factory({ propsData: { iframeAttributes: prop } })
+      it('should be `Object`', () => {
+        const definition = TestManager.getPropDefinition('iframeAttributes')
+        expect(definition).toMatchObject({
+          type: Object,
         })
-        expect(error).toHaveBeenCalledTimes(invalidProps.length)
       })
 
-      it('should correctly set attributes of the `<iframe />` when no value is passed ', async () => {
-        const wrapper = factory()
-        const iframe = await clickAndGetIframe(wrapper)
-        const { element } = iframe
-        const allowfullscreen = element.getAttribute('allowfullscreen')
-        expect(allowfullscreen).toEqual('allowfullscreen')
-        const frameborder = element.getAttribute('frameborder')
-        expect(frameborder).toEqual('0')
-        const allow = element.getAttribute('allow')
-        expect(allow).toEqual(
-          'accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture'
-        )
+      it('should correctly set attributes of the `<iframe />` element when no value is passed', async (done) => {
+        const wrapper = TestManager.createWrapper()
+        const iframe = await TestManager.clickAndGetIframe(wrapper)
+        Object.entries(DEFAULT_IFRAME_ATTRIBUTES).forEach(([key, value]) => {
+          const attribute = iframe.element.getAttribute(key)
+          if (attribute !== null) {
+            expect([value, attribute]).toContain(value)
+          } else {
+            done.fail()
+          }
+        })
+        done()
       })
     })
 
     describe('webp', () => {
       it('should not render `<source />` element when `false` is passed', () => {
-        const wrapper = factory({ propsData: { webp: false } })
+        const wrapper = TestManager.createWrapper({
+          propsData: { webp: false },
+        })
         const source = wrapper.find('source')
         expect(source.exists()).toBeFalsy()
       })
 
       it('should render `<source />` element when `true` is passed', () => {
-        const wrapper = factory({ propsData: { webp: true } })
+        const wrapper = TestManager.createWrapper({ propsData: { webp: true } })
         const source = wrapper.find('source')
         expect(source.exists()).toBeTruthy()
       })
 
-      it('should call `console.error` when value with invalid type is passed', () => {
-        const error = jest.spyOn(global.console, 'error')
-        const invalidProps = [1, 'foo', [], () => {}]
-        invalidProps.forEach((prop) => {
-          factory({ propsData: { iframeAttributes: prop } })
+      it('should be `Boolean` and have default value', () => {
+        const definition = TestManager.getPropDefinition('webp')
+        expect(definition).toMatchObject({
+          type: Boolean,
+          default: true,
         })
-        expect(error).toHaveBeenCalledTimes(invalidProps.length)
       })
     })
 
     describe('autoplay', () => {
       it('should set initial value of `activated` data property', () => {
         const autoplay = true
-        const wrapper = factory({ propsData: { autoplay } })
+        const wrapper = TestManager.createWrapper({ propsData: { autoplay } })
         expect(wrapper.vm.activated).toBe(autoplay)
       })
 
-      it('should call `console.error` when value with invalid type is passed', () => {
-        const error = jest.spyOn(global.console, 'error')
-        const invalidProps = [1, 'foo', [], () => {}]
-        invalidProps.forEach((prop) => {
-          factory({ propsData: { autoplay: prop } })
+      it('should be `Boolean` and have default value', () => {
+        const definition = TestManager.getPropDefinition('autoplay')
+        expect(definition).toMatchObject({
+          type: Boolean,
+          default: false,
         })
-        expect(error).toHaveBeenCalledTimes(invalidProps.length)
       })
     })
 
     describe('thumbnailListeners', () => {
       it('should bind passed listeners', () => {
-        const click = jest.fn(() => true)
-        const wrapper = factory({
+        const click = jest.fn()
+        const wrapper = TestManager.createWrapper({
           propsData: { thumbnailListeners: { click } },
         })
         const img = wrapper.find('img')
         img.element.click()
-        expect(click).toHaveBeenCalled()
+        expect(click).toHaveBeenCalledTimes(1)
       })
 
-      it('should call `console.error` and throw an error when value with invalid type is passed', () => {
-        const error = jest.spyOn(global.console, 'error')
-        const invalidProps = [1, 'foo', true, [], () => {}]
-        invalidProps.forEach((prop) => {
-          try {
-            factory({ propsData: { thumbnailListeners: prop } })
-          } catch (e) {}
+      it('should be `Object`', () => {
+        const definition = TestManager.getPropDefinition('thumbnailListeners')
+        expect(definition).toMatchObject({
+          type: Object,
         })
-        expect(error).toHaveBeenCalledTimes(invalidProps.length)
+      })
+    })
+
+    describe('enablejsapi', () => {
+      beforeEach(() => {
+        TestManager.mockGlobalPlayer()
+      })
+
+      afterEach(() => {
+        TestManager.cleanGlobalPlayer()
+      })
+    })
+
+    describe('playerOptions', () => {
+      beforeEach(() => {
+        TestManager.mockGlobalPlayer()
+      })
+
+      afterEach(() => {
+        TestManager.cleanGlobalPlayer()
+      })
+
+      it('should be typeof "object" and have default value', () => {
+        const definition = TestManager.getPropDefinition('playerOptions')
+        expect(definition).toMatchObject({
+          type: Object,
+        })
+        if (typeof definition === 'object' && !Array.isArray(definition)) {
+          const { default: d } = definition
+          if (d && typeof d === 'function') {
+            expect(d()).toMatchObject({})
+          } else {
+            throw new Error()
+          }
+        } else {
+          throw new Error()
+        }
+      })
+
+      it('should pass options to `YT.Player` constructor', async () => {
+        const options: YT.PlayerOptions = { width: 256 }
+        const wrapper = TestManager.createWrapper({
+          propsData: { enablejsapi: true, playerOptions: options },
+        })
+        await TestManager.play(wrapper)
+        expect(TestManager.getMockedPlayer()).toHaveBeenCalledWith(
+          TestManager.getIframeElement(wrapper),
+          options
+        )
+      })
+    })
+
+    describe('injectPlayerScript', () => {
+      it('should be `typeof "boolean"` and have default value', () => {
+        const definition = TestManager.getPropDefinition('injectPlayerScript')
+        expect(definition).toMatchObject({
+          type: Boolean,
+          default: false,
+        })
+      })
+
+      it('should inject `<script />` tag when passed', async () => {
+        const wrapper = TestManager.createWrapper({
+          propsData: { enablejsapi: true, injectPlayerScript: true },
+        })
+        await TestManager.play(wrapper)
+        expect(TestManager.getScriptElement()).not.toBe(null)
+        TestManager.cleanScriptElement()
+      })
+
+      it('should handle `<script />` `"onload"` event, wait for YT.Player availability and therefore instantiate a player instance', async (done) => {
+        const wrapper = TestManager.createWrapper({
+          propsData: { enablejsapi: true, injectPlayerScript: true },
+        })
+        await TestManager.play(wrapper)
+        expect(wrapper.vm.playerInstance).toBeNull()
+        const script = TestManager.getScriptElement()
+        if (script !== null) {
+          if (script.onload !== null) {
+            script.onload(new window.Event('load'))
+            global.YT = {}
+            setTimeout(() => {
+              TestManager.mockGlobalPlayer()
+            }, PLAYER_CHECK_MS)
+            setTimeout(() => {
+              expect(wrapper.vm.playerInstance).toBe(
+                TestManager.getMockedPlayer().mock.instances[0]
+              )
+              TestManager.cleanGlobalPlayer()
+              TestManager.cleanScriptElement()
+              done()
+            }, PLAYER_CHECK_MS * 3)
+          } else {
+            done.fail()
+          }
+        } else {
+          done.fail('`<script />` is `null`')
+        }
+      })
+
+      it('should throw if is set to `false` and there ins no `YT.Player` in `global`', async () => {
+        const spy = jest.spyOn(console, 'error').mockImplementation()
+        const wrapper = TestManager.createWrapper({
+          propsData: { enablejsapi: true },
+        })
+        expect(() => wrapper.vm.onIframeLoad()).toThrow()
+        spy.mockRestore()
       })
     })
   })
 
   describe('events', () => {
-    describe('load:iframe', () => {
+    describe(Event.LOAD_IFRAME, () => {
       it("should emit event when `<iframe />`' `load` event happens", async () => {
-        const wrapper = factory()
-        const iframe = await clickAndGetIframe(wrapper)
-        iframe.trigger('load')
-        expect(wrapper.emitted()['load:iframe']).toBeTruthy()
+        const wrapper = TestManager.createWrapper()
+        await TestManager.play(wrapper)
+        const emitted = wrapper.emitted(Event.LOAD_IFRAME)
+        if (emitted) {
+          expect(emitted.length).toBe(1)
+        }
       })
 
       it('should provide correct payload', async () => {
-        const wrapper = factory()
-        const iframe = await clickAndGetIframe(wrapper)
-        iframe.trigger('load')
-        expect(wrapper.emitted()['load:iframe']![0][0].iframe).toEqual(
-          iframe.element
-        )
+        const wrapper = TestManager.createWrapper()
+        await TestManager.play(wrapper)
+        const emitted = wrapper.emitted()[Event.LOAD_IFRAME]
+        if (emitted) {
+          expect(emitted[0][0].iframe).toEqual(
+            TestManager.getIframeElement(wrapper)
+          )
+        }
+      })
+    })
+
+    describe(Event.INIT_PLAYER, () => {
+      beforeEach(() => {
+        TestManager.mockGlobalPlayer()
+      })
+
+      afterEach(() => {
+        TestManager.cleanGlobalPlayer()
+      })
+
+      it('should emit when `YT.Player` is instantiated', async () => {
+        const wrapper = TestManager.createWrapper({
+          propsData: { enablejsapi: true },
+        })
+        await TestManager.play(wrapper)
+        const emitted = wrapper.emitted(Event.INIT_PLAYER)
+        if (emitted) {
+          expect(emitted.length).toBe(1)
+        }
+      })
+
+      it('should provide correct payload', async () => {
+        const wrapper = TestManager.createWrapper({
+          propsData: { enablejsapi: true },
+        })
+        await TestManager.play(wrapper)
+        const emitted = wrapper.emitted(Event.INIT_PLAYER)
+        if (emitted) {
+          expect(emitted[0][0].instance).toEqual(
+            TestManager.getMockedPlayer().mock.instances[0]
+          )
+        }
       })
     })
   })
@@ -389,7 +550,7 @@ describe('VueLazyYoutubeVideo', () => {
     describe('icon', () => {
       it('should render when passed', async () => {
         const icon = '<svg><g></g></svg>'
-        const wrapper = factory({ slots: { icon } })
+        const wrapper = TestManager.createWrapper({ slots: { icon } })
         expect(wrapper.find(classes.button).element.innerHTML).toBe(icon)
       })
     })
@@ -397,8 +558,56 @@ describe('VueLazyYoutubeVideo', () => {
     describe('button', () => {
       it('should render when passed', async () => {
         const button = '<button type="button">foo</button>'
-        const wrapper = factory({ slots: { button } })
+        const wrapper = TestManager.createWrapper({ slots: { button } })
         expect(wrapper.find('button').element.outerHTML).toBe(button)
+      })
+    })
+  })
+
+  describe('computed', () => {
+    describe('id', () => {
+      it('should warn for unsuccessful id extraction', () => {
+        const errorSpy = jest.spyOn(console, 'error').mockImplementation()
+        const src = 'INVALID_SRC'
+        const warnSpy = jest.spyOn(global.console, 'warn').mockImplementation()
+        TestManager.createWrapper({
+          propsData: { src },
+        })
+        expect(warnSpy).toHaveBeenCalledTimes(1)
+        errorSpy.mockRestore()
+        warnSpy.mockRestore()
+      })
+    })
+  })
+
+  describe('methods', () => {
+    beforeEach(() => {
+      TestManager.mockGlobalPlayer()
+    })
+
+    afterEach(() => {
+      TestManager.cleanGlobalPlayer()
+    })
+
+    describe('getPlayerInstance', () => {
+      it('should return `YT.Player` instance or null', async () => {
+        const wrapper = TestManager.createWrapper({
+          propsData: { enablejsapi: true },
+        })
+        expect(wrapper.vm.getPlayerInstance()).toBeNull()
+        await TestManager.play(wrapper)
+        expect(wrapper.vm.getPlayerInstance()).toBe(
+          TestManager.getMockedPlayer().mock.instances[0]
+        )
+      })
+    })
+
+    describe('initPlayerInstance', () => {
+      it('should throw if there is no `iframe />` element', () => {
+        const wrapper = TestManager.createWrapper({
+          propsData: { enablejsapi: true },
+        })
+        expect(() => wrapper.vm.initPlayerInstance()).toThrow()
       })
     })
   })
