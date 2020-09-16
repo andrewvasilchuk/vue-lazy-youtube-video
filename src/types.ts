@@ -6,7 +6,7 @@ export interface InitPlayerEventPayload {
   instance: YT.Player
 }
 
-export interface Refs {
+export type Refs = {
   iframe?: HTMLIFrameElement
 }
 

@@ -1,4 +1,5 @@
 import Vue, { VueConstructor, PropType, VNode, CreateElement } from 'vue'
+import type { WithRefs } from 'vue-typed-refs'
 
 import type {
   LoadIframeEventPayload,
@@ -20,7 +21,7 @@ import {
 } from './constants'
 import { Event } from './event'
 
-export default (Vue as VueConstructor<Vue & { $refs: Refs }>).extend({
+export default (Vue as WithRefs<Refs>).extend({
   name: 'VueLazyYoutubeVideo',
   props: {
     src: {
