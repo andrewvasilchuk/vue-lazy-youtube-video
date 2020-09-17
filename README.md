@@ -20,6 +20,7 @@
   - [API](#api)
     - [Properties](#properties)
     - [Events](#events)
+    - [Methods](#methods)
     - [Slots](#slots)
   - [Tests](#tests)
     - [Unit](#unit)
@@ -159,6 +160,12 @@ The list of available `props` (with their types, default values and descriptions
 | --------------- | -------------------------------- | ------------------------------------------------------------ |
 | `'load:iframe'` | `{ iframe?: HTMLIFrameElement }` | Happens when native' `<iframe />` element `load` event fires |
 | `'init:player'` | `{ instance: YT.Player }`        | Happens when the `YT.Player` instance is instantiated        |
+
+### Methods
+
+| Name                | Type                        | Description                                                                                                                                                                 |
+| ------------------- | --------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `getPlayerInstance` | `() => Nullable<YT.Plater>` | Returns an instance of the `YT.Player` when the `enablejapi` prop is passed and the `YT.Player` is initialized (check `'init:player'` event), in other cases returns `null` |
 
 ### Slots
 
