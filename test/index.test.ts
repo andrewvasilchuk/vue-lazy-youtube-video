@@ -5,6 +5,7 @@ import {
   PLAYER_CHECK_MS,
   DEFAULT_BUTTON_LABEL,
   PREVIEW_IMAGE_SIZES,
+  DEFAULT_PREVIEW_IMAGE_SIZE,
 } from '../src/constants'
 import { Event } from '../src/event'
 
@@ -28,7 +29,7 @@ describe('VueLazyYoutubeVideo', () => {
 
   describe('props', () => {
     describe('src', () => {
-      it('should correctly set `src` attribute of the `<iframe />`', async () => {
+      it('should correctly set `src` attribute of the `<iframe />` element', async () => {
         let wrapper = TestManager.createWrapper()
         let iframe = await TestManager.clickAndGetIframe(wrapper)
         expect(iframe.element.getAttribute('src')).toBe(
@@ -44,7 +45,7 @@ describe('VueLazyYoutubeVideo', () => {
         )
       })
 
-      it('should be required and `typeof "string"` and be validated', () => {
+      it('should be `String`, required and be validated', (done) => {
         const definition = TestManager.getPropDefinition('src')
         expect(definition).toMatchObject({
           type: String,
@@ -61,11 +62,12 @@ describe('VueLazyYoutubeVideo', () => {
             expect(
               validator('https://www.youtube-nocookie.com/embed/4JS70KB9GS0')
             ).toBeTruthy()
+            done()
           } else {
-            throw new Error()
+            done.fail('Invalid prop definition')
           }
         } else {
-          throw new Error()
+          done.fail('Invalid prop definition')
         }
       })
     })
@@ -100,7 +102,7 @@ describe('VueLazyYoutubeVideo', () => {
         })
       })
 
-      it('should be and `typeof "string"` have default value and be validated', () => {
+      it('should be `String` have default value and be validated', () => {
         const definition = TestManager.getPropDefinition('aspectRatio')
         expect(definition).toMatchObject({
           type: String,
@@ -203,6 +205,25 @@ describe('VueLazyYoutubeVideo', () => {
         done()
       })
 
+      it('should correctly set `srcset` and `src` attributes of `<source />` and `<img />` when no value is passed', () => {
+        const wrapper = TestManager.createWrapper()
+        const { img, source } = TestManager.getImgAndSourceElements(wrapper)
+        const srcAttribute = img.getAttribute('src')
+        const srcsetAttribute = source.getAttribute('srcset')
+
+        if (srcAttribute) {
+          expect(srcAttribute).toBe(
+            `https://i.ytimg.com/vi/${VIDEO_ID}/${DEFAULT_PREVIEW_IMAGE_SIZE}.jpg`
+          )
+        }
+
+        if (srcsetAttribute) {
+          expect(srcsetAttribute).toBe(
+            `https://i.ytimg.com/vi_webp/${VIDEO_ID}/${DEFAULT_PREVIEW_IMAGE_SIZE}.webp`
+          )
+        }
+      })
+
       it('should be `String` have default value and be validated', (done) => {
         const definition = TestManager.getPropDefinition('previewImageSize')
         expect(definition).toMatchObject({
@@ -223,25 +244,6 @@ describe('VueLazyYoutubeVideo', () => {
         }
 
         done()
-      })
-
-      it('should correctly set `srcset` and `src` attributes of `<source />` and `<img />` when no value is passed', () => {
-        const wrapper = TestManager.createWrapper()
-        const { img, source } = TestManager.getImgAndSourceElements(wrapper)
-        const srcAttribute = img.getAttribute('src')
-        const srcsetAttribute = source.getAttribute('srcset')
-
-        if (srcAttribute) {
-          expect(srcAttribute).toBe(
-            `https://i.ytimg.com/vi/${VIDEO_ID}/maxresdefault.jpg`
-          )
-        }
-
-        if (srcsetAttribute) {
-          expect(srcsetAttribute).toBe(
-            `https://i.ytimg.com/vi_webp/${VIDEO_ID}/maxresdefault.webp`
-          )
-        }
       })
     })
 
@@ -264,14 +266,13 @@ describe('VueLazyYoutubeVideo', () => {
           const { validator } = definition
           if (validator) {
             expect(validator({ jpg: 'j', webp: 'w' })).toBeTruthy()
+            done()
           } else {
             done.fail('Invalid validator definition')
           }
         } else {
           done.fail('Invalid validator definition')
         }
-
-        done()
       })
     })
 
@@ -299,13 +300,6 @@ describe('VueLazyYoutubeVideo', () => {
         done()
       })
 
-      it('should be `Object`', () => {
-        const definition = TestManager.getPropDefinition('iframeAttributes')
-        expect(definition).toMatchObject({
-          type: Object,
-        })
-      })
-
       it('should correctly set attributes of the `<iframe />` element when no value is passed', async (done) => {
         const wrapper = TestManager.createWrapper()
         const iframe = await TestManager.clickAndGetIframe(wrapper)
@@ -318,6 +312,13 @@ describe('VueLazyYoutubeVideo', () => {
           }
         })
         done()
+      })
+
+      it('should be `Object`', () => {
+        const definition = TestManager.getPropDefinition('iframeAttributes')
+        expect(definition).toMatchObject({
+          type: Object,
+        })
       })
     })
 
@@ -380,16 +381,6 @@ describe('VueLazyYoutubeVideo', () => {
       })
     })
 
-    describe('enablejsapi', () => {
-      beforeEach(() => {
-        TestManager.mockGlobalPlayer()
-      })
-
-      afterEach(() => {
-        TestManager.cleanGlobalPlayer()
-      })
-    })
-
     describe('playerOptions', () => {
       beforeEach(() => {
         TestManager.mockGlobalPlayer()
@@ -397,23 +388,6 @@ describe('VueLazyYoutubeVideo', () => {
 
       afterEach(() => {
         TestManager.cleanGlobalPlayer()
-      })
-
-      it('should be typeof "object" and have default value', () => {
-        const definition = TestManager.getPropDefinition('playerOptions')
-        expect(definition).toMatchObject({
-          type: Object,
-        })
-        if (typeof definition === 'object' && !Array.isArray(definition)) {
-          const { default: d } = definition
-          if (d && typeof d === 'function') {
-            expect(d()).toMatchObject({})
-          } else {
-            throw new Error()
-          }
-        } else {
-          throw new Error()
-        }
       })
 
       it('should pass options to `YT.Player` constructor', async () => {
@@ -427,17 +401,27 @@ describe('VueLazyYoutubeVideo', () => {
           options
         )
       })
+
+      it('should be `Object` and have default value', (done) => {
+        const definition = TestManager.getPropDefinition('playerOptions')
+        expect(definition).toMatchObject({
+          type: Object,
+        })
+        if (typeof definition === 'object' && !Array.isArray(definition)) {
+          const { default: d } = definition
+          if (d && typeof d === 'function') {
+            expect(d()).toMatchObject({})
+            done()
+          } else {
+            done.fail('Invalid prop definition')
+          }
+        } else {
+          done.fail('Invalid prop definition')
+        }
+      })
     })
 
     describe('injectPlayerScript', () => {
-      it('should be `typeof "boolean"` and have default value', () => {
-        const definition = TestManager.getPropDefinition('injectPlayerScript')
-        expect(definition).toMatchObject({
-          type: Boolean,
-          default: false,
-        })
-      })
-
       it('should inject `<script />` tag when passed', async () => {
         const wrapper = TestManager.createWrapper({
           propsData: { enablejsapi: true, injectPlayerScript: true },
@@ -470,7 +454,7 @@ describe('VueLazyYoutubeVideo', () => {
               done()
             }, PLAYER_CHECK_MS * 3)
           } else {
-            done.fail()
+            done.fail('`<script />` onload callback is not provided')
           }
         } else {
           done.fail('`<script />` is `null`')
@@ -480,10 +464,18 @@ describe('VueLazyYoutubeVideo', () => {
       it('should throw if is set to `false` and there ins no `YT.Player` in `global`', async () => {
         const spy = jest.spyOn(console, 'error').mockImplementation()
         const wrapper = TestManager.createWrapper({
-          propsData: { enablejsapi: true },
+          propsData: { enablejsapi: true, injectPlayerScript: false },
         })
         expect(() => wrapper.vm.onIframeLoad()).toThrow()
         spy.mockRestore()
+      })
+
+      it('should be `Boolean` and have default value', () => {
+        const definition = TestManager.getPropDefinition('injectPlayerScript')
+        expect(definition).toMatchObject({
+          type: Boolean,
+          default: false,
+        })
       })
     })
   })
@@ -603,7 +595,7 @@ describe('VueLazyYoutubeVideo', () => {
     })
 
     describe('initPlayerInstance', () => {
-      it('should throw if there is no `iframe />` element', () => {
+      it('should throw if there is no `<iframe />` element', () => {
         const wrapper = TestManager.createWrapper({
           propsData: { enablejsapi: true },
         })
