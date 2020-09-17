@@ -182,9 +182,15 @@ The list of available slots is listed below:
 
 ## Tests
 
-Jest is used for unit-tests.
+You can run unit tests by running the next command:
+
+```bash
+npm run test
+```
 
 ### Unit
+
+Jest is used for unit-tests.
 
 [`Jest`](https://jestjs.io) and [`VueTestUtils`](https://vue-test-utils.vuejs.org) is used for unit tests.
 
