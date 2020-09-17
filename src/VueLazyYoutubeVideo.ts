@@ -1,4 +1,5 @@
-import Vue, { VueConstructor, PropType, VNode, CreateElement } from 'vue'
+import Vue from 'vue'
+import type { PropType, CreateElement, VNode } from 'vue'
 import type { WithRefs } from 'vue-typed-refs'
 
 import type {
