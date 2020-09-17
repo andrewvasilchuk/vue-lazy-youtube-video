@@ -158,6 +158,7 @@ The list of available `props` (with their types, default values and descriptions
 | Name            | Payload                          | Description                                                  |
 | --------------- | -------------------------------- | ------------------------------------------------------------ |
 | `'load:iframe'` | `{ iframe?: HTMLIFrameElement }` | Happens when native' `<iframe />` element `load` event fires |
+| `'init:player'` | `{ instance: YT.Player }`        | Happens when the `YT.Player` instance is instantiated        |
 
 ### Slots
 
