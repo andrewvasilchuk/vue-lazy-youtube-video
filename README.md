@@ -190,8 +190,14 @@ The list of available slots is listed below:
 
 <details>
 <summary>Code</summary>
+
 ```html
-<LazyYoutubeVideo ref="youtube" src="..." enablejsapi @init:player="onPlayerInit" />
+<LazyYoutubeVideo
+  ref="youtube"
+  src="..."
+  enablejsapi
+  @init:player="onPlayerInit"
+/>
 ```
 
 ```ts
