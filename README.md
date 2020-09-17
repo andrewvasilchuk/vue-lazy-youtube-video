@@ -24,6 +24,7 @@
     - [Slots](#slots)
   - [Tests](#tests)
     - [Unit](#unit)
+  - [TypeScript support](#typescript-support)
   - [Development](#development)
   - [Build](#build)
   - [Powered by](#powered-by)
@@ -198,6 +199,22 @@ You can run unit tests by running the next command:
 
 ```bash
 npm run test:unit
+```
+
+## TypeScript support
+
+Component is completely built and tested using TypeScript.
+
+Here is the list of the types you can use:
+
+```ts
+// import type {} TypeScript 3.8 +
+import {
+  Props,
+  LoadIframeEventPayload,
+  InitPlayerEventPayload,
+  Thumbnail,
+} from 'vue-lazy-youtube-video'
 ```
 
 ## Development
