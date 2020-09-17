@@ -22,6 +22,7 @@
     - [Events](#events)
     - [Methods](#methods)
     - [Slots](#slots)
+    - [FAQ](#faq)
   - [Tests](#tests)
     - [Unit](#unit)
   - [TypeScript support](#typescript-support)
@@ -180,6 +181,34 @@ The list of available slots is listed below:
 | `icon`   | Slot gives an ability to provide custom icon of the play button |
 
 > ⚠️ **Note**, that when `button` slot is passed and this slot contains `<button></button>`, ones should not to forget to add `aria-label` (if this button contains only icon) and `type="button"` attributes. Also, if that button do not contain `.y-video-button` class, all default styles will be lost, so style concerns it's up to developer.
+
+### FAQ
+
+**Question**: How to play/pause/stop a video?
+
+**Answer**: Pass the `enablejapi` prop and then listen to `'init:player'` event to get an instance of the `YT.Player`. All the available instance methods you can find [here](https://developers.google.com/youtube/iframe_api_reference). Hint: You can also get a player instance via the `getPlayerInstance` method.
+
+<details>
+<summary>Code</summary>
+```html
+<LazyYoutubeVideo ref="youtube" src="..." enablejsapi @init:player="onPlayerInit" />
+```
+
+```ts
+import { InitPlayerEventPayload } from 'vue-lazy-youtube-video'
+{
+  // ...
+  methods: {
+    onPlayerInit(payload: InitPlayerEventPayload) {
+      console.log(payload.instance)
+      console.log(this.$refs.youtube.getPlayerInstance())
+    },
+  },
+  // ...
+}
+```
+
+</details>
 
 ## Tests
 
