@@ -1,3 +1,10 @@
+import type { Event } from './event'
+
+export interface Events {
+  [Event.LOAD_IFRAME]: LoadIframeEventPayload
+  [Event.INIT_PLAYER]: InitPlayerEventPayload
+}
+
 export interface LoadIframeEventPayload {
   iframe?: HTMLIFrameElement
 }
