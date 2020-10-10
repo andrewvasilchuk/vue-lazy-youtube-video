@@ -73,6 +73,7 @@
     "typescript": "^4.0.2",
     "vue": "^2.6.12",
     "vue-template-compiler": "^2.6.12",
+    "vue-typed-emit": "^1.0.0",
     "vue-typed-refs": "^1.0.0"
   },
   "peerDependencies": {

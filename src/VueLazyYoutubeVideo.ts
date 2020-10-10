@@ -1,13 +1,9 @@
 import Vue from 'vue'
 import type { PropType, CreateElement, VNode } from 'vue'
+import type { WithEvents } from 'vue-typed-emit'
 import type { WithRefs } from 'vue-typed-refs'
 
-import type {
-  LoadIframeEventPayload,
-  InitPlayerEventPayload,
-  Refs,
-  Thumbnail,
-} from './types'
+import type { Events, Refs, Thumbnail } from './types'
 import { startsWith, isAspectRatio } from './helpers'
 import {
   DEFAULT_ALT_ATTRIBUTE,
@@ -22,7 +18,7 @@ import {
 } from './constants'
 import { Event } from './event'
 
-export default (Vue as WithRefs<Refs>).extend({
+export default (Vue as WithRefs<Refs, WithEvents<Events>>).extend({
   name: 'VueLazyYoutubeVideo',
   props: {
     src: {
@@ -135,8 +131,7 @@ export default (Vue as WithRefs<Refs>).extend({
       return `${(b / a) * 100}%`
     },
     onIframeLoad() {
-      const payload: LoadIframeEventPayload = { iframe: this.$refs.iframe }
-      this.$emit(Event.LOAD_IFRAME, payload)
+      this.$emit(Event.LOAD_IFRAME, { iframe: this.$refs.iframe })
 
       if (this.enablejsapi) {
         try {
@@ -173,8 +168,7 @@ export default (Vue as WithRefs<Refs>).extend({
           '[vue-lazy-youtube-video]: YT.Player can not be instantiated without iframe element'
         )
       this.playerInstance = new YT.Player(iframe, this.playerOptions)
-      const payload: InitPlayerEventPayload = { instance: this.playerInstance }
-      this.$emit(Event.INIT_PLAYER, payload)
+      this.$emit(Event.INIT_PLAYER, { instance: this.playerInstance })
       return this.playerInstance
     },
     getPlayerInstance() {
