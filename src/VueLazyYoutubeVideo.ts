@@ -76,6 +76,10 @@ export default (Vue as WithRefs<Refs, WithEvents<Events>>).extend({
       type: Boolean,
       default: false,
     },
+    rel: {
+      type: Boolean,
+      default: true,
+    }
   },
   data() {
     return {
@@ -97,9 +101,10 @@ export default (Vue as WithRefs<Refs, WithEvents<Events>>).extend({
     srcAttribute(): string {
       const hasQuestionMark =
         typeof this.src === 'string' && this.src.indexOf('?') !== -1
-      return `${this.src}${hasQuestionMark ? '&' : '?'}autoplay=1${
-        this.enablejsapi ? '&enablejsapi=1' : ''
-      }`
+      const initialSeparator = hasQuestionMark ? '&' : '?'
+      const enableJsApi = `&enablejsapi=${+this.enablejsapi}`
+      const rel = `&rel=${+this.rel}`
+      return `${this.src}${initialSeparator}autoplay=1${enableJsApi}${rel}`
     },
     styleObj(): object {
       return {

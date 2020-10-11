@@ -33,7 +33,7 @@ describe('VueLazyYoutubeVideo', () => {
         let wrapper = TestManager.createWrapper()
         let iframe = await TestManager.clickAndGetIframe(wrapper)
         expect(iframe.element.getAttribute('src')).toBe(
-          `${defaultProps.src}?autoplay=1`
+          `${defaultProps.src}?autoplay=1&enablejsapi=0&rel=1`
         )
         const query = '?loop=1'
         wrapper = TestManager.createWrapper({
@@ -41,7 +41,7 @@ describe('VueLazyYoutubeVideo', () => {
         })
         iframe = await TestManager.clickAndGetIframe(wrapper)
         expect(iframe.element.getAttribute('src')).toBe(
-          `${defaultProps.src}${query}&autoplay=1`
+          `${defaultProps.src}${query}&autoplay=1&enablejsapi=0&rel=1`
         )
       })
 
