@@ -33,7 +33,7 @@ describe('VueLazyYoutubeVideo', () => {
         let wrapper = TestManager.createWrapper()
         let iframe = await TestManager.clickAndGetIframe(wrapper)
         expect(iframe.element.getAttribute('src')).toBe(
-          `${defaultProps.src}?autoplay=1`
+          `${defaultProps.src}?autoplay=1&enablejsapi=0`
         )
         const query = '?loop=1'
         wrapper = TestManager.createWrapper({
@@ -41,7 +41,7 @@ describe('VueLazyYoutubeVideo', () => {
         })
         iframe = await TestManager.clickAndGetIframe(wrapper)
         expect(iframe.element.getAttribute('src')).toBe(
-          `${defaultProps.src}${query}&autoplay=1`
+          `${defaultProps.src}${query}&autoplay=1&enablejsapi=0`
         )
       })
 
@@ -476,6 +476,45 @@ describe('VueLazyYoutubeVideo', () => {
           type: Boolean,
           default: false,
         })
+      })
+    })
+
+    describe('parameters', () => {
+      it('should correctly set `parameters` to `src` attribute of the `<iframe />` element', async () => {
+        const parameters = { rel: 0, color: 'white' }
+        let wrapper = TestManager.createWrapper({
+          propsData: { parameters: parameters },
+        })
+        let iframe = await TestManager.clickAndGetIframe(wrapper)
+        expect(iframe.element.getAttribute('src')).toBe(
+          `${defaultProps.src}?autoplay=1&enablejsapi=0&rel=0&color=white`
+        )
+        const query = '?loop=1'
+        wrapper = TestManager.createWrapper({
+          propsData: { ...getDefaultProps({ query }), parameters: parameters }
+        })
+        iframe = await TestManager.clickAndGetIframe(wrapper)
+        expect(iframe.element.getAttribute('src')).toBe(
+          `${defaultProps.src}${query}&autoplay=1&enablejsapi=0&rel=0&color=white`
+        )
+      })
+
+      it('should be `Object` and have default value', (done) => {
+        const definition = TestManager.getPropDefinition('parameters')
+        expect(definition).toMatchObject({
+          type: Object,
+        })
+        if (typeof definition === 'object' && !Array.isArray(definition)) {
+          const { default: d } = definition
+          if (d && typeof d === 'function') {
+            expect(d()).toMatchObject({})
+            done()
+          } else {
+            done.fail('Invalid prop definition')
+          }
+        } else {
+          done.fail('Invalid prop definition')
+        }
       })
     })
   })

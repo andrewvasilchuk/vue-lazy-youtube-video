@@ -76,6 +76,10 @@ export default (Vue as WithRefs<Refs, WithEvents<Events>>).extend({
       type: Boolean,
       default: false,
     },
+    parameters: {
+      type: Object,
+      default: () => ({}),
+    }
   },
   data() {
     return {
@@ -95,11 +99,11 @@ export default (Vue as WithRefs<Refs, WithEvents<Events>>).extend({
       }
     },
     srcAttribute(): string {
-      const hasQuestionMark =
-        typeof this.src === 'string' && this.src.indexOf('?') !== -1
-      return `${this.src}${hasQuestionMark ? '&' : '?'}autoplay=1${
-        this.enablejsapi ? '&enablejsapi=1' : ''
-      }`
+      const hasQuestionMark = this.src.indexOf('?') !== -1
+      const enableJsApi = `&enablejsapi=${Number(this.enablejsapi)}`
+      let src = `${this.src}${hasQuestionMark ? '&' : '?'}autoplay=1${enableJsApi}`
+      Object.entries(this.parameters).forEach(([key, value]) => src += `&${key}=${value}`)
+      return src
     },
     styleObj(): object {
       return {

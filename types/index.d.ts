@@ -23,4 +23,5 @@ export interface Props {
   enablejsapi?: boolean
   playerOptions?: Partial<YT.PlayerOptions>
   injectPlayerScript?: boolean
+  parameters?: Object
 }
