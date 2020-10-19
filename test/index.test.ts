@@ -33,7 +33,7 @@ describe('VueLazyYoutubeVideo', () => {
         let wrapper = TestManager.createWrapper()
         let iframe = await TestManager.clickAndGetIframe(wrapper)
         expect(iframe.element.getAttribute('src')).toBe(
-          `${defaultProps.src}?autoplay=1&enablejsapi=0`
+          `${defaultProps.src}?autoplay=1`
         )
         const query = '?loop=1'
         wrapper = TestManager.createWrapper({
@@ -41,7 +41,7 @@ describe('VueLazyYoutubeVideo', () => {
         })
         iframe = await TestManager.clickAndGetIframe(wrapper)
         expect(iframe.element.getAttribute('src')).toBe(
-          `${defaultProps.src}${query}&autoplay=1&enablejsapi=0`
+          `${defaultProps.src}${query}&autoplay=1`
         )
       })
 
@@ -481,21 +481,13 @@ describe('VueLazyYoutubeVideo', () => {
 
     describe('parameters', () => {
       it('should correctly set `parameters` to `src` attribute of the `<iframe />` element', async () => {
-        const parameters = { rel: 0, color: 'white' }
-        let wrapper = TestManager.createWrapper({
-          propsData: { parameters: parameters },
+        const parameters = { rel: 0, color: 'white' as const }
+        const wrapper = TestManager.createWrapper({
+          propsData: { parameters },
         })
-        let iframe = await TestManager.clickAndGetIframe(wrapper)
+        const iframe = await TestManager.clickAndGetIframe(wrapper)
         expect(iframe.element.getAttribute('src')).toBe(
-          `${defaultProps.src}?autoplay=1&enablejsapi=0&rel=0&color=white`
-        )
-        const query = '?loop=1'
-        wrapper = TestManager.createWrapper({
-          propsData: { ...getDefaultProps({ query }), parameters: parameters }
-        })
-        iframe = await TestManager.clickAndGetIframe(wrapper)
-        expect(iframe.element.getAttribute('src')).toBe(
-          `${defaultProps.src}${query}&autoplay=1&enablejsapi=0&rel=0&color=white`
+          `${defaultProps.src}?autoplay=1&rel=0&color=white`
         )
       })
 
