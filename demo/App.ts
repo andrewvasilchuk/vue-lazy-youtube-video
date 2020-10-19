@@ -51,6 +51,9 @@ export default Vue.extend({
             src: 'https://www.youtube.com/embed/4JS70KB9GS0',
             aspectRatio: '1:1',
             previewImageSize: 'default',
+            parameters: {
+              start: 32,
+            },
           },
         }),
       ]),
