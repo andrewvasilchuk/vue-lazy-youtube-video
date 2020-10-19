@@ -77,9 +77,9 @@ export default (Vue as WithRefs<Refs, WithEvents<Events>>).extend({
       default: false,
     },
     parameters: {
-      type: Object,
+      type: Object as PropType<YT.PlayerVars>,
       default: () => ({}),
-    }
+    },
   },
   data() {
     return {
