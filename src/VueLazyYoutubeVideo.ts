@@ -100,10 +100,14 @@ export default (Vue as WithRefs<Refs, WithEvents<Events>>).extend({
     },
     srcAttribute(): string {
       const hasQuestionMark = this.src.indexOf('?') !== -1
-      const enableJsApi = `&enablejsapi=${Number(this.enablejsapi)}`
-      let src = `${this.src}${hasQuestionMark ? '&' : '?'}autoplay=1${enableJsApi}`
-      Object.entries(this.parameters).forEach(([key, value]) => src += `&${key}=${value}`)
-      return src
+      const src = `${this.src}${hasQuestionMark ? '&' : '?'}autoplay=1${
+        this.enablejsapi ? '&enablejsapi=1' : ''
+      }`
+
+      return Object.entries(this.parameters).reduce(
+        (acc, [key, value]) => acc + `&${key}=${value}`,
+        src
+      )
     },
     styleObj(): object {
       return {
