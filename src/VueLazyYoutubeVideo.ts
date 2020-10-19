@@ -85,7 +85,7 @@ export default (Vue as WithRefs<Refs, WithEvents<Events>>).extend({
     return {
       activated: this.autoplay,
       playerInstance: null as YT.Player | null,
-      __interval__: null as NodeJS.Timeout | null,
+      __interval__: null as number | null,
     }
   },
   computed: {
@@ -187,7 +187,7 @@ export default (Vue as WithRefs<Refs, WithEvents<Events>>).extend({
       script.setAttribute('src', PLAYER_SCRIPT_SRC)
 
       script.onload = () => {
-        this.__interval__ = setInterval(() => {
+        this.__interval__ = window.setInterval(() => {
           this.checkPlayer()
         }, PLAYER_CHECK_MS)
       }
