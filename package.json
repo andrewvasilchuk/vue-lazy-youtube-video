@@ -40,6 +40,11 @@
     "test:unit": "jest --coverage",
     "prepare": "npm run build"
   },
+  "dependencies": {
+    "@types/youtube": "0.0.39",
+    "vue-typed-emit": "^1.0.0",
+    "vue-typed-refs": "^1.0.0"
+  },
   "devDependencies": {
     "@babel/core": "^7.12.3",
     "@babel/preset-env": "^7.12.1",
@@ -51,7 +56,6 @@
     "@rollup/plugin-typescript": "^6.0.0",
     "@types/jest": "^26.0.15",
     "@types/lodash.clonedeep": "^4.5.6",
-    "@types/youtube": "0.0.39",
     "@vue/test-utils": "^1.1.0",
     "commitizen": "^4.2.2",
     "cp-file": "^9.0.0",
@@ -72,9 +76,7 @@
     "ts-jest": "^26.4.2",
     "typescript": "^4.0.3",
     "vue": "^2.6.12",
-    "vue-template-compiler": "^2.6.12",
-    "vue-typed-emit": "^1.0.0",
-    "vue-typed-refs": "^1.0.0"
+    "vue-template-compiler": "^2.6.12"
   },
   "peerDependencies": {
     "vue": "^2.6.12"
