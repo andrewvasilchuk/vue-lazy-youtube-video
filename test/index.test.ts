@@ -478,6 +478,37 @@ describe('VueLazyYoutubeVideo', () => {
         })
       })
     })
+
+    describe('parameters', () => {
+      it('should correctly set `parameters` to `src` attribute of the `<iframe />` element', async () => {
+        const parameters = { rel: 0, color: 'white' as const }
+        const wrapper = TestManager.createWrapper({
+          propsData: { parameters },
+        })
+        const iframe = await TestManager.clickAndGetIframe(wrapper)
+        expect(iframe.element.getAttribute('src')).toBe(
+          `${defaultProps.src}?autoplay=1&rel=0&color=white`
+        )
+      })
+
+      it('should be `Object` and have default value', (done) => {
+        const definition = TestManager.getPropDefinition('parameters')
+        expect(definition).toMatchObject({
+          type: Object,
+        })
+        if (typeof definition === 'object' && !Array.isArray(definition)) {
+          const { default: d } = definition
+          if (d && typeof d === 'function') {
+            expect(d()).toMatchObject({})
+            done()
+          } else {
+            done.fail('Invalid prop definition')
+          }
+        } else {
+          done.fail('Invalid prop definition')
+        }
+      })
+    })
   })
 
   describe('events', () => {

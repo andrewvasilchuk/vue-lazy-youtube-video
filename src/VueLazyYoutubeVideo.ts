@@ -76,12 +76,16 @@ export default (Vue as WithRefs<Refs, WithEvents<Events>>).extend({
       type: Boolean,
       default: false,
     },
+    parameters: {
+      type: Object as PropType<YT.PlayerVars>,
+      default: () => ({}),
+    },
   },
   data() {
     return {
       activated: this.autoplay,
       playerInstance: null as YT.Player | null,
-      __interval__: null as NodeJS.Timeout | null,
+      __interval__: null as number | null,
     }
   },
   computed: {
@@ -95,11 +99,15 @@ export default (Vue as WithRefs<Refs, WithEvents<Events>>).extend({
       }
     },
     srcAttribute(): string {
-      const hasQuestionMark =
-        typeof this.src === 'string' && this.src.indexOf('?') !== -1
-      return `${this.src}${hasQuestionMark ? '&' : '?'}autoplay=1${
+      const hasQuestionMark = this.src.indexOf('?') !== -1
+      const src = `${this.src}${hasQuestionMark ? '&' : '?'}autoplay=1${
         this.enablejsapi ? '&enablejsapi=1' : ''
       }`
+
+      return Object.entries(this.parameters).reduce(
+        (acc, [key, value]) => acc + `&${key}=${value}`,
+        src
+      )
     },
     styleObj(): object {
       return {
@@ -179,7 +187,7 @@ export default (Vue as WithRefs<Refs, WithEvents<Events>>).extend({
       script.setAttribute('src', PLAYER_SCRIPT_SRC)
 
       script.onload = () => {
-        this.__interval__ = setInterval(() => {
+        this.__interval__ = window.setInterval(() => {
           this.checkPlayer()
         }, PLAYER_CHECK_MS)
       }
