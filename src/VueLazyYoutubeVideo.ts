@@ -100,7 +100,9 @@ export default (Vue as WithRefs<Refs, WithEvents<Events>>).extend({
     },
     srcAttribute(): string {
       const hasQuestionMark = this.src.indexOf('?') !== -1
-      const src = `${this.src}${hasQuestionMark ? '&' : '?'}autoplay=1${
+      const src = `${this.src}${hasQuestionMark ? '&' : '?'}${
+        this.autoplay ? 'autoplay=1' : ''
+      }${
         this.enablejsapi ? '&enablejsapi=1' : ''
       }`
 
