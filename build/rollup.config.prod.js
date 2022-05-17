@@ -1,4 +1,5 @@
 import path from 'path'
+import { defineConfig } from 'rollup'
 import typescript from '@rollup/plugin-typescript'
 import replace from '@rollup/plugin-replace'
 import { terser } from 'rollup-plugin-terser'
@@ -16,12 +17,12 @@ const globals = {
 const plugins = [
   replace({
     'process.env.NODE_ENV': JSON.stringify('production'),
+    preventAssignment: true,
   }),
 ].concat(basePlugins)
 
-/** @type {import('rollup').RollupOptions} */
 export default [
-  {
+  defineConfig({
     input: SOURCE,
     external,
     output: [
@@ -47,8 +48,8 @@ export default [
         tsconfig: './tsconfig.prod.json',
       }),
     ].concat(plugins),
-  },
-  {
+  }),
+  defineConfig({
     input: SOURCE,
     external,
     output: {
@@ -64,5 +65,5 @@ export default [
       }),
       terser({ output: { comments: false } }),
     ].concat(plugins),
-  },
+  }),
 ]

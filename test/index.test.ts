@@ -75,9 +75,10 @@ describe('VueLazyYoutubeVideo', () => {
     describe('aspectRatio', () => {
       it(`should correctly set \`padding bottom\` of the \`<element class="${classes.inner}"></element>\` when no value is passed`, () => {
         const wrapper = TestManager.createWrapper()
-        expect(wrapper.find(classes.inner).element.style.paddingBottom).toBe(
-          `${(9 / 16) * 100}%`
-        )
+        expect(
+          (wrapper.find(classes.inner).element as HTMLElement).style
+            .paddingBottom
+        ).toBe(`${(9 / 16) * 100}%`)
       })
 
       it(`should correctly set \`padding bottom\` of the \`<element class="${classes.inner}"></element>\` when valid value is passed`, () => {
@@ -85,9 +86,10 @@ describe('VueLazyYoutubeVideo', () => {
         const wrapper = TestManager.createWrapper({
           propsData: { aspectRatio: `${a}:${b}` },
         })
-        expect(wrapper.find(classes.inner).element.style.paddingBottom).toBe(
-          `${(b / a) * 100}%`
-        )
+        expect(
+          (wrapper.find(classes.inner).element as HTMLElement).style
+            .paddingBottom
+        ).toBe(`${(b / a) * 100}%`)
       })
 
       it(`should correctly set \`padding bottom\` of the \`<element class="${classes.inner}"></element>\` when invalid value is passed`, () => {
@@ -96,9 +98,10 @@ describe('VueLazyYoutubeVideo', () => {
           const wrapper = TestManager.createWrapper({
             propsData: { aspectRatio: value },
           })
-          expect(wrapper.find(classes.inner).element.style.paddingBottom).toBe(
-            `${(9 / 16) * 100}%`
-          )
+          expect(
+            (wrapper.find(classes.inner).element as HTMLElement).style
+              .paddingBottom
+          ).toBe(`${(9 / 16) * 100}%`)
         })
       })
 
@@ -277,7 +280,7 @@ describe('VueLazyYoutubeVideo', () => {
     })
 
     describe('iframeAttributes', () => {
-      it('should correctly set attributes of the `<iframe />` when valid value is passed', async (done) => {
+      it('should correctly set attributes of the `<iframe />` when valid value is passed', async () => {
         const iframeAttributes = { foo: 'bar', baz: 'vue' }
         const wrapper = TestManager.createWrapper({
           propsData: { iframeAttributes },
@@ -293,14 +296,12 @@ describe('VueLazyYoutubeVideo', () => {
           if (attribute !== null) {
             expect([value, attribute]).toContain(value)
           } else {
-            done.fail()
+            throw new Error(`Attribute "${key}" is not set`)
           }
         })
-
-        done()
       })
 
-      it('should correctly set attributes of the `<iframe />` element when no value is passed', async (done) => {
+      it('should correctly set attributes of the `<iframe />` element when no value is passed', async () => {
         const wrapper = TestManager.createWrapper()
         const iframe = await TestManager.clickAndGetIframe(wrapper)
         Object.entries(DEFAULT_IFRAME_ATTRIBUTES).forEach(([key, value]) => {
@@ -308,10 +309,9 @@ describe('VueLazyYoutubeVideo', () => {
           if (attribute !== null) {
             expect([value, attribute]).toContain(value)
           } else {
-            done.fail()
+            throw new Error(`Attribute "${key}" is not set`)
           }
         })
-        done()
       })
 
       it('should be `Object`', () => {
@@ -369,7 +369,7 @@ describe('VueLazyYoutubeVideo', () => {
           propsData: { thumbnailListeners: { click } },
         })
         const img = wrapper.find('img')
-        img.element.click()
+        img.trigger('click')
         expect(click).toHaveBeenCalledTimes(1)
       })
 
@@ -431,7 +431,7 @@ describe('VueLazyYoutubeVideo', () => {
         TestManager.cleanScriptElement()
       })
 
-      it('should handle `<script />` `"onload"` event, wait for YT.Player availability and therefore instantiate a player instance', async (done) => {
+      it('should handle `<script />` `"onload"` event, wait for YT.Player availability and therefore instantiate a player instance', async () => {
         const wrapper = TestManager.createWrapper({
           propsData: { enablejsapi: true, injectPlayerScript: true },
         })
@@ -451,13 +451,12 @@ describe('VueLazyYoutubeVideo', () => {
               )
               TestManager.cleanGlobalPlayer()
               TestManager.cleanScriptElement()
-              done()
             }, PLAYER_CHECK_MS * 3)
           } else {
-            done.fail('`<script />` onload callback is not provided')
+            throw new Error('`<script />` onload callback is not provided')
           }
         } else {
-          done.fail('`<script />` is `null`')
+          throw new Error('`<script />` is `null`')
         }
       })
 

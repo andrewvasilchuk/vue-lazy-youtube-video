@@ -1,8 +1,5 @@
 module.exports = {
-  moduleFileExtensions: ['js', 'ts', 'json'],
-  transform: {
-    // process `*.ts` files with `ts-jest`
-    '^.+\\.tsx?$': 'ts-jest',
-  },
+  preset: 'ts-jest',
+  testEnvironment: 'jsdom',
   collectCoverageFrom: ['./src/VueLazyYoutubeVideo.ts'],
 }

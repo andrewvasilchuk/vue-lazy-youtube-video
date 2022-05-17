@@ -1,4 +1,5 @@
 import path from 'path'
+import { defineConfig } from 'rollup'
 import typescript from '@rollup/plugin-typescript'
 import serve from 'rollup-plugin-serve'
 import livereload from 'rollup-plugin-livereload'
@@ -9,8 +10,7 @@ import plugins from './base/plugins/index'
 
 const DEMO_DIR = path.join(__dirname, '../demo')
 
-/** @type {import('rollup').RollupOptions} */
-export default {
+export default defineConfig({
   input: path.join(DEMO_DIR, 'index.ts'),
   output: {
     file: path.join(DEMO_DIR, 'demo.js'),
@@ -23,6 +23,7 @@ export default {
     css(),
     replace({
       'process.env.NODE_ENV': JSON.stringify('development'),
+      preventAssignment: true,
     }),
     serve({
       open: true,
@@ -34,4 +35,4 @@ export default {
       watch: DEMO_DIR,
     }),
   ].concat(plugins),
-}
+})
