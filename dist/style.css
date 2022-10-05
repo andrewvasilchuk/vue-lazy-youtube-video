@@ -1,0 +1,72 @@
+:root {
+  --y-video-background-color: #000;
+  --y-video-button-width: 68px;
+  --y-video-button-height: 48px;
+  --y-video-button-padding: 0;
+  --y-video-button-border-width: 0;
+  --y-video-button-background-color: transparent;
+  --y-video-button-fill: #212121;
+  --y-video-button-fill-opacity: 0.8;
+  --y-video-button-active-fill: red;
+  --y-video-button-active-fill-opacity: 1;
+  --y-video-button-icon-fill: #fff;
+}
+
+.y-video {
+  background-color: var(--y-video-background-color, #000);
+  cursor: pointer;
+}
+
+.y-video__inner {
+  position: relative;
+}
+
+.y-video__embed,
+.y-video__media {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border-width: 0;
+}
+
+.y-video__media--type--img {
+  object-fit: cover;
+}
+
+.y-video__button {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  padding: var(--y-video-button-padding, 0);
+  border-width: var(--y-video-button-border-width, 0);
+  background-color: var(--y-video-button-background-color, transparent);
+  width: var(--y-video-button-width, 68px);
+  height: var(--y-video-button-height, 48px);
+  cursor: pointer;
+}
+
+.y-video__button-shape {
+  fill: var(--y-video-button-fill, #212121);
+  fill-opacity: var(--y-video-button-fill-opacity, 0.8);
+}
+
+.y-video__button-icon {
+  fill: var(--y-video-button-icon-fill, #fff);
+}
+
+.y-video__button:focus {
+  outline: 0;
+}
+
+.y-video__button:focus .y-video__button-shape {
+  fill: var(--y-video-button-active-fill, red);
+  fill-opacity: var(--y-video-button-active-fill-opacity, 1);
+}
+
+.y-video:hover .y-video__button-shape {
+  fill: var(--y-video-button-active-fill, red);
+  fill-opacity: var(--y-video-button-active-fill-opacity, 1);
+}
