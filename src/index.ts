@@ -1,11 +1,10 @@
-import VueLazyYoutubeVideo from './VueLazyYoutubeVideo'
-
-import { PluginObject } from 'vue'
+import VueLazyYoutubeVideo from './VueLazyYoutubeVideo.vue'
+import { App, Plugin } from 'vue'
 
 export default VueLazyYoutubeVideo
 
-export const Plugin: PluginObject<any> = {
-  install(Vue) {
-    Vue.component('LazyYoutubeVideo', VueLazyYoutubeVideo)
+export const plugin: Plugin = {
+  install: (app: App) => {
+    app.component('LazyYoutubeVideo', VueLazyYoutubeVideo)
   },
 }

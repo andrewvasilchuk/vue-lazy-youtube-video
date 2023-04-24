@@ -1,14 +1,9 @@
-/**
- * @see https://stackoverflow.com/a/30867255/11761617
- */
-export function startsWith(
-  string: string,
-  value: string,
-  position: number = 0
-) {
-  return string.indexOf(value, position) === position
-}
+export const isAspectRatio = (value: string) => /^\d+:\d+$/.test(value)
 
-export function isAspectRatio(value: string) {
-  return /^\d+:\d+$/.test(value)
-}
+export const toListenersWithOn = <T>(listeners: Record<string, T>) =>
+  Object.fromEntries(
+    Object.entries(listeners).map(([key, value]) => [
+      `on${key[0].toUpperCase()}${key.slice(1)}`,
+      value,
+    ])
+  )
