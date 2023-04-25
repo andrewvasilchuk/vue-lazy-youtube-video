@@ -228,9 +228,9 @@ npm run test
 
 ### Unit
 
-Jest is used for unit-tests.
+Vitest is used for unit-tests.
 
-[`Jest`](https://jestjs.io) and [`VueTestUtils`](https://vue-test-utils.vuejs.org) is used for unit tests.
+[`Vitest`](https://vitest.dev/) and [`VueTestUtils`](https://test-utils.vuejs.org) are used for unit tests.
 
 You can run unit tests by running the next command:
 
@@ -267,8 +267,8 @@ To build the production ready bundle simply run `npm run build`:
 After the successful build the following files will be generated in the `dist` folder:
 
 ```
-├── vue-lazy-youtube-video.common.js
-├── vue-lazy-youtube-video.esm.js
+├── vue-lazy-youtube-video.cjs.js
+├── vue-lazy-youtube-video.mjs
 ├── vue-lazy-youtube-video.js
 ├── vue-lazy-youtube-video.min.js
 ├── style.css
@@ -280,10 +280,9 @@ After the successful build the following files will be generated in the `dist` f
 ## Powered by
 
 - [`Vue`](https://vuejs.org)
-- [`Rollup`](https://rollupjs.org/guide/en) (and plugins)
-- [`Babel`](https://babeljs.io)
-- [`Jest`](https://jestjs.io)
-- [`Vue Test Utils`](http://vue-test-utils.vuejs.org)
+- [`Vite`](https://vitejs.dev/) (and plugins)
+- [`Vitest`](https://vitest.dev/)
+- [`Vue Test Utils`](https://test-utils.vuejs.org/)
 - [`TypeScript`](http://www.typescriptlang.org)
 - [`PostCSS`](https://postcss.org)
 

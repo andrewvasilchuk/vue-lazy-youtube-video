@@ -1,13 +1,10 @@
-import Vue from 'vue'
-import App from './App'
-import { Plugin } from '../src'
 import '../src/styles/index.css'
 
-Vue.config.productionTip = false
+import { createApp } from 'vue'
+import App from './App.vue'
+import { plugin } from '../src'
 
-Vue.use(Plugin)
+const app = createApp(App)
+app.use(plugin)
 
-new Vue({
-  el: '#app',
-  render: (h) => h(App),
-})
+app.mount('#app')

@@ -1,5 +1,3 @@
-import cloneDeep from 'lodash.clonedeep'
-
 export const VIDEO_ID = '4JS70KB9GS0'
 
 export const defaultProps = {
@@ -7,7 +5,7 @@ export const defaultProps = {
 }
 
 export function getDefaultProps({ query }: { query?: string } = {}) {
-  const props = cloneDeep(defaultProps)
+  const props = { ...defaultProps }
 
   if (query) {
     props.src += query

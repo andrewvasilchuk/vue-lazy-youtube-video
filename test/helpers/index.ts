@@ -1,83 +1,58 @@
-import type Vue from 'vue'
-import type { ThisTypedComponentOptionsWithRecordProps } from 'vue/types/options'
-import type { Wrapper, ThisTypedShallowMountOptions } from '@vue/test-utils'
-import { shallowMount } from '@vue/test-utils'
+import { VueWrapper, mount } from '@vue/test-utils'
 
 import type { Props } from '../../types'
-import VueLazyYoutubeVideo from '../../src/VueLazyYoutubeVideo'
+import VueLazyYoutubeVideo from '../../src/VueLazyYoutubeVideo.vue'
 import { PLAYER_SCRIPT_SRC } from '../../src/constants'
 
 import { defaultProps } from '../fixtures'
+import { vi, Mock } from 'vitest'
 
-type ComponentInstance = InstanceType<typeof VueLazyYoutubeVideo>
-type LocalWrapper = Wrapper<ComponentInstance>
-
-declare global {
-  namespace NodeJS {
-    interface Global {
-      YT?: {
-        Player?: jest.Mock
-      }
-    }
-  }
-}
+type LocalWrapper = VueWrapper<InstanceType<typeof VueLazyYoutubeVideo>>
 
 export class TestManager {
   static createWrapper(
-    options?: ThisTypedShallowMountOptions<ComponentInstance> & {
-      propsData?: Partial<Props>
-    }
+    options?: Record<string, any> & { props?: Partial<Props> }
   ) {
-    return shallowMount<ComponentInstance>(VueLazyYoutubeVideo, {
+    return mount(VueLazyYoutubeVideo, {
       ...options,
-      propsData: {
+      props: {
         ...defaultProps,
-        ...(options !== undefined
-          ? options.propsData !== undefined
-            ? options.propsData
-            : {}
-          : {}),
+        ...options?.props,
       },
     })
   }
 
   static async clickAndGetIframe(wrapper: LocalWrapper) {
-    wrapper.trigger('click')
-    await wrapper.vm.$nextTick()
+    await wrapper.trigger('click')
     return wrapper.find('iframe')
   }
 
   static async play(wrapper: LocalWrapper) {
-    wrapper.trigger('click')
-    await wrapper.vm.$nextTick()
+    await wrapper.trigger('click')
     const iframe = wrapper.find('iframe')
     iframe.trigger('load')
   }
 
   static mockGlobalPlayer() {
     global.YT = {
-      Player: jest.fn(),
-    }
+      Player: vi.fn(),
+    } as any
   }
 
   static getMockedPlayer() {
     const { YT } = global
-    if (YT !== undefined && YT.Player !== undefined) {
-      return YT.Player
+    if (YT?.Player !== undefined) {
+      return YT.Player as Mock
     }
     throw new Error('Unable to get mocked player')
   }
 
   static cleanGlobalPlayer() {
-    global.YT = undefined
+    global.YT = undefined as any
   }
 
   static getPropDefinition<K extends keyof Props>(key: K) {
-    const { props } = (VueLazyYoutubeVideo as typeof VueLazyYoutubeVideo & {
-      options: ThisTypedComponentOptionsWithRecordProps<Vue, {}, {}, {}, Props>
-    }).options
-    if (props === undefined) throw new Error()
-    return props[key]
+    return VueLazyYoutubeVideo.props[key]
   }
 
   static getImgAndSourceElements(wrapper: LocalWrapper) {
@@ -95,9 +70,9 @@ export class TestManager {
   }
 
   static getScriptElement() {
-    return document.querySelector(
+    return document.querySelector<HTMLScriptElement>(
       `script[src="${PLAYER_SCRIPT_SRC}"]`
-    ) as HTMLScriptElement | null
+    )
   }
 
   static cleanScriptElement() {
