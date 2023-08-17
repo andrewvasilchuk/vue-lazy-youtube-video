@@ -3,20 +3,20 @@ import type { PropType, CreateElement, VNode } from 'vue'
 import type { WithEvents } from 'vue-typed-emit'
 import type { WithRefs } from 'vue-typed-refs'
 
-import type { Events, Refs, Thumbnail } from './types'
-import { startsWith, isAspectRatio } from './helpers'
+import type { Undefined, Events, Refs, Thumbnail, ThumnailSize } from './types'
+import { THUMBNAIL_SIZES } from './types'
+import { startsWith, isAspectRatio, getThumbnailSize } from './helpers'
 import {
   DEFAULT_ALT_ATTRIBUTE,
   DEFAULT_BUTTON_LABEL,
-  PREVIEW_IMAGE_SIZES,
-  DEFAULT_PREVIEW_IMAGE_SIZE,
+  THUMBNAIL_SIZE,
   DEFAULT_ASPECT_RATIO,
   DEFAULT_IFRAME_ATTRIBUTES,
   YOUTUBE_REGEX,
   PLAYER_SCRIPT_SRC,
   PLAYER_CHECK_MS,
 } from './constants'
-import { Event } from './event'
+import { EventName } from './event'
 
 export default (Vue as WithRefs<Refs, WithEvents<Events>>).extend({
   name: 'VueLazyYoutubeVideo',
@@ -43,12 +43,13 @@ export default (Vue as WithRefs<Refs, WithEvents<Events>>).extend({
     },
     previewImageSize: {
       type: String,
-      default: DEFAULT_PREVIEW_IMAGE_SIZE,
-      validator: (value: any) => PREVIEW_IMAGE_SIZES.indexOf(value) !== -1,
+      default: undefined,
+      validator: (value: any) => THUMBNAIL_SIZES.indexOf(value) !== -1,
     },
     thumbnail: {
       type: Object as PropType<Thumbnail>,
-      validator: (val) => 'jpg' in val && 'webp' in val,
+      validator: (val) => 'jpg' in val,
+      default: null,
     },
     iframeAttributes: {
       type: Object as PropType<Record<string, string | boolean | number>>,
@@ -63,6 +64,7 @@ export default (Vue as WithRefs<Refs, WithEvents<Events>>).extend({
     },
     thumbnailListeners: {
       type: Object as PropType<Record<string, Function | Function[]>>,
+      default: null,
     },
     enablejsapi: {
       type: Boolean,
@@ -86,6 +88,8 @@ export default (Vue as WithRefs<Refs, WithEvents<Events>>).extend({
       activated: this.autoplay,
       playerInstance: null as YT.Player | null,
       __interval__: null as number | null,
+      width: 0,
+      thumbnailSizeOverride: undefined as Undefined<ThumnailSize>,
     }
   },
   computed: {
@@ -114,6 +118,20 @@ export default (Vue as WithRefs<Refs, WithEvents<Events>>).extend({
         paddingBottom: this.getPaddingBottom(),
       }
     },
+    thumbnailSize(): Undefined<ThumnailSize> {
+      if (this.previewImageSize) return this.previewImageSize
+      if (this.thumbnailSizeOverride !== undefined)
+        return this.thumbnailSizeOverride
+      if (this.width === 0) return undefined
+      let ratio = 1
+      if (window !== undefined) {
+        ratio = window.devicePixelRatio
+      }
+      return getThumbnailSize(this.width * ratio)
+    },
+  },
+  mounted() {
+    this.width = (this.$el as HTMLElement).clientWidth
   },
   methods: {
     clickHandler() {
@@ -139,7 +157,7 @@ export default (Vue as WithRefs<Refs, WithEvents<Events>>).extend({
       return `${(b / a) * 100}%`
     },
     onIframeLoad() {
-      this.$emit(Event.LOAD_IFRAME, { iframe: this.$refs.iframe })
+      this.$emit(EventName.LOAD_IFRAME, { iframe: this.$refs.iframe })
 
       if (this.enablejsapi) {
         try {
@@ -176,7 +194,7 @@ export default (Vue as WithRefs<Refs, WithEvents<Events>>).extend({
           '[vue-lazy-youtube-video]: YT.Player can not be instantiated without iframe element'
         )
       this.playerInstance = new YT.Player(iframe, this.playerOptions)
-      this.$emit(Event.INIT_PLAYER, { instance: this.playerInstance })
+      this.$emit(EventName.INIT_PLAYER, { instance: this.playerInstance })
       return this.playerInstance
     },
     getPlayerInstance() {
@@ -209,14 +227,40 @@ export default (Vue as WithRefs<Refs, WithEvents<Events>>).extend({
         on: { load: this.onIframeLoad },
       })
     },
+    onThumbnailLoad(e: Event) {
+      if (
+        this.thumbnailListeners !== null &&
+        typeof this.thumbnailListeners.load === 'function'
+      ) {
+        this.thumbnailListeners.load(e)
+      }
+      if (this.thumbnail !== null) return
+      if (this.thumbnailSize === undefined) return
+      if (
+        THUMBNAIL_SIZE[this.thumbnailSize] !==
+        (e.target as HTMLImageElement).naturalWidth
+      ) {
+        const index = Math.max(
+          THUMBNAIL_SIZES.indexOf(this.thumbnailSize) - 1,
+          0
+        )
+        this.thumbnailSizeOverride = THUMBNAIL_SIZES[index]
+      }
+    },
     renderThumbnail(h: CreateElement) {
-      return h('picture', {}, [
-        this.webp
+      if (this.thumbnail === null && this.thumbnailSize === undefined) {
+        return null
+      }
+      return h('picture', undefined, [
+        this.webp &&
+        (this.thumbnail === null ||
+          (this.thumbnail !== null && this.thumbnail.webp))
           ? h('source', {
               attrs: {
                 srcset:
-                  (this.thumbnail && this.thumbnail.webp) ||
-                  `https://i.ytimg.com/vi_webp/${this.id}/${this.previewImageSize}.webp`,
+                  this.thumbnail !== null && this.thumbnail.webp
+                    ? this.thumbnail.webp
+                    : `https://i.ytimg.com/vi_webp/${this.id}/${this.thumbnailSize}.webp`,
                 type: 'image/webp',
               },
             })
@@ -225,11 +269,15 @@ export default (Vue as WithRefs<Refs, WithEvents<Events>>).extend({
           staticClass: 'y-video__media y-video__media--type--img',
           attrs: {
             src:
-              (this.thumbnail && this.thumbnail.jpg) ||
-              `https://i.ytimg.com/vi/${this.id}/${this.previewImageSize}.jpg`,
+              this.thumbnail !== null && this.thumbnail.jpg
+                ? this.thumbnail.jpg
+                : `https://i.ytimg.com/vi/${this.id}/${this.thumbnailSize}.jpg`,
             alt: this.alt,
           },
-          on: this.thumbnailListeners,
+          on: {
+            ...this.thumbnailListeners,
+            load: this.onThumbnailLoad,
+          },
         }),
       ])
     },
@@ -247,8 +295,7 @@ export default (Vue as WithRefs<Refs, WithEvents<Events>>).extend({
           h('path', {
             staticClass: 'y-video__button-shape',
             attrs: {
-              d:
-                'M66.5 7.7c-.8-2.9-2.5-5.4-5.4-6.2C55.8.1 34 0 34 0S12.2.1 6.9 1.6c-3 .7-4.6 3.2-5.4 6.1a89.6 89.6 0 0 0 0 32.5c.8 3 2.5 5.5 5.4 6.3C12.2 47.9 34 48 34 48s21.8-.1 27.1-1.6c3-.7 4.6-3.2 5.4-6.1C68 35 68 24 68 24s0-11-1.5-16.3z',
+              d: 'M66.5 7.7c-.8-2.9-2.5-5.4-5.4-6.2C55.8.1 34 0 34 0S12.2.1 6.9 1.6c-3 .7-4.6 3.2-5.4 6.1a89.6 89.6 0 0 0 0 32.5c.8 3 2.5 5.5 5.4 6.3C12.2 47.9 34 48 34 48s21.8-.1 27.1-1.6c3-.7 4.6-3.2 5.4-6.1C68 35 68 24 68 24s0-11-1.5-16.3z',
             },
           }),
           h('path', {

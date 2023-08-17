@@ -34,41 +34,40 @@ export default Vue.extend({
   },
   render(h): VNode {
     return h('ul', {}, [
-      h('li', {}, [
+      h('li', { style: { width: '512px' } }, [
         h(VueLazyYoutubeVideo, {
           props: {
             src: 'https://www.youtube.com/embed/4JS70KB9GS0',
-            previewImageSize: 'maxresdefault',
             alt: 'foo',
             buttonLabel: 'baz',
             imgListeners: this.thumbnailListeners,
           },
         }),
       ]),
-      h('li', {}, [
+      h('li', undefined, [
         h(VueLazyYoutubeVideo, {
           props: {
             src: 'https://www.youtube.com/embed/4JS70KB9GS0',
             aspectRatio: '1:1',
-            previewImageSize: 'default',
             parameters: {
               start: 32,
             },
           },
         }),
       ]),
-      h('li', {}, [
+      h('li', undefined, [
         h(VueLazyYoutubeVideo, {
           props: {
             src: 'https://www.youtube.com/embed/4JS70KB9GS0',
-            thumbnail: { webp: 'foo', jpg: 'bar' },
+            thumbnail: { jpg: 'https://placehold.co/1280x720' },
           },
         }),
       ]),
-      h('li', {}, [
+      h('li', undefined, [
         h(VueLazyYoutubeVideo, {
           props: {
             src: 'https://www.youtube.com/embed/4JS70KB9GS0',
+            previewImageSize: 'default',
             webp: false,
             autoplay: true,
             iframeAttributes: this.iframeAttributes,

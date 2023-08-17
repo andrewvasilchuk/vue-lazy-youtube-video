@@ -20,7 +20,7 @@ export default defineConfig({
   },
   plugins: [
     typescript(),
-    css(),
+    css({ output: 'demo.css' }),
     replace({
       'process.env.NODE_ENV': JSON.stringify('development'),
       preventAssignment: true,
