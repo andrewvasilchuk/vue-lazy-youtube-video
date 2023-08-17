@@ -1,8 +1,10 @@
-import type { Event } from './event'
+import type { EventName } from './event'
+
+export type Undefined<T> = T | undefined
 
 export interface Events {
-  [Event.LOAD_IFRAME]: LoadIframeEventPayload
-  [Event.INIT_PLAYER]: InitPlayerEventPayload
+  [EventName.LOAD_IFRAME]: LoadIframeEventPayload
+  [EventName.INIT_PLAYER]: InitPlayerEventPayload
 }
 
 export interface LoadIframeEventPayload {
@@ -18,6 +20,16 @@ export type Refs = {
 }
 
 export interface Thumbnail {
-  webp: string
   jpg: string
+  webp?: string
 }
+
+export const THUMBNAIL_SIZES = [
+  'default',
+  'mqdefault',
+  'hqdefault',
+  'sddefault',
+  'maxresdefault',
+] as const
+
+export type ThumnailSize = typeof THUMBNAIL_SIZES[number]

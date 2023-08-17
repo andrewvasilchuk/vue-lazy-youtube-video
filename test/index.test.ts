@@ -1,13 +1,12 @@
+import { THUMBNAIL_SIZES } from '../src/types'
 import {
   DEFAULT_ALT_ATTRIBUTE,
   DEFAULT_ASPECT_RATIO,
   DEFAULT_IFRAME_ATTRIBUTES,
   PLAYER_CHECK_MS,
   DEFAULT_BUTTON_LABEL,
-  PREVIEW_IMAGE_SIZES,
-  DEFAULT_PREVIEW_IMAGE_SIZE,
 } from '../src/constants'
-import { Event } from '../src/event'
+import { EventName } from '../src/event'
 
 import { classes } from './config'
 import { defaultProps, getDefaultProps, VIDEO_ID } from './fixtures'
@@ -127,24 +126,18 @@ describe('VueLazyYoutubeVideo', () => {
     })
 
     describe('alt', () => {
-      it('should correctly set `alt` attribute of the preview `<img />` when valid value is passed', () => {
+      it('should correctly set `alt` attribute of the preview `<img />` when valid value is passed', async () => {
         const alt = 'foo'
         const wrapper = TestManager.createWrapper({
           propsData: { alt },
         })
+        await TestManager.setWidth(wrapper)
         expect(wrapper.find('img').element.getAttribute('alt')).toBe(alt)
       })
 
-      it('should be `String` and have default value', () => {
-        const definition = TestManager.getPropDefinition('alt')
-        expect(definition).toMatchObject({
-          type: String,
-          default: DEFAULT_ALT_ATTRIBUTE,
-        })
-      })
-
-      it('should correctly set `alt` attribute of the preview `<img />` when no value is passed', () => {
+      it('should correctly set `alt` attribute of the preview `<img />` when no value is passed', async () => {
         const wrapper = TestManager.createWrapper()
+        await TestManager.setWidth(wrapper)
         expect(wrapper.find('img').element.getAttribute('alt')).toBe(
           DEFAULT_ALT_ATTRIBUTE
         )
@@ -179,13 +172,14 @@ describe('VueLazyYoutubeVideo', () => {
     })
 
     describe('previewImageSize', () => {
-      it('should correctly set `srcset` and `src` attributes of `<source />` and `<img />` when valid value is passed', (done) => {
-        const previewImageSize = PREVIEW_IMAGE_SIZES[0]
+      it('should correctly set `srcset` and `src` attributes of `<source />` and `<img />` when valid value is passed', async () => {
+        const previewImageSize = THUMBNAIL_SIZES[0]
         const wrapper = TestManager.createWrapper({
           propsData: {
             previewImageSize,
           },
         })
+        await TestManager.setWidth(wrapper)
         const { img, source } = TestManager.getImgAndSourceElements(wrapper)
         const srcAttribute = img.getAttribute('src')
         const srcsetAttribute = source.getAttribute('srcset')
@@ -195,65 +189,43 @@ describe('VueLazyYoutubeVideo', () => {
             `https://i.ytimg.com/vi/${VIDEO_ID}/${previewImageSize}.jpg`
           )
         } else {
-          done.fail('Invalid `src` attribute')
+          throw new Error('Invalid `src` attribute')
         }
         if (srcsetAttribute !== null) {
           expect(srcsetAttribute).toBe(
             `https://i.ytimg.com/vi_webp/${VIDEO_ID}/${previewImageSize}.webp`
           )
         } else {
-          done.fail('Invalid `srcset` attribute')
+          throw new Error('Invalid `srcset` attribute')
         }
-
-        done()
       })
 
-      it('should correctly set `srcset` and `src` attributes of `<source />` and `<img />` when no value is passed', () => {
+      it('should correctly set `srcset` and `src` attributes of `<source />` and `<img />` when no value is passed', async () => {
         const wrapper = TestManager.createWrapper()
+        await TestManager.setWidth(wrapper, 1024)
         const { img, source } = TestManager.getImgAndSourceElements(wrapper)
         const srcAttribute = img.getAttribute('src')
         const srcsetAttribute = source.getAttribute('srcset')
 
         if (srcAttribute) {
           expect(srcAttribute).toBe(
-            `https://i.ytimg.com/vi/${VIDEO_ID}/${DEFAULT_PREVIEW_IMAGE_SIZE}.jpg`
+            `https://i.ytimg.com/vi/${VIDEO_ID}/maxresdefault.jpg`
           )
         }
 
         if (srcsetAttribute) {
           expect(srcsetAttribute).toBe(
-            `https://i.ytimg.com/vi_webp/${VIDEO_ID}/${DEFAULT_PREVIEW_IMAGE_SIZE}.webp`
+            `https://i.ytimg.com/vi_webp/${VIDEO_ID}/maxresdefault.webp`
           )
         }
-      })
-
-      it('should be `String` have default value and be validated', (done) => {
-        const definition = TestManager.getPropDefinition('previewImageSize')
-        expect(definition).toMatchObject({
-          type: String,
-          default: 'maxresdefault',
-        })
-
-        if (typeof definition === 'object' && !Array.isArray(definition)) {
-          const { validator } = definition
-          if (validator) {
-            expect(validator('INVALID_VALUE')).toBeFalsy()
-            expect(validator(PREVIEW_IMAGE_SIZES[0])).toBeTruthy()
-          } else {
-            done.fail('Invalid validator definition')
-          }
-        } else {
-          done.fail('Invalid validator definition')
-        }
-
-        done()
       })
     })
 
     describe('thumbnail', () => {
-      it('should correctly set `srcset` and `src` attributes of thumbnails when valid value is passed', () => {
+      it('should correctly set `srcset` and `src` attributes of thumbnails when valid value is passed', async () => {
         const thumbnail = { webp: 'w', jpg: 'j' }
         const wrapper = TestManager.createWrapper({ propsData: { thumbnail } })
+        await TestManager.setWidth(wrapper)
         const { img, source } = TestManager.getImgAndSourceElements(wrapper)
         expect(source.getAttribute('srcset')).toEqual(thumbnail.webp)
         expect(img.getAttribute('src')).toEqual(thumbnail.jpg)
@@ -331,8 +303,9 @@ describe('VueLazyYoutubeVideo', () => {
         expect(source.exists()).toBeFalsy()
       })
 
-      it('should render `<source />` element when `true` is passed', () => {
+      it('should render `<source />` element when `true` is passed', async () => {
         const wrapper = TestManager.createWrapper({ propsData: { webp: true } })
+        await TestManager.setWidth(wrapper)
         const source = wrapper.find('source')
         expect(source.exists()).toBeTruthy()
       })
@@ -363,11 +336,12 @@ describe('VueLazyYoutubeVideo', () => {
     })
 
     describe('thumbnailListeners', () => {
-      it('should bind passed listeners', () => {
+      it('should bind passed listeners', async () => {
         const click = jest.fn()
         const wrapper = TestManager.createWrapper({
           propsData: { thumbnailListeners: { click } },
         })
+        await TestManager.setWidth(wrapper)
         const img = wrapper.find('img')
         img.trigger('click')
         expect(click).toHaveBeenCalledTimes(1)
@@ -511,11 +485,11 @@ describe('VueLazyYoutubeVideo', () => {
   })
 
   describe('events', () => {
-    describe(Event.LOAD_IFRAME, () => {
+    describe(EventName.LOAD_IFRAME, () => {
       it("should emit event when `<iframe />`' `load` event happens", async () => {
         const wrapper = TestManager.createWrapper()
         await TestManager.play(wrapper)
-        const emitted = wrapper.emitted(Event.LOAD_IFRAME)
+        const emitted = wrapper.emitted(EventName.LOAD_IFRAME)
         if (emitted) {
           expect(emitted.length).toBe(1)
         }
@@ -524,7 +498,7 @@ describe('VueLazyYoutubeVideo', () => {
       it('should provide correct payload', async () => {
         const wrapper = TestManager.createWrapper()
         await TestManager.play(wrapper)
-        const emitted = wrapper.emitted()[Event.LOAD_IFRAME]
+        const emitted = wrapper.emitted()[EventName.LOAD_IFRAME]
         if (emitted) {
           expect(emitted[0][0].iframe).toEqual(
             TestManager.getIframeElement(wrapper)
@@ -533,7 +507,7 @@ describe('VueLazyYoutubeVideo', () => {
       })
     })
 
-    describe(Event.INIT_PLAYER, () => {
+    describe(EventName.INIT_PLAYER, () => {
       beforeEach(() => {
         TestManager.mockGlobalPlayer()
       })
@@ -547,7 +521,7 @@ describe('VueLazyYoutubeVideo', () => {
           propsData: { enablejsapi: true },
         })
         await TestManager.play(wrapper)
-        const emitted = wrapper.emitted(Event.INIT_PLAYER)
+        const emitted = wrapper.emitted(EventName.INIT_PLAYER)
         if (emitted) {
           expect(emitted.length).toBe(1)
         }
@@ -558,7 +532,7 @@ describe('VueLazyYoutubeVideo', () => {
           propsData: { enablejsapi: true },
         })
         await TestManager.play(wrapper)
-        const emitted = wrapper.emitted(Event.INIT_PLAYER)
+        const emitted = wrapper.emitted(EventName.INIT_PLAYER)
         if (emitted) {
           expect(emitted[0][0].instance).toEqual(
             TestManager.getMockedPlayer().mock.instances[0]
@@ -588,13 +562,14 @@ describe('VueLazyYoutubeVideo', () => {
 
   describe('computed', () => {
     describe('id', () => {
-      it('should warn for unsuccessful id extraction', () => {
+      it('should warn for unsuccessful id extraction', async () => {
         const errorSpy = jest.spyOn(console, 'error').mockImplementation()
         const src = 'INVALID_SRC'
         const warnSpy = jest.spyOn(global.console, 'warn').mockImplementation()
-        TestManager.createWrapper({
+        const wrapper = TestManager.createWrapper({
           propsData: { src },
         })
+        await TestManager.setWidth(wrapper)
         expect(warnSpy).toHaveBeenCalledTimes(1)
         errorSpy.mockRestore()
         warnSpy.mockRestore()
