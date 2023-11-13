@@ -28,7 +28,7 @@ export class TestManager {
       propsData?: Partial<Props>
     }
   ) {
-    return shallowMount<ComponentInstance>(VueLazyYoutubeVideo, {
+    const wrapper = shallowMount<ComponentInstance>(VueLazyYoutubeVideo, {
       ...options,
       propsData: {
         ...defaultProps,
@@ -39,6 +39,7 @@ export class TestManager {
           : {}),
       },
     })
+    return wrapper
   }
 
   static async clickAndGetIframe(wrapper: LocalWrapper) {
@@ -73,9 +74,17 @@ export class TestManager {
   }
 
   static getPropDefinition<K extends keyof Props>(key: K) {
-    const { props } = (VueLazyYoutubeVideo as typeof VueLazyYoutubeVideo & {
-      options: ThisTypedComponentOptionsWithRecordProps<Vue, {}, {}, {}, Props>
-    }).options
+    const { props } = (
+      VueLazyYoutubeVideo as typeof VueLazyYoutubeVideo & {
+        options: ThisTypedComponentOptionsWithRecordProps<
+          Vue,
+          {},
+          {},
+          {},
+          Props
+        >
+      }
+    ).options
     if (props === undefined) throw new Error()
     return props[key]
   }
@@ -106,5 +115,10 @@ export class TestManager {
     if (script) {
       script.remove()
     }
+  }
+
+  static async setWidth(wrapper: LocalWrapper, width = 512) {
+    wrapper.setData({ width })
+    await wrapper.vm.$nextTick()
   }
 }

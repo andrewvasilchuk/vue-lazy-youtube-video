@@ -1,18 +1,18 @@
+import type { ThumnailSize } from '../types'
+
 export const DEFAULT_ALT_ATTRIBUTE = 'Video thumbnail'
 
 export const DEFAULT_BUTTON_LABEL = 'Play video'
 
 export const DEFAULT_ASPECT_RATIO = '16:9'
 
-export const PREVIEW_IMAGE_SIZES = [
-  'default',
-  'mqdefault',
-  'sddefault',
-  'hqdefault',
-  'maxresdefault',
-] as const
-
-export const DEFAULT_PREVIEW_IMAGE_SIZE = PREVIEW_IMAGE_SIZES[4]
+export const THUMBNAIL_SIZE: Record<ThumnailSize, number> = {
+  default: 120,
+  mqdefault: 320,
+  hqdefault: 480,
+  sddefault: 640,
+  maxresdefault: 1280,
+}
 
 export const DEFAULT_IFRAME_ATTRIBUTES = {
   allowfullscreen: true,
