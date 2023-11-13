@@ -21,8 +21,8 @@ export const DEFAULT_IFRAME_ATTRIBUTES = {
     'accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture',
 }
 
-export const YOUTUBE_REGEX =
-  /^https:\/\/www\.youtube(?:-nocookie)?\.com\/embed\/(.+?)(?:\?.*)?$/
+export const YOUTUBE_REGEX = /^https:\/\/www\.youtube(?:-nocookie)?\.com\/embed\/(.+?)(?:\?.*)?$/
+export const LOOM_REGEX = /^https:\/\/www\.loom\.com\/embed\/(.+?)(?:\?.*)?$/
 
 export const PLAYER_SCRIPT_SRC = 'https://www.youtube.com/player_api'
 

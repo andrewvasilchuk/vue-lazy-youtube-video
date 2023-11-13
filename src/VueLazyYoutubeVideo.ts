@@ -13,6 +13,7 @@ import {
   DEFAULT_ASPECT_RATIO,
   DEFAULT_IFRAME_ATTRIBUTES,
   YOUTUBE_REGEX,
+  LOOM_REGEX,
   PLAYER_SCRIPT_SRC,
   PLAYER_CHECK_MS,
 } from './constants'
@@ -26,7 +27,8 @@ export default (Vue as WithRefs<Refs, WithEvents<Events>>).extend({
       required: true,
       validator: (value) =>
         startsWith(value, 'https://www.youtube.com/embed/') ||
-        startsWith(value, 'https://www.youtube-nocookie.com/embed/'),
+        startsWith(value, 'https://www.youtube-nocookie.com/embed/') ||
+        startsWith(value, 'https://www.loom.com/embed/'),
     },
     alt: {
       type: String,
@@ -94,7 +96,13 @@ export default (Vue as WithRefs<Refs, WithEvents<Events>>).extend({
   },
   computed: {
     id(): string {
-      const executionResult = YOUTUBE_REGEX.exec(this.src)
+      var executionResult = null
+      if (startsWith(this.src, 'https://www.loom.com/embed/')){
+        executionResult = LOOM_REGEX.exec(this.src)
+      }
+      else{
+        executionResult = YOUTUBE_REGEX.exec(this.src)
+      }
       if (executionResult !== null) {
         return executionResult[1]
       } else {
@@ -247,7 +255,7 @@ export default (Vue as WithRefs<Refs, WithEvents<Events>>).extend({
         this.thumbnailSizeOverride = THUMBNAIL_SIZES[index]
       }
     },
-    renderThumbnail(h: CreateElement) {
+    renderYoutubeThumbnail(h: CreateElement) {
       if (this.thumbnail === null && this.thumbnailSize === undefined) {
         return null
       }
@@ -278,6 +286,20 @@ export default (Vue as WithRefs<Refs, WithEvents<Events>>).extend({
             ...this.thumbnailListeners,
             load: this.onThumbnailLoad,
           },
+        }),
+      ])
+    },
+    renderLoomThumbnail(h: CreateElement){
+      return h('picture', {}, [
+        h('img', {
+          staticClass: 'y-video__media y-video__media--type--img',
+          attrs: {
+            src:
+              (this.thumbnail && this.thumbnail.jpg) ||
+              `https://cdn.loom.com/sessions/thumbnails/${this.id}-00001.jpg`,
+            alt: this.alt,
+          },
+          on: this.thumbnailListeners,
         }),
       ])
     },
@@ -318,7 +340,8 @@ export default (Vue as WithRefs<Refs, WithEvents<Events>>).extend({
           this.activated
             ? this.renderIframe(h)
             : [
-                this.renderThumbnail(h),
+                startsWith(this.src, 'https://www.loom.com/embed/') ? this.renderLoomThumbnail(h) : this.renderYoutubeThumbnail(h),
+                // this.renderThumbnail(h),
                 this.$slots.button ||
                   h(
                     'button',
